@@ -5,6 +5,8 @@ import Button from "../Button/Button";
 import { authStore } from "../../store/auth.store";
 import SvgWhiteUserIcon from "../../assets/svg/ui-white-user-profile.svg";
 import SvgUserIcon from "../../assets/svg/ui-user-profile.svg";
+import SvgWhiteLogoutIcon from "../../assets/svg/ui-white-logout.svg"
+import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
 
 const Header = () => {
   return <>
@@ -18,10 +20,12 @@ const Header = () => {
         </div> 
 
         <div className={styles.divActionsButtons}>
-          {!authStore.isAuth
+          {authStore.isAuth
             ? <>
               <Button>
                 username
+                <img src={SvgLogoutIcon}/>
+                <img src={SvgWhiteLogoutIcon}/>
               </Button>
             </>
             : <>
