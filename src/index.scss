@@ -61,9 +61,36 @@
   font-style: normal;
 }
 
+// Шрифты
 $fontStack-sanseSerif: -apple-system, BlinkMacSystemFont, 'RosatomWebRegular', 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';;
 $fontStack-monospace: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
 $fontSize: 20px;
+
+// Цвета
+$color-blue-1: #003274;
+$color-blue-2: #025EA1;
+$color-blue-3: #6cace4;
+
+$color-black: #000;
+$color-white: #fff;
+
+$color-grey-1: #333333;
+$color-grey-2: #5F6062;
+$color-grey-3: #7F7F7F;
+
+$color-gadoc: #ff8282;
+$color-orange: #ee6c23;
+$color-green: #259789;
+$color-purple: #b22174;
+$color-yellow: #f0a600;
+$color-lightGreen: #4DB852;
+$color-darkRed: #b84d4d;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;

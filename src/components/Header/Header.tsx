@@ -6,10 +6,10 @@ const Header = () => {
   return <>
     <header>
       <div className={styles.divActions}>
-        <div>
+        <div className={styles.divLogo}>
           <img src={SvgIcon} alt="" />
-          <div>
-            <p>ГРИНАТОМ<br />ТОРГОВЛЯ И СКЛАД</p>
+          <div className={styles.divLogoLabel}> 
+            <p>гринатом<br /><span className={styles.divLogoLabelSublabel}>торговля и склад</span></p>
           </div>
         </div>
 
