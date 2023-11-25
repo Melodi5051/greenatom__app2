@@ -20,6 +20,7 @@
 
 - OpenApiSpecification (Swagger) - http://5.35.83.142:8082/api/swagger-ui/index.html
 - Приложение доступно по адресу: http://5.35.83.142:8082
+- [Figma](https://www.figma.com/file/Y1Xt75uQrOSEmrQ5Nzjit7/%D0%94%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0?type=design&node-id=1-2&mode=design&t=xdXB6kktlApNBte9-0)
 
 # Документация к написанию проекта
 ## Пример API Запроса
