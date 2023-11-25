@@ -9,6 +9,7 @@ import SvgWhiteLogoutIcon from "../../assets/svg/ui-white-logout.svg"
 import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
 
 const Header = () => {
+  console.log(authStore.isAuth)
   return <>
     <header>
       <div className={styles.divActions}>
@@ -22,10 +23,9 @@ const Header = () => {
         <div className={styles.divActionsButtons}>
           {authStore.isAuth
             ? <>
-              <Button>
+              <Button viewtype="text">
                 username
                 <img src={SvgLogoutIcon}/>
-                <img src={SvgWhiteLogoutIcon}/>
               </Button>
             </>
             : <>

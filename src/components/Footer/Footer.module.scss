@@ -1,25 +1,19 @@
 @use '../../index.scss';
 
-header {
+
+footer {
   user-select: none;
-  border-bottom: 1px solid #000;
+  border-top: 1px solid #003274;
+
+  position: relative;
+  bottom: 0;
 
   .divActions {
-    width: 100%;
     display: flex;
+    min-height: 100px;
     padding: 20px 50px;
-    justify-content: space-between;
-    align-items: center;
-    align-self: stretch;
-
-    .divActionsButtons {
-      display: flex;
-      height: 65px;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 10px;
-      flex: 1 0 0;
-    }
+    align-items: flex-start;
+    gap: 10px;
 
     .divLogo {
       display: flex;
@@ -29,7 +23,7 @@ header {
       }
 
       >* {
-        padding: 0 17px;
+        padding: 0 10px;
       }
 
       .divLogoLabel {
@@ -43,22 +37,10 @@ header {
         align-items: center;
 
         .divLogoLabelSublabel {
-          // color: black;
+          // text-transform: initial;
           color: index.$color-blue-2;
         }
       }
     }
-  }
-}
-
-
-@media (max-width: 1200px) {
-  header .divActions .divLogo>img {
-    display: none;
-  }
-
-  header .divActions .divLogo .divLogoLabel {
-    border-left: none;
-    padding: 0;
   }
 }

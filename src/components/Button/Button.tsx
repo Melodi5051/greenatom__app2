@@ -33,7 +33,7 @@ const Button: React.FC<IPropsButton> = (props) => {
 
   // два типа подгружаемых иконок.
   // если дочерний элемент 1 - просто рисуем кнопку
-  if (childrens.length === 1) {
+  if (childrens.length <= 2) {
     return (
       <button
         className={btnClassName}
