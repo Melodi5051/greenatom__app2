@@ -67,6 +67,7 @@ $fontStack-monospace: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Li
 $fontSize: 20px;
 
 // Цвета
+$color-primary: #025EA1;
 $color-blue-1: #003274;
 $color-blue-2: #025EA1;
 $color-blue-3: #6cace4;
@@ -90,11 +91,11 @@ $color-darkRed: #b84d4d;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: $fontStack-sanseSerif;
+  font-size: $fontSize;
 }
 
 body {
-  margin: 0;
-  font-family: $fontStack-sanseSerif;
   font-size: $fontSize;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
