@@ -1,20 +1,24 @@
 import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { userStore } from "../store/user.store";
+import { getMeHelper } from "../helpers/main.helper";
+import { mainStore } from "../store/main.store";
+import { observer } from "mobx-react-lite";
+import Header from "../components/Header/Header";
 
 const Layout = () => {
   useEffect(() => {
-    console.log(userStore.user);
-  }, [userStore.user]);
-
+    // getMeHelper();
+  }, []);
+  useEffect(() => {}, [mainStore.loading]);
+  useEffect(() => {}, [userStore.user]);
   return (
     <div>
-      <header>HEADER</header>
-      <h1>{userStore.user.username}</h1>
+      <Header />
       <Outlet />
       <footer>FOOTER</footer>
     </div>
   );
 };
 
-export default Layout;
+export default observer(Layout);

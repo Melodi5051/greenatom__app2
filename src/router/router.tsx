@@ -1,5 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../pages/Layout";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import ProtectedRouter from "../components/ProtectedRouter";
+import Main from "../components/Main/Main";
 
 export const router = createBrowserRouter([
   {
@@ -8,12 +12,20 @@ export const router = createBrowserRouter([
     errorElement: <div>ErrorPage</div>,
     children: [
       {
-        path: "/auth",
-        element: <div>АВТОРИЗАЦИЯ</div>,
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
       {
         path: "/main",
-        element: <div>ГЛАВНАЯ СТРАНИЦА</div>,
+        element: (
+          <ProtectedRouter>
+            <Main />
+          </ProtectedRouter>
+        ),
       },
     ],
   },
