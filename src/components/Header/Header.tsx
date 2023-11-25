@@ -18,15 +18,26 @@ const Header = () => {
           <div className={styles.divLogoLabel}>
             <p>гринатом<br /><span className={styles.divLogoLabelSublabel}>торговля и склад</span></p>
           </div>
-        </div> 
+        </div>
 
         <div className={styles.divActionsButtons}>
           {authStore.isAuth
             ? <>
               <Button viewtype="text">
-                username
-                <img src={SvgLogoutIcon}/>
+                Департаменты
               </Button>
+              <Button viewtype="text">
+                Документы
+              </Button>
+              <Button viewtype="text">
+                Заявки
+              </Button>
+              <Button viewtype="text">
+                username
+              </Button>
+              <Button viewtype="text">
+                <img src={SvgLogoutIcon} />
+              </Button> 
             </>
             : <>
               <Button viewtype="text">
@@ -34,8 +45,8 @@ const Header = () => {
               </Button>
               <Button viewtype="v2">
                 Войти
-                <img src={SvgUserIcon}/>
-                <img src={SvgWhiteUserIcon}/>
+                <img src={SvgUserIcon} />
+                <img src={SvgWhiteUserIcon} />
               </Button>
             </>
           }
