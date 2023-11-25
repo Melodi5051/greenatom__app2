@@ -22,21 +22,22 @@ header {
     }
 
     .divActionsButtons p {
-      font-size: 16px;
+      font-size: index.$fontSize-logo;
     }
 
     .divLogo {
       display: flex;
-
+      
       >img {
         display: inline;
       }
-
+      
       >* {
         padding: 0 17px;
       }
-
+      
       .divLogoLabel {
+        font-size: index.$fontSize-logo;
         height: 70px;
         border-left: 1px solid black;
         max-height: min-content;
