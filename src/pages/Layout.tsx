@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { userStore } from "../store/user.store";
+import Header from "../components/Header/Header";
 
 const Layout = () => {
   useEffect(() => {
@@ -9,7 +10,7 @@ const Layout = () => {
 
   return (
     <div>
-      <header>HEADER</header>
+      <Header />
       <h1>{userStore.user.username}</h1>
       <Outlet />
       <footer>FOOTER</footer>
