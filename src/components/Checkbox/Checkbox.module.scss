@@ -1,0 +1,38 @@
+@use "../../index.scss";
+
+.checkbox {
+  * {
+    cursor: pointer;
+  }
+
+  input {
+    appearance: none;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.2s, background-color 0.2s;
+
+    &:checked {
+      border-color: index.$color-primary;
+
+      &::before {
+        content: '\2713';
+        font-size: 1.2em;
+        font-weight: 900;
+        position: absolute;
+        top: 30%;
+        left: 60%;
+        transform: translate(-50%, -50%);
+        color: index.$color-primary;
+      }
+    }
+  }
+
+  label {
+    padding-left: 8px;
+    user-select: none;
+  }
+}
