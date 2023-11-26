@@ -8,12 +8,16 @@ import SvgUserIcon from "../../assets/svg/ui-user-profile.svg";
 import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
 import { observer } from "mobx-react-lite";
 import { userStore } from "../../store/user.store";
-import { removeTokenToLocalStorage } from "../../helpers/localstorage.helper";
+import {
+  removeCurrentPathToLocalStorage,
+  removeTokenToLocalStorage,
+} from "../../helpers/localstorage.helper";
 import { Link } from "react-router-dom";
 
 const Header = () => {
   const handleLogout = () => {
     removeTokenToLocalStorage();
+    removeCurrentPathToLocalStorage();
   };
   return (
     <>
@@ -53,12 +57,16 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  <Button viewtype="text">Регистрация</Button>
-                  <Button viewtype="v2">
-                    Войти
-                    <img src={SvgUserIcon} />
-                    <img src={SvgWhiteUserIcon} />
-                  </Button>
+                  <Link to={"/register"}>
+                    <Button viewtype="text">Регистрация</Button>
+                  </Link>
+                  <Link to={"/login"}>
+                    <Button viewtype="v2">
+                      Войти
+                      <img src={SvgUserIcon} />
+                      <img src={SvgWhiteUserIcon} />
+                    </Button>
+                  </Link>
                 </>
               )}
             </div>

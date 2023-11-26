@@ -1,6 +1,5 @@
 import { makeAutoObservable } from "mobx";
-
-import { IUser } from "../types/types";
+import { IUser } from "../types/userTypes";
 
 class User__Store {
   user: IUser | null = null;

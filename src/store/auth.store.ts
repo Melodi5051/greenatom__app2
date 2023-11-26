@@ -8,7 +8,6 @@ class Auth__Store {
 
   setIsAuth(isAuth: boolean) {
     this.isAuth = isAuth;
-    console.log();
   }
 }
 
