@@ -1,0 +1,74 @@
+@use "../../index.scss";
+
+
+.notify {
+  user-select: none;
+  cursor: pointer;
+  z-index: 99;
+  width: 25vw;
+  text-align: left;
+  position: absolute;
+  color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  
+  top: 2vh;
+  right: 2vw;
+  
+  -webkit-box-shadow: 9px 9px 17px 4px rgba(34, 60, 80, 0.19);
+  -moz-box-shadow: 9px 9px 17px 4px rgba(34, 60, 80, 0.19);
+  box-shadow: 9px 9px 17px 4px rgba(34, 60, 80, 0.19);
+  
+  // display: flex;
+  display: none;
+  min-height: max-content;
+
+  .icon {
+    max-width: 50px;
+    max-height: 50px;
+  }
+  
+  .notifyBody {
+    text-align: left;
+    display: inline-flex;
+    flex-direction: column;
+    margin-left: 10px;
+  
+    h5 {
+      text-transform: uppercase;
+    }
+  }
+
+  .headerLine {
+    font-family: index.$fontStack-sanseSerif;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .active {
+    display: flex;
+  }
+
+  &.info {
+    background-color: index.$color-primary;
+  }
+
+  &.warning {
+    background-color: index.$color-yellow;
+  }
+
+  &.error {
+    background-color: index.$color-red;
+  }
+
+  &.positive {
+    background-color: index.$color-lightGreen;
+  }
+
+  &.grey {
+    background-color: index.$color-grey-3;
+  }
+}
