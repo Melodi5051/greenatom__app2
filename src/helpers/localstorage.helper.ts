@@ -6,6 +6,18 @@ export const getTokenFromLocalStorage = (): string => {
   return token;
 };
 
+export const getCurrentPathToLocalStorage = (): string | null => {
+  return localStorage.getItem("lastPath");
+};
+
+export const setCurrentPathToLocalStorage = (path: string): void => {
+  localStorage.setItem("lastPath", path);
+};
+
+export const removeCurrentPathToLocalStorage = (): void => {
+  localStorage.removeItem("lastPath");
+};
+
 export const setTokenToLocalStorage = (token: string): void => {
   localStorage.setItem("token", JSON.stringify(token));
 };

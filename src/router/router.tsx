@@ -7,6 +7,7 @@ import Loader from "../components/Loader/Loader";
 const Login = React.lazy(() => import("../pages/Login"));
 const Register = React.lazy(() => import("../pages/Register"));
 const Main = React.lazy(() => import("../components/Main/Main"));
+const Department = React.lazy(() => import("../pages/Department"));
 const Document = React.lazy(() => import("../pages/Document"));
 // const Department = React.lazy(
 //   () => import("../components/Department/Department")
@@ -65,7 +66,7 @@ export const router = createBrowserRouter([
         element: (
           <React.Suspense fallback={<Loader />}>
             <ProtectedRouter>
-              <div>департаменты</div>
+              <Department />
             </ProtectedRouter>
           </React.Suspense>
         ),

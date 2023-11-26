@@ -7,16 +7,11 @@ import { userStore } from "../store/user.store";
 import { mainStore } from "../store/main.store";
 import { observer } from "mobx-react-lite";
 import style from "./../styles/layout.module.scss";
-import { getMeHelper } from "../helpers/main.helper";
+import { getAllDepartmentHepler } from "../helpers/department.helpre";
 const Layout = () => {
   useEffect(() => {}, [mainStore.loading]);
   useEffect(() => {}, [userStore.user]);
-  // useEffect(() => {
-  //   console.log(toJS(userStore.user));
-  // }, [userStore.user]);
-  useEffect(() => {
-    getMeHelper();
-  }, []);
+  getAllDepartmentHepler();
   return (
     <div className={style.layout}>
       <Header />
@@ -28,4 +23,4 @@ const Layout = () => {
   );
 };
 
-export default observer(Layout);
+export default Layout;
