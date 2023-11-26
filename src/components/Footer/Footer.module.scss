@@ -1,0 +1,45 @@
+@use "../../index.scss";
+
+footer {
+  user-select: none;
+  border-top: 1px solid #003274;
+  flex: 0 0 auto;
+  position: relative;
+  bottom: 0;
+
+  .divActions {
+    display: flex;
+    min-height: 100px;
+    padding: 20px 50px;
+    align-items: flex-start;
+    gap: 10px;
+
+    .divLogo {
+      display: flex;
+
+      > img {
+        display: inline;
+      }
+
+      > * {
+        padding: 0 10px;
+      }
+
+      .divLogoLabel {
+        height: 70px;
+        border-left: 1px solid black;
+        max-height: min-content;
+        text-transform: uppercase;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .divLogoLabelSublabel {
+          // text-transform: initial;
+          color: index.$color-blue-2;
+        }
+      }
+    }
+  }
+}

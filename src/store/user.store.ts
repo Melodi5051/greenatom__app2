@@ -1,12 +1,13 @@
 import { makeAutoObservable } from "mobx";
 
+import { IUser } from "../types/types";
+
 class User__Store {
-  user: any = {};
+  user: IUser | null = null;
   constructor() {
     makeAutoObservable(this);
   }
   setUser(dataUser: any) {
-    console.log(dataUser);
     this.user = dataUser;
   }
 }

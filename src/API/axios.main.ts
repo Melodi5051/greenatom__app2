@@ -9,7 +9,6 @@ export const getMe = async (): Promise<any> => {
         Authorization: `Bearer ${getTokenFromLocalStorage()}`,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error);
