@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ProtectedRouter from "../components/ProtectedRouter";
 import Main from "../components/Main/Main";
+import React from "react";
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +24,9 @@ export const router = createBrowserRouter([
         path: "/main",
         element: (
           <ProtectedRouter>
-            <Main />
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <Main />
+            </React.Suspense>
           </ProtectedRouter>
         ),
       },

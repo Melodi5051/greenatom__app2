@@ -1,22 +1,27 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import Header from "../components/Header/Header";
+import Footer from "../components/Footer/Footer";
+import { toJS } from "mobx";
 import { userStore } from "../store/user.store";
-import { getMeHelper } from "../helpers/main.helper";
 import { mainStore } from "../store/main.store";
 import { observer } from "mobx-react-lite";
-import Header from "../components/Header/Header";
-
+import style from "./../styles/layout.module.scss";
+import { getMeHelper } from "../helpers/main.helper";
 const Layout = () => {
-  useEffect(() => {
-    // getMeHelper();
-  }, []);
   useEffect(() => {}, [mainStore.loading]);
   useEffect(() => {}, [userStore.user]);
+  // useEffect(() => {
+  //   console.log(toJS(userStore.user));
+  // }, [userStore.user]);
+
   return (
-    <div>
+    <div className={style.layout}>
       <Header />
-      <Outlet />
-      <footer>FOOTER</footer>
+      <div className={style.content}>
+        <Outlet />
+      </div>
+      <Footer />
     </div>
   );
 };

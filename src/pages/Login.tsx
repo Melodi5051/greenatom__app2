@@ -3,45 +3,45 @@ import { useState } from "react";
 import { loginHelper } from "../helpers/auth.helper";
 import { IDataLogin } from "../types/types";
 import { authStore } from "../store/auth.store";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import style from "./../styles/login.module.scss";
+import Button from "../components/Button/Button";
 
 const Login = () => {
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLogin(e.target.value);
-  };
-  const handlePasswrodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-  const handlerLogin = () => {
-    const userObj: IDataLogin = {
-      username: login,
-      password: password,
-    };
-    loginHelper(userObj);
+  const handlerLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const obj = Object.fromEntries(form.entries()) as unknown as IDataLogin;
+    loginHelper(obj);
   };
   return authStore.isAuth ? (
     <Navigate replace to={"/main"} />
   ) : (
     <div>
-      <form action="">
+      <h2>Вход в систему</h2>
+      <Link to={"/register"}>У меня нет аккаунта</Link>
+      <form id="formElement" onSubmit={(e) => handlerLogin(e)}>
         <div>
-          <label htmlFor="login">Логин:</label>
+          <label htmlFor="username">Логин</label>
           <input
             type="text"
-            name="login"
-            id="login"
-            onChange={handleLoginChange}
+            name="username"
+            id="username"
+            placeholder="Введите логин..."
           />
         </div>
         <div>
-          <label htmlFor="password">Пароль:</label>
-          <input type="password" onChange={handlePasswrodChange} />
+          <label htmlFor="password">Пароль</label>
+          <input
+            type="password"
+            name="password"
+            autoComplete="on"
+            id="password"
+            placeholder="Введите пароль..."
+          />
         </div>
+        <Button>ВОЙТИ</Button>
       </form>
-      <button onClick={() => handlerLogin()}>ВОЙТИ</button>
     </div>
   );
 };

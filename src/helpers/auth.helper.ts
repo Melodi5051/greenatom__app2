@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import { authLogin, authRegister } from "../API/axios.auth";
 import { authStore } from "../store/auth.store";
 import { IDataLogin } from "../types/types";
-
 import { setTokenToLocalStorage } from "./localstorage.helper";
 
 export const registerHepler = (dataNewUser: any): void => {
@@ -15,10 +13,15 @@ export const registerHepler = (dataNewUser: any): void => {
 };
 
 export const loginHelper = (dataUser: IDataLogin): void => {
-  authLogin(dataUser).then((token) => {
-    if (token) {
-      authStore.setIsAuth(true);
-      setTokenToLocalStorage(token);
-    }
-  });
+  //TODO ПЕРЕПИСАТЬ УСЛОВИЕ
+  if (dataUser.username.length || dataUser.password.length) {
+    authLogin(dataUser).then((token) => {
+      if (token) {
+        authStore.setIsAuth(true);
+        setTokenToLocalStorage(token);
+      }
+    });
+    return;
+  }
+  console.log("ERROR");
 };

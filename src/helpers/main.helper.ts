@@ -3,8 +3,8 @@ import { mainStore } from "../store/main.store";
 import { userStore } from "../store/user.store";
 
 export const getMeHelper = (): void => {
-  getMe().then((response) => {
-    userStore.setUser(response);
+  getMe().then((dataUser) => {
+    userStore.setUser(dataUser);
     mainStore.setLoading(false);
   });
 };

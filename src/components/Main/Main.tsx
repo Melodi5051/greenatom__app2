@@ -1,8 +1,12 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
-
+import React, { useEffect } from "react";
+import styles from "./Main.module.scss";
+import { getMeHelper } from "../../helpers/main.helper";
 const Main = () => {
-  return <div>MAIN</div>;
+  useEffect(() => {
+    getMeHelper();
+  }, []);
+  return <main className={styles.main}>MAIN</main>;
 };
 
 export default observer(Main);
