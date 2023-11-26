@@ -8,9 +8,10 @@ import { mainStore } from "../store/main.store";
 import { observer } from "mobx-react-lite";
 import style from "./../styles/layout.module.scss";
 import { getMeHelper } from "../helpers/main.helper";
+import Notify, { NotifyStack } from "../components/Notify/Notify";
 const Layout = () => {
-  useEffect(() => {}, [mainStore.loading]);
-  useEffect(() => {}, [userStore.user]);
+  useEffect(() => { }, [mainStore.loading]);
+  useEffect(() => { }, [userStore.user]);
   // useEffect(() => {
   //   console.log(toJS(userStore.user));
   // }, [userStore.user]);
@@ -18,13 +19,16 @@ const Layout = () => {
     getMeHelper();
   }, []);
   return (
-    <div className={style.layout}>
-      <Header />
-      <div className={style.content}>
-        <Outlet />
+    <>
+      <NotifyStack />
+      <div className={style.layout}>
+        <Header />
+        <div className={style.content}>
+          <Outlet />
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 };
 

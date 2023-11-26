@@ -7,19 +7,19 @@
   z-index: 99;
   width: 25vw;
   text-align: left;
-  position: absolute;
   color: white;
   padding: 20px 30px;
   border-radius: 10px;
-  
-  top: 2vh;
-  right: 2vw;
-  
-  -webkit-box-shadow: 9px 9px 17px 4px rgba(34, 60, 80, 0.19);
-  -moz-box-shadow: 9px 9px 17px 4px rgba(34, 60, 80, 0.19);
-  box-shadow: 9px 9px 17px 4px rgba(34, 60, 80, 0.19);
-  
-  // display: flex;
+  opacity: 0;
+
+  transition: all .3s;
+
+  margin: 10px 0;
+
+  // -webkit-box-shadow: 9px 9px 17px 4px rgba(34, 60, 80, 0.3);
+  // -moz-box-shadow: 9px 9px 17px 4px rgba(34, 60, 80, 0.3);
+  // box-shadow: 9px 9px 17px 4px rgba(34, 60, 80, 0.3);
+
   display: none;
   min-height: max-content;
 
@@ -27,13 +27,13 @@
     max-width: 50px;
     max-height: 50px;
   }
-  
+
   .notifyBody {
     text-align: left;
     display: inline-flex;
     flex-direction: column;
     margin-left: 10px;
-  
+
     h5 {
       text-transform: uppercase;
     }
@@ -48,7 +48,8 @@
     justify-content: space-between;
   }
 
-  .active {
+  &.active {
+    opacity: 1;
     display: flex;
   }
 
@@ -71,4 +72,20 @@
   &.grey {
     background-color: index.$color-grey-3;
   }
+}
+
+
+
+.notifyStackDiv {
+  z-index: 98;
+  width: 25vw;
+  text-align: left;
+  position: absolute;
+  color: white;
+
+  top: 2vh;
+  right: 2vw;
+
+  max-height: 95vh;
+  overflow: hidden;
 }
