@@ -8,7 +8,6 @@ import { useEffect } from "react";
 function App() {
   const checkAuth = async (): Promise<void> => {
     const token = getTokenFromLocalStorage();
-
     try {
       if (token) {
         authStore.setIsAuth(true);

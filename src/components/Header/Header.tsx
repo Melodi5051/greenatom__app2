@@ -9,6 +9,7 @@ import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
 import { observer } from "mobx-react-lite";
 import { userStore } from "../../store/user.store";
 import { removeTokenToLocalStorage } from "../../helpers/localstorage.helper";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const handleLogout = () => {
@@ -19,36 +20,46 @@ const Header = () => {
       <header>
         <div className={styles.divActions}>
           <div className={styles.divLogo}>
-            <img src={SvgIcon} alt="" />
-            <div className={styles.divLogoLabel}>
-              <p>
-                гринатом
-                <br />
-                <span className={styles.divLogoLabelSublabel}>
-                  торговля и склад
-                </span>
-              </p>
+            <Link to={"/"}>
+              <img src={SvgIcon} alt="" />
+              <div className={styles.divLogoLabel}>
+                <p>
+                  <span>гринатом</span>
+                  <br />
+                  <span className={styles.divLogoLabelSublabel}>
+                    торговля и склад
+                  </span>
+                </p>
+              </div>
+            </Link>
+            <div className={styles.divActionsButtons}>
+              {authStore.isAuth ? (
+                <>
+                  <Link to={"/департаменты"}>
+                    <Button viewtype="text">Департаменты</Button>
+                  </Link>
+                  <Link to={"/документы"}>
+                    <Button viewtype="text">Документы</Button>
+                  </Link>
+                  <Link to={"/заявки"}>
+                    <Button viewtype="text">Заявки</Button>
+                  </Link>
+                  <Button viewtype="text">{userStore.user?.username}</Button>
+                  <Button viewtype="text">
+                    <img src={SvgLogoutIcon} onClick={handleLogout} />
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button viewtype="text">Регистрация</Button>
+                  <Button viewtype="v2">
+                    Войти
+                    <img src={SvgUserIcon} />
+                    <img src={SvgWhiteUserIcon} />
+                  </Button>
+                </>
+              )}
             </div>
-          </div>
-
-          <div className={styles.divActionsButtons}>
-            {authStore.isAuth ? (
-              <>
-                <Button viewtype="text">
-                  {userStore.user?.username}
-                  <img src={SvgLogoutIcon} onClick={handleLogout} />
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button viewtype="text">Регистрация</Button>
-                <Button viewtype="v2">
-                  Войти
-                  <img src={SvgUserIcon} />
-                  <img src={SvgWhiteUserIcon} />
-                </Button>
-              </>
-            )}
           </div>
         </div>
       </header>

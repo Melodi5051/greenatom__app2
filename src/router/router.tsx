@@ -21,11 +21,41 @@ export const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: "/main",
+        path: "/",
         element: (
           <ProtectedRouter>
             <React.Suspense fallback={<div>Loading...</div>}>
               <Main />
+            </React.Suspense>
+          </ProtectedRouter>
+        ),
+      },
+      {
+        path: "/департаменты",
+        element: (
+          <ProtectedRouter>
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <div>department</div>
+            </React.Suspense>
+          </ProtectedRouter>
+        ),
+      },
+      {
+        path: "/документы",
+        element: (
+          <ProtectedRouter>
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <div>documents</div>
+            </React.Suspense>
+          </ProtectedRouter>
+        ),
+      },
+      {
+        path: "/заявки",
+        element: (
+          <ProtectedRouter>
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <div>orders</div>
             </React.Suspense>
           </ProtectedRouter>
         ),

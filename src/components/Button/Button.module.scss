@@ -19,56 +19,56 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-}
+
+  &.v1 {
+    border-radius: 5px;
+    border: 1px solid #6CACE4;
+    background: #FFF;
+  }
+
+  &.v1:hover {
+    border-radius: 5px;
+    background: #6CACE4;
+    color: white;
+  }
+
+  &.v1:active {
+    border-radius: 5px;
+    background: #369BF3;
+    color: white;
+  }
 
 
-.button.v1 {
-  border-radius: 5px;
-  border: 1px solid #6CACE4;
-  background: #FFF;
-}
+  &.v2 {
+    border-radius: 5px;
+    border: 1px solid #025EA1;
+    background: #FFF;
+  }
 
-.button.v1:hover {
-  border-radius: 5px;
-  background: #6CACE4;
-  color: white;
-}
+  &.v2:hover {
+    border-radius: 5px;
+    background: #025EA1;
+    color: white;
+  }
 
-.button.v1:active {
-  border-radius: 5px;
-  background: #369BF3;
-  color: white;
-}
-
-
-.button.v2 {
-  border-radius: 5px;
-  border: 1px solid #025EA1;
-  background: #FFF;
-}
-
-.button.v2:hover {
-  border-radius: 5px;
-  background: #025EA1;
-  color: white;
-}
-
-.button.v2:active {
-  border-radius: 5px;
-  background: #004273;
-  color: white;
-}
+  &.v2:active {
+    border-radius: 5px;
+    background: #004273;
+    color: white;
+  }
 
 
-.button.withIcon>img {
-  width: 20px;
-  height: 20px;
-}
+  &.withIcon>img {
+    width: 20px;
+    height: 20px;
+  }
 
-.button.text {
-  border-radius: 5px;
-  background: #FFF;
-}
-.button.text:active {
-  transform: scale(.97);
+  &.text {
+    border-radius: 5px;
+    background: #FFF;
+  }
+
+  &.text:active {
+    transform: scale(.97);
+  }
 }

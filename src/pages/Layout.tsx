@@ -8,6 +8,7 @@ import { mainStore } from "../store/main.store";
 import { observer } from "mobx-react-lite";
 import style from "./../styles/layout.module.scss";
 import { getMeHelper } from "../helpers/main.helper";
+import { authStore } from "../store/auth.store";
 const Layout = () => {
   useEffect(() => {}, [mainStore.loading]);
   useEffect(() => {}, [userStore.user]);

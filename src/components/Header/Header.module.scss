@@ -3,10 +3,10 @@
 header {
   user-select: none;
   border-bottom: 1px solid #000;
+  justify-content: space-between;
   flex: 0 0 auto;
   .divActions {
     width: 100%;
-    display: flex;
     padding: 20px 50px;
     justify-content: space-between;
     align-items: center;
@@ -21,18 +21,35 @@ header {
       flex: 1 0 0;
     }
 
+    .divActionsButtons p {
+      font-size: index.$fontSize-logo;
+    }
+
     .divLogo {
       display: flex;
+      a {
+        display: flex;
+        text-decoration: none;
 
-      > img {
+        span {
+          color: black;
+        }
+        &:active {
+          span {
+            color: black;
+          }
+        }
+      }
+      > a > img {
         display: inline;
       }
 
-      > * {
+      > a > * {
         padding: 0 17px;
       }
 
       .divLogoLabel {
+        font-size: index.$fontSize-logo;
         height: 70px;
         border-left: 1px solid black;
         max-height: min-content;
