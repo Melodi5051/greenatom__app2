@@ -1,10 +1,21 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../pages/Layout";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
 import ProtectedRouter from "../components/ProtectedRouter";
-import Main from "../components/Main/Main";
 import React from "react";
+import Loader from "../components/Loader/Loader";
+
+const Login = React.lazy(() => import("../pages/Login"));
+const Register = React.lazy(() => import("../pages/Register"));
+const Main = React.lazy(() => import("../components/Main/Main"));
+const Document = React.lazy(() => import("../pages/Document"));
+// const Department = React.lazy(
+//   () => import("../components/Department/Department")
+// ); // Assuming you have a Department component Assuming you have a Documents component
+
+// const Orders = React.lazy(() => import("../components/Orders/Orders")); // Assuming you have an Orders component
+// const ProtectedRouter = React.lazy(
+//   () => import("../components/ProtectedRouter")
+// );
 
 export const router = createBrowserRouter([
   {
@@ -14,50 +25,69 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/login",
-        element: <Login />,
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <Login />
+          </React.Suspense>
+        ),
       },
       {
         path: "/register",
-        element: <Register />,
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <Register />
+          </React.Suspense>
+        ),
       },
+
       {
         path: "/",
         element: (
-          <ProtectedRouter>
-            <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<Loader />}>
+            <ProtectedRouter>
               <Main />
-            </React.Suspense>
-          </ProtectedRouter>
+            </ProtectedRouter>
+          </React.Suspense>
+        ),
+      },
+      {
+        path: "/профиль",
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <ProtectedRouter>
+              <div>профиль</div>
+            </ProtectedRouter>
+          </React.Suspense>
         ),
       },
       {
         path: "/департаменты",
         element: (
-          <ProtectedRouter>
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <div>department</div>
-            </React.Suspense>
-          </ProtectedRouter>
+          <React.Suspense fallback={<Loader />}>
+            <ProtectedRouter>
+              <div>департаменты</div>
+            </ProtectedRouter>
+          </React.Suspense>
         ),
       },
       {
         path: "/документы",
         element: (
-          <ProtectedRouter>
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <div>documents</div>
-            </React.Suspense>
-          </ProtectedRouter>
+          <React.Suspense fallback={<Loader />}>
+            <ProtectedRouter>
+              <Document />
+            </ProtectedRouter>
+          </React.Suspense>
         ),
       },
       {
         path: "/заявки",
         element: (
-          <ProtectedRouter>
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <div>orders</div>
-            </React.Suspense>
-          </ProtectedRouter>
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <ProtectedRouter>
+              <div>заявки</div>
+            </ProtectedRouter>
+          </React.Suspense>
         ),
       },
     ],

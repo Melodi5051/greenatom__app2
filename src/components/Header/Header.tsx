@@ -44,7 +44,9 @@ const Header = () => {
                   <Link to={"/заявки"}>
                     <Button viewtype="text">Заявки</Button>
                   </Link>
-                  <Button viewtype="text">{userStore.user?.username}</Button>
+                  <Link to={"/профиль"}>
+                    <Button viewtype="text">{userStore.user?.username}</Button>
+                  </Link>
                   <Button viewtype="text">
                     <img src={SvgLogoutIcon} onClick={handleLogout} />
                   </Button>

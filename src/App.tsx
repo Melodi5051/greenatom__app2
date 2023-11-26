@@ -1,4 +1,4 @@
-import { RouterProvider } from "react-router-dom";
+import { RouterProvider, useRoutes } from "react-router-dom";
 import { router } from "./router/router";
 import { observer } from "mobx-react-lite";
 import { getTokenFromLocalStorage } from "./helpers/localstorage.helper";
@@ -16,6 +16,7 @@ function App() {
       console.log(error);
     }
   };
+
   useEffect(() => {
     checkAuth();
   }, []);
