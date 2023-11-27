@@ -20,6 +20,7 @@ function App() {
   useEffect(() => {
     checkAuth();
   }, []);
+
   return <RouterProvider router={router} />;
 }
 

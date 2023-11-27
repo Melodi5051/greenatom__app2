@@ -1,12 +1,11 @@
 export interface IItemsDocs {
   name: string;
 }
-export interface IDataRegister {
-  username: string;
-  password: string;
+export interface IDataRegister extends IDataLogin {
   confirmPassword: string;
   email: string;
 }
+
 export interface IDataLogin {
   username: string;
   password: string;

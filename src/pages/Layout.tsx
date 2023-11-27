@@ -7,17 +7,12 @@ import { userStore } from "../store/user.store";
 import { mainStore } from "../store/main.store";
 import { observer } from "mobx-react-lite";
 import style from "./../styles/layout.module.scss";
-import { getMeHelper } from "../helpers/main.helper";
-import Notify, { NotifyStack } from "../components/Notify/Notify";
+import { getAllDepartmentHepler } from "../helpers/department.helpre";
+import { NotifyStack } from "../components/Notify/Notify";
 const Layout = () => {
-  useEffect(() => { }, [mainStore.loading]);
-  useEffect(() => { }, [userStore.user]);
-  // useEffect(() => {
-  //   console.log(toJS(userStore.user));
-  // }, [userStore.user]);
-  useEffect(() => {
-    getMeHelper();
-  }, []);
+  useEffect(() => {}, [mainStore.loading]);
+  useEffect(() => {}, [userStore.user]);
+  getAllDepartmentHepler();
   return (
     <>
       <NotifyStack />
@@ -32,4 +27,4 @@ const Layout = () => {
   );
 };
 
-export default observer(Layout);
+export default Layout;

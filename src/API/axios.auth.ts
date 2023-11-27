@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IDataLogin, IDataRegister } from "../types/types";
+import { IDataLogin, IDataRegister } from "../types/userTypes";
 
 export const authRegister = async (dataUser: IDataRegister): Promise<any> => {
   try {
@@ -11,7 +11,7 @@ export const authRegister = async (dataUser: IDataRegister): Promise<any> => {
       }
     );
     const { token } = response.data;
-    return response;
+    return token;
   } catch (error) {
     return error;
   }
