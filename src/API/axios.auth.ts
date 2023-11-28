@@ -19,14 +19,14 @@ export const authRegister = async (dataUser: IDataRegister): Promise<any> => {
 export const authLogin = async (dataUser: IDataLogin): Promise<any> => {
   try {
     const response = await axios.post(
-      "http://5.35.83.142:8082/api/login",
+      "http://79.174.80.230:8080/api/auth/signin",
       dataUser,
       {
         headers: { "Content-Type": "application/json" },
       }
     );
-    const { token } = response.data;
-    return token;
+    const { accessToken } = response.data;
+    return accessToken;
   } catch (error) {
     return error;
   }

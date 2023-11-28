@@ -57,10 +57,10 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  <Link to={"/register"}>
+                  {/* <Link to={"/register"}>
                     <Button viewtype="text">Регистрация</Button>
-                  </Link>
-                  <Link to={"/login"}>
+                  </Link> */}
+                  <Link to={"/авторизация"}>
                     <Button viewtype="v2">
                       Войти
                       <img src={SvgUserIcon} />

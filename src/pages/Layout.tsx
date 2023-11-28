@@ -8,10 +8,13 @@ import { mainStore } from "../store/main.store";
 import { observer } from "mobx-react-lite";
 import style from "./../styles/layout.module.scss";
 import { getAllDepartmentHepler } from "../helpers/department.helpre";
+import { getALLEmployerHelper } from "../helpers/employer.helper";
+import { employerStore } from "../store/employer.store";
 const Layout = () => {
   useEffect(() => {}, [mainStore.loading]);
-  useEffect(() => {}, [userStore.user]);
-  getAllDepartmentHepler();
+  // getAllDepartmentHepler();
+  getALLEmployerHelper();
+  console.log(employerStore.dataEmployers);
   return (
     <div className={style.layout}>
       <Header />
