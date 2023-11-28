@@ -2,12 +2,6 @@ export interface IItemsDocs {
   name: string;
 }
 
-// Старый код с "саморегистрацией" пользователя
-export interface IDataRegister extends IDataLogin {
-  confirmPassword: string;
-  email: string;
-}
-
 // Код для регистрации пользователя адимнистратором
 export interface IDataRegisterEmployee {
   firstname: string;
@@ -27,6 +21,13 @@ export interface IDataLogin {
   username: string;
   password: string;
 }
+
+// Old project
+export interface IDataRegister extends IDataLogin {
+  confirmPassword: string;
+  email: string;
+}
+
 export interface IUser {
   id: number;
   position: string;

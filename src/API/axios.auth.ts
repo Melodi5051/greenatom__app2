@@ -26,6 +26,7 @@ export const authLogin = async (dataUser: IDataLogin): Promise<any> => {
         headers: { "Content-Type": "application/json" },
       }
     );
+
     const { token } = response.data;
     return token;
   } catch (error) {
