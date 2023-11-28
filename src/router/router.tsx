@@ -3,6 +3,7 @@ import Layout from "../pages/Layout";
 import ProtectedRouter from "../components/ProtectedRouter";
 import React from "react";
 import Loader from "../components/Loader/Loader";
+import ErrorPage from "../pages/ErrorPage";
 
 const Login = React.lazy(() => import("../pages/Login"));
 const Register = React.lazy(() => import("../pages/Register"));
@@ -22,7 +23,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
-    errorElement: <div>ErrorPage</div>,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/авторизация",
