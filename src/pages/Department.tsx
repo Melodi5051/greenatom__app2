@@ -7,6 +7,8 @@ import { observer } from "mobx-react-lite";
 import { mainStore } from "../store/main.store";
 import Loader from "../components/Loader/Loader";
 import { IDepartment } from "../types/departmentTypes";
+import { getALLEmployerHelper } from "../helpers/employer.helper";
+import { employerStore } from "../store/employer.store";
 
 export enum DepartmentKeys {
   "id" = "Номер",
@@ -27,7 +29,6 @@ const Department = () => {
   useEffect(() => {
     setArrayKeys(extractKeys(departmentStore.departmentsData));
   }, [departmentStore.departmentsData]);
-
   return (
     <div className={style.content}>
       <div>ШАПКА</div>

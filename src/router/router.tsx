@@ -25,21 +25,21 @@ export const router = createBrowserRouter([
     errorElement: <div>ErrorPage</div>,
     children: [
       {
-        path: "/login",
+        path: "/авторизация",
         element: (
           <React.Suspense fallback={<Loader />}>
             <Login />
           </React.Suspense>
         ),
       },
-      {
-        path: "/register",
-        element: (
-          <React.Suspense fallback={<Loader />}>
-            <Register />
-          </React.Suspense>
-        ),
-      },
+      // {
+      //   path: "/register",
+      //   element: (
+      //     <React.Suspense fallback={<Loader />}>
+      //       <Register />
+      //     </React.Suspense>
+      //   ),
+      // },
 
       {
         path: "/",
@@ -47,6 +47,16 @@ export const router = createBrowserRouter([
           <React.Suspense fallback={<Loader />}>
             <ProtectedRouter>
               <Main />
+            </ProtectedRouter>
+          </React.Suspense>
+        ),
+      },
+      {
+        path: "/сотрудники",
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <ProtectedRouter>
+              <div>Сотрудники</div>
             </ProtectedRouter>
           </React.Suspense>
         ),

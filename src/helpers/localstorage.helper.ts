@@ -1,7 +1,7 @@
 import { authStore } from "../store/auth.store";
 
-export const getTokenFromLocalStorage = (): string => {
-  const data = localStorage.getItem("token");
+export const getTokenFromLocalStorage = (name: string): string => {
+  const data = localStorage.getItem(name);
   const token: string = data ? JSON.parse(data) : "";
   return token;
 };
@@ -18,11 +18,11 @@ export const removeCurrentPathToLocalStorage = (): void => {
   localStorage.removeItem("lastPath");
 };
 
-export const setTokenToLocalStorage = (token: string): void => {
-  localStorage.setItem("token", JSON.stringify(token));
+export const setTokenToLocalStorage = (name: string, token: string): void => {
+  localStorage.setItem(name, JSON.stringify(token));
 };
 
-export const removeTokenToLocalStorage = (): void => {
+export const removeTokenToLocalStorage = (name: string): void => {
   authStore.setIsAuth(false);
-  localStorage.removeItem("token");
+  localStorage.removeItem(name);
 };

@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
-import { toJS } from "mobx";
-import { userStore } from "../store/user.store";
-import { mainStore } from "../store/main.store";
-import { observer } from "mobx-react-lite";
 import style from "./../styles/layout.module.scss";
-import { getAllDepartmentHepler } from "../helpers/department.helpre";
+import { getMeHelper } from "../helpers/main.helper";
+import { authStore } from "../store/auth.store";
+import { resreshTokenHelper } from "../helpers/auth.helper";
+import { getTokenFromLocalStorage } from "../helpers/localstorage.helper";
 const Layout = () => {
-  useEffect(() => {}, [mainStore.loading]);
-  useEffect(() => {}, [userStore.user]);
-  getAllDepartmentHepler();
+  useEffect(() => {
+    resreshTokenHelper(getTokenFromLocalStorage("refreshToken"));
+    getMeHelper();
+  }, [authStore.isAuth]);
   return (
     <div className={style.layout}>
       <Header />

@@ -19,9 +19,9 @@ const ModalAuth = ({ handlerAuth, title, path, link, type }: IPropsModal) => {
       <div className={style.wrapper}>
         <div>
           <h2 className={style.title}>{title}</h2>
-          <Link to={`/${path}`} className={style.link}>
+          {/* <Link to={`/${path}`} className={style.link}>
             {link}
-          </Link>
+          </Link> */}
         </div>
         <form
           className={style.form}

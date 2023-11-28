@@ -27,8 +27,11 @@ const ProtectedRouter = ({ children }: Props) => {
       navigate(lastPath, { replace: true });
     }
   }, [navigate]);
+
   return (
-    <div>{authStore.isAuth ? children : <Navigate replace to="/login" />}</div>
+    <div>
+      {authStore.isAuth ? children : <Navigate replace to="/авторизация" />}
+    </div>
   );
 };
 
