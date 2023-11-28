@@ -27,8 +27,7 @@ export const authLogin = async (dataUser: IDataLogin): Promise<any> => {
       }
     );
 
-    const { token } = response.data;
-    return token;
+    return response.data;
   } catch (error) {
     return error;
   }
