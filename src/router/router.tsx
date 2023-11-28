@@ -52,6 +52,16 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "/сотрудники",
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <ProtectedRouter>
+              <div>Сотрудники</div>
+            </ProtectedRouter>
+          </React.Suspense>
+        ),
+      },
+      {
         path: "/профиль",
         element: (
           <React.Suspense fallback={<Loader />}>

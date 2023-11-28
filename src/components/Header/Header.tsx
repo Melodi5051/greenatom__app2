@@ -16,7 +16,8 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   const handleLogout = () => {
-    removeTokenToLocalStorage();
+    removeTokenToLocalStorage("token");
+    removeTokenToLocalStorage("refreshToken");
     removeCurrentPathToLocalStorage();
   };
   return (

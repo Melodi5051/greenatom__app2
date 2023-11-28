@@ -8,7 +8,7 @@ export const getALLEmployer = async (): Promise<any> => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+          Authorization: `Bearer ${getTokenFromLocalStorage("token")}`,
         },
       }
     );
