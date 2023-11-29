@@ -6,6 +6,15 @@ export enum UserRole {
   "ROLE_COURIER" = "Курьер",
 }
 
+export enum EmployeeRole {
+  "MANAGER" = "Менеджер",
+  "ADMIN" = "Админ",
+  "SUPER_ADMIN" = "Супер админ",
+  "WAREHOUSE_WORKER" = "Работник склада",
+  "COURIER" = "Курьер",
+  "ROLE_CLIENT_INTERMEDIARY" = "Клиент",
+}
+
 export interface IEmployee {
   id: number;
   firstname: string;
