@@ -40,8 +40,8 @@ const Header = () => {
             <div className={styles.divActionsButtons}>
               {authStore.isAuth ? (
                 <>
-                  <Link to={"/департаменты"}>
-                    <Button viewtype="text">Департаменты</Button>
+                  <Link to={"/сотрудники"}>
+                    <Button viewtype="text">Сотрудники</Button>
                   </Link>
                   <Link to={"/документы"}>
                     <Button viewtype="text">Документы</Button>

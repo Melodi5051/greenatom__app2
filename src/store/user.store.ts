@@ -1,14 +1,14 @@
 import { makeAutoObservable } from "mobx";
 import { IUser } from "../types/userTypes";
-import { IEmployer, UserRole } from "../types/employerTypes";
+import { IEmployee, UserRole } from "../types/employerTypes";
 
 class User__Store {
-  user: IEmployer | null = null;
+  user: IEmployee | null = null;
   userRole: string = "";
   constructor() {
     makeAutoObservable(this);
   }
-  setUser(dataUser: IEmployer) {
+  setUser(dataUser: IEmployee) {
     console.log(dataUser);
     this.user = dataUser;
   }

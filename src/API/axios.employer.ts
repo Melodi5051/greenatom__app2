@@ -1,10 +1,10 @@
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../helpers/localstorage.helper";
 
-export const getALLEmployer = async (): Promise<any> => {
+export const getALLEmployee = async (): Promise<any> => {
   try {
     const response = await axios.get(
-      "http://79.174.80.230:8080/api/employees",
+      "http://45.130.43.231:8080/api/employees",
       {
         headers: {
           "Content-Type": "application/json",

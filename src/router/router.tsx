@@ -6,10 +6,10 @@ import Loader from "../components/Loader/Loader";
 import ErrorPage from "../pages/ErrorPage";
 
 const Login = React.lazy(() => import("../pages/Login"));
-const Register = React.lazy(() => import("../pages/Register"));
 const Main = React.lazy(() => import("../components/Main/Main"));
-const Department = React.lazy(() => import("../pages/Department"));
+// const Department = React.lazy(() => import("../pages/Department"));
 const Document = React.lazy(() => import("../pages/Document"));
+const Employer = React.lazy(() => import("../pages/Employee"));
 // const Department = React.lazy(
 //   () => import("../components/Department/Department")
 // ); // Assuming you have a Department component Assuming you have a Documents component
@@ -57,7 +57,7 @@ export const router = createBrowserRouter([
         element: (
           <React.Suspense fallback={<Loader />}>
             <ProtectedRouter>
-              <div>Сотрудники</div>
+              <Employer />
             </ProtectedRouter>
           </React.Suspense>
         ),
@@ -72,16 +72,16 @@ export const router = createBrowserRouter([
           </React.Suspense>
         ),
       },
-      {
-        path: "/департаменты",
-        element: (
-          <React.Suspense fallback={<Loader />}>
-            <ProtectedRouter>
-              <Department />
-            </ProtectedRouter>
-          </React.Suspense>
-        ),
-      },
+      // {
+      //   path: "/департаменты",
+      //   element: (
+      //     <React.Suspense fallback={<Loader />}>
+      //       <ProtectedRouter>
+      //         <Department />
+      //       </ProtectedRouter>
+      //     </React.Suspense>
+      //   ),
+      // },
       {
         path: "/документы",
         element: (

@@ -21,8 +21,6 @@ export interface IDataLogin {
   username: string;
   password: string;
 }
-
-// Old project
 export interface IDataRegister extends IDataLogin {
   confirmPassword: string;
   email: string;

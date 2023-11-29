@@ -7,8 +7,6 @@ import { observer } from "mobx-react-lite";
 import { mainStore } from "../store/main.store";
 import Loader from "../components/Loader/Loader";
 import { IDepartment } from "../types/departmentTypes";
-import { getALLEmployerHelper } from "../helpers/employer.helper";
-import { employerStore } from "../store/employer.store";
 
 export enum DepartmentKeys {
   "id" = "Номер",
@@ -35,7 +33,8 @@ const Department = () => {
       {mainStore.loading ? (
         <Loader />
       ) : (
-        <Table dataTable={departmentStore.departmentsData} keys={arrayKeys} />
+        // <Table dataTable={departmentStore.departmentsData} keys={arrayKeys} />
+        <div>sdfs</div>
       )}
       <div>Пагинация</div>
     </div>

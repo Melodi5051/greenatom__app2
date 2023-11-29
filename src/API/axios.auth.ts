@@ -17,7 +17,6 @@ export const authRegister = async (dataUser: IDataRegister): Promise<any> => {
     return error;
   }
 };
-
 export const authLogin = async (dataUser: IDataLogin): Promise<any> => {
   try {
     const response = await axios.post(
