@@ -7,12 +7,14 @@ import { IDataRegister } from "../types/userTypes";
 // import { registerHepler } from "../helpers/auth.helper";
 
 const Register = () => {
+
   const handlerRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const obj = Object.fromEntries(form.entries()) as unknown as IDataRegister;
     // registerHepler(obj);
   };
+
   return authStore.isAuth ? (
     <Navigate replace to={"/"} />
   ) : (
