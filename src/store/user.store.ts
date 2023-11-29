@@ -1,5 +1,4 @@
 import { makeAutoObservable } from "mobx";
-import { IUser } from "../types/userTypes";
 import { IEmployee, UserRole } from "../types/employerTypes";
 
 class User__Store {

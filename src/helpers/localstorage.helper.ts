@@ -20,6 +20,7 @@ export const removeCurrentPathToLocalStorage = (): void => {
 
 export const setTokenToLocalStorage = (name: string, token: string): void => {
   localStorage.setItem(name, JSON.stringify(token));
+  authStore.setIsAuth(true);
 };
 
 export const removeTokenToLocalStorage = (name: string): void => {
