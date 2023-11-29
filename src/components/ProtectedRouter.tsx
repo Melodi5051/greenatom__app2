@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import {
   setCurrentPathToLocalStorage,
   getCurrentPathToLocalStorage,
+  getTokenFromLocalStorage,
 } from "../helpers/localstorage.helper";
 
 type Props = { children: React.ReactNode };
@@ -30,7 +31,13 @@ const ProtectedRouter = ({ children }: Props) => {
 
   return (
     <div>
-      {authStore.isAuth ? children : <Navigate replace to="/авторизация" />}
+      {authStore.isAuth ||
+      getTokenFromLocalStorage("token") ||
+      getTokenFromLocalStorage("refreshToken") ? (
+        children
+      ) : (
+        <Navigate replace to="/авторизация" />
+      )}
     </div>
   );
 };
