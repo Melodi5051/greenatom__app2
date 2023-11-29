@@ -25,7 +25,7 @@ import { setTokenToLocalStorage } from "./localstorage.helper";
 
 export const loginHelper = (dataUser: IDataLogin): void => {
   //TODO ПЕРЕПИСАТЬ УСЛОВИЕ
-  if (dataUser.username.length || dataUser.password.length) {
+  if (dataUser.username.length && dataUser.password.length) {
     authLogin(dataUser).then((token) => {
       if (token) {
         authStore.setIsAuth(true);

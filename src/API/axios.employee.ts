@@ -14,8 +14,7 @@ export const createEmployee = async (dataUser: IDataRegisterEmployee): Promise<a
         Authorization: `Bearer ${getTokenFromLocalStorage()}`, },
       }
     );
-    const { token } = response.data;
-    return token;
+    return response.data;
   } catch (error) {
     return error;
   }
