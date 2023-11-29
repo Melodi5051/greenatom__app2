@@ -9,6 +9,7 @@ import { getALLEmployee } from "../API/axios.employer";
 import { getALLEmployeeHelper } from "../helpers/employee.helper";
 import { mainStore } from "../store/main.store";
 import { authStore } from "../store/auth.store";
+import { getEmployeeById } from "../API/axios.employeeById";
 
 export enum EmployeeKeys {
   "fullname" = "ФИО",
@@ -70,6 +71,21 @@ const Employer = () => {
       setArrayKeys(extractKeys(infoEmployee));
     }
   }, [infoEmployee, employeeStore.dataEmployees]);
+
+  // гет работника по айди
+  useEffect(() => {
+    const fetchEmployeeById = async () => {
+      const employeeId = 4; //поменять айдишник на существующий
+      try {
+        const employee = await getEmployeeById(employeeId);
+        console.log(`Сотрудник с id = ${employeeId}:`, employee);
+      } catch (error) {
+        console.error("Ошибка при получении информации о сотруднике:", error);
+      }
+    };
+    fetchEmployeeById();
+  }, []);
+
   return (
     <div className={style.content}>
       <div>ШАПКА</div>
