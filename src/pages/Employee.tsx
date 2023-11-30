@@ -5,6 +5,15 @@ import { observer } from "mobx-react-lite";
 import Loader from "../components/Loader/Loader";
 import style from "./../styles/department.module.scss";
 import Table from "../components/Table/Table";
+import { getALLEmployee } from "../API/axios.employer";
+import {
+  getALLEmployeeHelper,
+  getEmployeeByIdHelper,
+} from "../helpers/employee.helper";
+import { mainStore } from "../store/main.store";
+import { authStore } from "../store/auth.store";
+import { checkPhoneNumber } from "../helpers/main.helper";
+import Pagination from "../components/Pagination/Pagination";
 
 export enum EmployeeKeys {
   "fullname" = "ФИО",
@@ -44,7 +53,7 @@ const transformData = (data: IEmployee[] | null) => {
         jobPosition,
         salary,
         mail: email,
-        phoneNumber,
+        phoneNumber: phoneNumber,
       };
     }) || []
   );
@@ -53,23 +62,38 @@ const transformData = (data: IEmployee[] | null) => {
 const Employer = () => {
   const [infoEmployee, setinfoEmployee] = useState<any[]>([]);
   const [arrayKeys, setArrayKeys] = useState<(keyof typeof EmployeeKeys)[]>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     setinfoEmployee(transformData(employeeStore.dataEmployees));
-  }, []);
+  }, [employeeStore.dataEmployees]);
+
+  useEffect(() => {
+    getALLEmployeeHelper();
+  }, [employeeStore.currentPage]);
+
   useEffect(() => {
     if (infoEmployee.length > 0) {
+      setLoading(false);
       setArrayKeys(extractKeys(infoEmployee));
     }
-  }, [infoEmployee]);
+  }, [infoEmployee, employeeStore.dataEmployees]);
+
+  // useEffect(() => {
+  //   getEmployeeByIdHelper(3);
+  // }, []);
+
   return (
     <div className={style.content}>
       <div>ШАПКА</div>
-      {!arrayKeys.length ? (
+      {!arrayKeys.length || loading ? (
         <Loader />
       ) : (
-        <Table dataTable={infoEmployee} keys={arrayKeys} />
+        <>
+          <Table dataTable={infoEmployee} keys={arrayKeys} />
+          <Pagination maxPages={employeeStore.maxPage} />
+        </>
       )}
-      <div>Пагинация</div>
     </div>
   );
 };

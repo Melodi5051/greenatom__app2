@@ -3,6 +3,7 @@ import { authLogin, authRegister, getNewJWTToken } from "../API/axios.auth";
 import { authStore } from "../store/auth.store";
 import { IDataLogin, IDataRegister } from "../types/userTypes";
 import { setTokenToLocalStorage } from "./localstorage.helper";
+import { getMeHelper } from "./main.helper";
 
 // Не имеет смысла без регистрации
 
@@ -41,5 +42,6 @@ export const loginHelper = (dataUser: IDataLogin): void => {
 export const resreshTokenHelper = (refreshToken: string): void => {
   getNewJWTToken(refreshToken).then((response: string) => {
     setTokenToLocalStorage("token", response);
+    authStore.setIsAuth(true);
   });
 };

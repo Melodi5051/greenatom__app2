@@ -1,29 +1,7 @@
-import { RouterProvider, useRoutes } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import { router } from "./router/router";
 import { observer } from "mobx-react-lite";
-import { getTokenFromLocalStorage } from "./helpers/localstorage.helper";
-import { authStore } from "./store/auth.store";
-import { useEffect } from "react";
-import { createEmployeeHelper } from "./helpers/employee.helper";
-import { createEmployee } from "./API/axios.employee";
-
 function App() {
-  const checkAuth = async (): Promise<void> => {
-    const token = getTokenFromLocalStorage("token");
-    const refreshToken = getTokenFromLocalStorage("refreshToken");
-    try {
-      if (token || refreshToken) {
-        authStore.setIsAuth(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
   return <RouterProvider router={router} />;
 }
 

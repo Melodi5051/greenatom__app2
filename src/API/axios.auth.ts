@@ -1,6 +1,7 @@
 import axios from "axios";
 import { IDataLogin, IDataRegister } from "../types/userTypes";
 import { setTokenToLocalStorage } from "../helpers/localstorage.helper";
+import { authStore } from "../store/auth.store";
 
 export const authRegister = async (dataUser: IDataRegister): Promise<any> => {
   try {

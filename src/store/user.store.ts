@@ -1,5 +1,4 @@
 import { makeAutoObservable } from "mobx";
-import { IUser } from "../types/userTypes";
 import { IEmployee, UserRole } from "../types/employerTypes";
 
 class User__Store {
@@ -11,10 +10,11 @@ class User__Store {
       'Документы': '/документы',
       'Заявки': '/заявки'
     },
-    // "ROLE_MANAGER": {
-    //   'routeName': '/somepath',
-    //   'routeName': '/somepath'
-    // },
+    "ROLE_MANAGER": {
+      'Продукты': '/продукты',
+      'Заказы': '/заказы',
+      'Корзина': '/корзина',
+    },
     // "ROLE_DIRECTOR": {
     //   'routeName': '/somepath',
     //   'routeName': '/somepath'
@@ -22,10 +22,9 @@ class User__Store {
     "ROLE_WAREHOUSE_WORKER": {
       'Склад': '/склад'
     },
-    // "ROLE_COURIER": {
-    //   'routeName': '/somepath',
-    //   'routeName': '/somepath'
-    // }
+    "ROLE_COURIER": {
+      'Доставка': '/доставка'
+    }
   }
 
   constructor() {
@@ -34,7 +33,9 @@ class User__Store {
   setUser(dataUser: IEmployee) {
     this.user = dataUser;
   }
-  setRole(roleUser: UserRole) {
+
+  setRole(roleUser: UserRole | string) {
+    console.log(roleUser);
     this.userRole = roleUser;
   }
 

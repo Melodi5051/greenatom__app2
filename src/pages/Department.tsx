@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "../components/Table/Table";
 import style from "./../styles/department.module.scss";
-import { getAllDepartmentHepler } from "../helpers/department.helpre";
+import { getAllDepartmentHepler } from "../helpers/department.helper";
 import { departmentStore } from "../store/department.store";
 import { observer } from "mobx-react-lite";
 import { mainStore } from "../store/main.store";
