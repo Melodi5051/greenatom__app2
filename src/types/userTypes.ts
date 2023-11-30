@@ -2,7 +2,6 @@ export interface IItemsDocs {
   name: string;
 }
 
-// Код для регистрации пользователя адимнистратором
 export interface IDataRegisterEmployee {
   firstname: string;
   surname: string;

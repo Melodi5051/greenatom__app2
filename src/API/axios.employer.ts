@@ -2,6 +2,7 @@ import axios from "axios";
 import { getTokenFromLocalStorage } from "../helpers/localstorage.helper";
 import { IDataRegisterEmployee } from "../types/userTypes";
 import { IEmployee } from "../types/employerTypes";
+import { employeeStore } from "../store/employee.store";
 const employeeApi = "http://45.130.43.231:8080/api/employees/";
 
 const axiosConfig = () => ({
@@ -35,7 +36,7 @@ export const createEmployee = async (
 export const getALLEmployee = async (): Promise<any> => {
   try {
     const response = await axios.get(
-      "http://45.130.43.231:8080/api/employees",
+      `http://45.130.43.231:8080/api/employees?pagePosition=${employeeStore.currentPage}&pageSize=${employeeStore.limit}&sortBy=id`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +44,8 @@ export const getALLEmployee = async (): Promise<any> => {
         },
       }
     );
-    const { content } = response.data;
+    const { content, totalPages } = response.data;
+    employeeStore.setMaxPage(totalPages);
     return content;
   } catch (error) {
     return error;

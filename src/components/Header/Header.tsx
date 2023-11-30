@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import styles from "./Header.module.scss";
 import SvgIcon from "../../assets/svg/logo.svg";
 import Button from "../Button/Button";
@@ -26,55 +26,52 @@ const Header = () => {
     switch (userStore.userRole) {
       case "ROLE_ADMIN":
         return (
-        <>
-          <Link to={"/сотрудники"}>
-            <Button viewtype="text">Сотрудники</Button>
-          </Link>
-          <Link to={"/продукты"}>
-            <Button viewtype="text">Продукты</Button>
-          </Link>
-          <Link to={"/заказы"}>
-            <Button viewtype="text">Заказы</Button>
-          </Link>
-          <Link to={"/профиль"}>
-            <Button viewtype="admin">
-              {userStore.user?.username}
-              <img src={SvgWhiteUserIcon} />
+          <>
+            <Link to={"/сотрудники"}>
+              <Button viewtype="text">Сотрудники</Button>
+            </Link>
+            <Link to={"/продукты"}>
+              <Button viewtype="text">Продукты</Button>
+            </Link>
+            <Link to={"/профиль"}>
+              <Button viewtype="admin">
+                {userStore.user?.username}
+                <img src={SvgWhiteUserIcon} />
+              </Button>
+            </Link>
+            <Button viewtype="text" onClick={handleLogout}>
+              Выйти
+              <img src={SvgLogoutIcon} alt="Выйти" />
             </Button>
-          </Link>
-          <Button viewtype="text" onClick={handleLogout}>
-            Выйти
-            <img src={SvgLogoutIcon} alt="Выйти"/>
-          </Button>
-        </>
-      )
+          </>
+        );
       case "ROLE_MANAGER":
         return (
-            <>
-              <Link to={"/продукты"}>
-                <Button viewtype="text">Продукты</Button>
-              </Link>
-              <Link to={"/заказы"}>
-                <Button viewtype="text">Заказы</Button>
-              </Link>
-              <Link to={"/корзина"}>
-                <Button viewtype="text">
-                  Корзина
-                  <img src={SvgBasket} />
-                </Button>
-              </Link>
-              <Link to={"/профиль"}>
-                <Button viewtype="manager">
-                  {userStore.user?.username}
-                  <img src={SvgWhiteUserIcon} />
-                </Button>
-              </Link>
-              <Button viewtype="text" onClick={handleLogout}>
-                Выйти
-                <img src={SvgLogoutIcon} alt="Выйти"/>
+          <>
+            <Link to={"/продукты"}>
+              <Button viewtype="text">Продукты</Button>
+            </Link>
+            <Link to={"/заказы"}>
+              <Button viewtype="text">Заказы</Button>
+            </Link>
+            <Link to={"/корзина"}>
+              <Button viewtype="text">
+                Корзина
+                <img src={SvgBasket} />
               </Button>
-            </>
-        )
+            </Link>
+            <Link to={"/профиль"}>
+              <Button viewtype="manager">
+                {userStore.user?.username}
+                <img src={SvgWhiteUserIcon} />
+              </Button>
+            </Link>
+            <Button viewtype="text" onClick={handleLogout}>
+              Выйти
+              <img src={SvgLogoutIcon} alt="Выйти" />
+            </Button>
+          </>
+        );
       case "ROLE_COURIER":
         return (
           <>
@@ -89,35 +86,35 @@ const Header = () => {
             </Link>
             <Button viewtype="text" onClick={handleLogout}>
               Выйти
-              <img src={SvgLogoutIcon} alt="Выйти"/>
+              <img src={SvgLogoutIcon} alt="Выйти" />
             </Button>
           </>
-        )
+        );
       default:
         return (
-            <>
-              {/* <Link to={"/register"}>
+          <>
+            {/* <Link to={"/register"}>
                     <Button viewtype="text">Регистрация</Button>
                   </Link> */}
-              <Link to={"/авторизация"}>
-                <Button viewtype="v2">
-                  Войти
-                  <img src={SvgUserIcon} />
-                  <img src={SvgWhiteUserIcon} />
-                </Button>
-              </Link>
-            </>
-        )
-        break
+            <Link to={"/авторизация"}>
+              <Button viewtype="v2">
+                Войти
+                <img src={SvgUserIcon} />
+                <img src={SvgWhiteUserIcon} />
+              </Button>
+            </Link>
+          </>
+        );
+        break;
     }
-  }
+  };
 
   useEffect(() => {
-    handleNavMenu()
-    console.log(authStore.isAuth)
-  }, [userStore.userRole])
+    handleNavMenu();
+    console.log(authStore.isAuth);
+  }, [userStore.userRole]);
 
-  console.log("User role: ",userStore.userRole)
+  console.log("User role: ", userStore.userRole);
   return (
     <>
       <header>
@@ -129,15 +126,11 @@ const Header = () => {
                 <p>
                   <span>росатом</span>
                   <br />
-                  <span className={styles.divLogoLabelSublabel}>
-                    маркет
-                  </span>
+                  <span className={styles.divLogoLabelSublabel}>маркет</span>
                 </p>
               </div>
             </Link>
-            <div className={styles.divActionsButtons}>
-              {handleNavMenu()}
-            </div>
+            <div className={styles.divActionsButtons}>{handleNavMenu()}</div>
           </div>
         </div>
       </header>
