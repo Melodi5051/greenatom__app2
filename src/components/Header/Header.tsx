@@ -5,7 +5,7 @@ import Button from "../Button/Button";
 import { authStore } from "../../store/auth.store";
 import SvgWhiteUserIcon from "../../assets/svg/ui-white-user-profile.svg";
 import SvgUserIcon from "../../assets/svg/ui-user-profile.svg";
-import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
+// import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
 import { observer } from "mobx-react-lite";
 import { userStore } from "../../store/user.store";
 import {
@@ -13,6 +13,7 @@ import {
   removeTokenToLocalStorage,
 } from "../../helpers/localstorage.helper";
 import { Link } from "react-router-dom";
+import Navbar from "../Navbar/Navbar";
 
 const Header = () => {
   const handleLogout = () => {
@@ -40,21 +41,7 @@ const Header = () => {
             <div className={styles.divActionsButtons}>
               {authStore.isAuth ? (
                 <>
-                  <Link to={"/сотрудники"}>
-                    <Button viewtype="text">Сотрудники</Button>
-                  </Link>
-                  <Link to={"/документы"}>
-                    <Button viewtype="text">Документы</Button>
-                  </Link>
-                  <Link to={"/заявки"}>
-                    <Button viewtype="text">Заявки</Button>
-                  </Link>
-                  <Link to={"/профиль"}>
-                    <Button viewtype="text">{userStore.user?.username}</Button>
-                  </Link>
-                  <Button viewtype="text">
-                    <img src={SvgLogoutIcon} onClick={handleLogout} />
-                  </Button>
+                  <Navbar userData={userStore.user} handleLogout={handleLogout} userRoutes={userStore.setRoutesByRole} />
                 </>
               ) : (
                 <>
