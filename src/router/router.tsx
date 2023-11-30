@@ -8,7 +8,7 @@ import ErrorPage from "../pages/ErrorPage";
 const Login = React.lazy(() => import("../pages/Login"));
 const Main = React.lazy(() => import("../components/Main/Main"));
 // const Department = React.lazy(() => import("../pages/Department"));
-const Document = React.lazy(() => import("../pages/Document"));
+const Product = React.lazy(() => import("../pages/Product"));
 const Employer = React.lazy(() => import("../pages/Employee"));
 // const Department = React.lazy(
 //   () => import("../components/Department/Department")
@@ -83,21 +83,21 @@ export const router = createBrowserRouter([
       //   ),
       // },
       {
-        path: "/документы",
+        path: "/продукты",
         element: (
           <React.Suspense fallback={<Loader />}>
             <ProtectedRouter>
-              <Document />
+              <Product />
             </ProtectedRouter>
           </React.Suspense>
         ),
       },
       {
-        path: "/заявки",
+        path: "/заказы",
         element: (
           <React.Suspense fallback={<div>Loading...</div>}>
             <ProtectedRouter>
-              <div>заявки</div>
+              <div>заказы</div>
             </ProtectedRouter>
           </React.Suspense>
         ),

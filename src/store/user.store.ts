@@ -11,7 +11,7 @@ class User__Store {
     console.log(dataUser);
     this.user = dataUser;
   }
-  setRole(roleUser: UserRole) {
+  setRole(roleUser: UserRole | string) {
     console.log(roleUser);
     this.userRole = roleUser;
   }

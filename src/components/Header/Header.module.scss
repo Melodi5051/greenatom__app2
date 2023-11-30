@@ -58,13 +58,17 @@ header {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
+        min-width: max-content;
         .divLogoLabelSublabel {
           // color: black;
           color: index.$color-blue-2;
         }
       }
     }
+  }
+
+  .UserRoleAdmin {
+    background: red;
   }
 }
 
@@ -74,7 +78,6 @@ header {
   }
 
   header .divActions .divLogo .divLogoLabel {
-    border-left: none;
-    padding: 0;
+
   }
 }

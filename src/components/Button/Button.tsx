@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./Button.module.scss";
 
 interface IPropsButton extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
-  viewtype?: "v1" | "v2" | "text"
+  viewtype?: "v1" | "v2" | "text" | "admin" | "manager" | "courier"
 }
 
 /**

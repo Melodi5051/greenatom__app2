@@ -6,10 +6,8 @@
   padding: 10px 20px;
   justify-content: center;
   align-items: center;
-  gap: 15px;
-
+  gap: 10px;
   outline: none;
-
   cursor: pointer;
   transition: all .09s ease-in-out;
   border: none;
@@ -70,5 +68,23 @@
 
   &.text:active {
     transform: scale(.97);
+  }
+
+  &.admin {
+    border-radius: 5px;
+    background: #CE4C4C;
+    color: white;
+  }
+
+  &.manager {
+    border-radius: 5px;
+    background: #6CACE4;
+    color: white;
+  }
+
+  &.courier {
+    border-radius: 5px;
+    background: #004273;
+    color: white;
   }
 }
