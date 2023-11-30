@@ -7,7 +7,7 @@ header {
   flex: 0 0 auto;
   .divActions {
     width: 100%;
-    padding: 20px 50px;
+    padding: 0px 50px;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
@@ -30,6 +30,7 @@ header {
       a {
         display: flex;
         text-decoration: none;
+        align-items: center;
 
         span {
           color: black;
@@ -50,7 +51,6 @@ header {
 
       .divLogoLabel {
         font-size: index.$fontSize-logo;
-        height: 70px;
         border-left: 1px solid black;
         max-height: min-content;
         text-transform: uppercase;
