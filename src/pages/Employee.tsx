@@ -6,10 +6,13 @@ import Loader from "../components/Loader/Loader";
 import style from "./../styles/department.module.scss";
 import Table from "../components/Table/Table";
 import { getALLEmployee } from "../API/axios.employer";
-import { getALLEmployeeHelper } from "../helpers/employee.helper";
+import {
+  getALLEmployeeHelper,
+  getEmployeeByIdHelper,
+} from "../helpers/employee.helper";
 import { mainStore } from "../store/main.store";
 import { authStore } from "../store/auth.store";
-import { getEmployeeById } from "../API/axios.employeeById";
+import { checkPhoneNumber } from "../helpers/main.helper";
 
 export enum EmployeeKeys {
   "fullname" = "ФИО",
@@ -32,17 +35,6 @@ const extractKeys = (dataTable: IInfoEmployee[] | null) => {
   return [];
 };
 
-const checkPhoneNumber = (phoneNumber: string): string => {
-  const cleaned = phoneNumber.replace(/\D/g, '');
-  const match = cleaned.match(/^(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})$/);
-  if (match) {
-    return `+${match[1]} (${match[2]}) ${match[3]}-${match[4]}-${match[5]}`;
-  } else {
-    return ("Неверный формат номера")
-  }
-  return phoneNumber;
-};
-
 const transformData = (data: IEmployee[] | null) => {
   return (
     data?.map((item) => {
@@ -60,7 +52,7 @@ const transformData = (data: IEmployee[] | null) => {
         jobPosition,
         salary,
         mail: email,
-        phoneNumber: checkPhoneNumber(phoneNumber),
+        phoneNumber: phoneNumber,
       };
     }) || []
   );
@@ -73,9 +65,11 @@ const Employer = () => {
   useEffect(() => {
     setinfoEmployee(transformData(employeeStore.dataEmployees));
   }, [employeeStore.dataEmployees]);
+
   useEffect(() => {
     getALLEmployeeHelper();
   }, []);
+
   useEffect(() => {
     if (infoEmployee.length > 0) {
       setLoading(false);
@@ -83,19 +77,9 @@ const Employer = () => {
     }
   }, [infoEmployee, employeeStore.dataEmployees]);
 
-  // гет работника по айди
-  useEffect(() => {
-    const fetchEmployeeById = async () => {
-      const employeeId = 4; //поменять айдишник на существующий
-      try {
-        const employee = await getEmployeeById(employeeId);
-        console.log(`Сотрудник с id = ${employeeId}:`, employee);
-      } catch (error) {
-        console.error("Ошибка при получении информации о сотруднике:", error);
-      }
-    };
-    fetchEmployeeById();
-  }, []);
+  // useEffect(() => {
+  //   getEmployeeByIdHelper(3);
+  // }, []);
 
   return (
     <div className={style.content}>

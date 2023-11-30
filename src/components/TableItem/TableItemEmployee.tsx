@@ -2,17 +2,9 @@ import React from "react";
 import { IInfoEmployee } from "../../pages/Employee";
 import style from "../Table/Table.module.scss";
 import { EmployeeRole } from "../../types/employerTypes";
+import { checkPhoneNumber } from "../../helpers/main.helper";
 
-interface TableItemProps {
-  fullname: string;
-  jobPosition: string;
-  salary: number;
-  mail: string;
-  phoneNumber: string;
-}
-
-interface IPropsItem {}
-const TableItem: React.FC<TableItemProps> = (props) => {
+const TableItemEmployee: React.FC<IInfoEmployee> = (props) => {
   return (
     <div>
       <div className={style.tr}>
@@ -22,10 +14,10 @@ const TableItem: React.FC<TableItemProps> = (props) => {
         </div>
         <div className={style.td}>{props.salary}</div>
         <div className={style.td}>{props.mail}</div>
-        <div className={style.td}>{props.phoneNumber}</div>
+        <div className={style.td}>{checkPhoneNumber(props.phoneNumber)}</div>
       </div>
     </div>
   );
 };
 
-export default TableItem;
+export default TableItemEmployee;

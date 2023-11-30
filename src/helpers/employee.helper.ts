@@ -1,4 +1,4 @@
-import { createEmployee } from "../API/axios.employee";
+import { createEmployee, getEmployeeById } from "../API/axios.employer";
 import { getALLEmployee } from "../API/axios.employer";
 import { employeeStore } from "../store/employee.store";
 import { mainStore } from "../store/main.store";
@@ -40,4 +40,13 @@ export const createEmployeeHelper = (dataUser: IDataRegisterEmployee): void => {
       });
   }
   console.log("ERROR");
+};
+
+export const getEmployeeByIdHelper = (id: number): void => {
+  mainStore.setLoading(true);
+  getEmployeeById(id).then((response: IEmployee) => {
+    mainStore.setLoading(false);
+    employeeStore.setDataEmployee(response);
+    console.log(response);
+  });
 };
