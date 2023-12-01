@@ -12,17 +12,20 @@ interface IPropsModal {
   link: string;
   type: Type;
 }
+
 type Type = "register" | "login";
+
 const ModalAuth = ({ handlerAuth, title, path, link, type }: IPropsModal) => {
   return (
     <div className={style.content}>
       <div className={style.wrapper}>
         <div>
           <h2 className={style.title}>{title}</h2>
-          <Link to={`/${path}`} className={style.link}>
+          {/* <Link to={`/${path}`} className={style.link}>
             {link}
-          </Link>
+          </Link> */}
         </div>
+
         <form
           className={style.form}
           id="formElement"
@@ -39,6 +42,7 @@ const ModalAuth = ({ handlerAuth, title, path, link, type }: IPropsModal) => {
                   name="username"
                 />
               </div>
+
               <div>
                 <label htmlFor="password">Пароль</label>
                 <EyeInput
@@ -47,6 +51,7 @@ const ModalAuth = ({ handlerAuth, title, path, link, type }: IPropsModal) => {
                   id="password"
                 />
               </div>
+
               <Button viewtype="v2">ВОЙТИ</Button>
             </>
           ) : (
@@ -60,6 +65,7 @@ const ModalAuth = ({ handlerAuth, title, path, link, type }: IPropsModal) => {
                   name="username"
                 />
               </div>
+
               <div>
                 <label htmlFor="username">Почта</label>
                 <Input
@@ -69,6 +75,7 @@ const ModalAuth = ({ handlerAuth, title, path, link, type }: IPropsModal) => {
                   name="email"
                 />
               </div>
+
               <div>
                 <label htmlFor="password">Пароль</label>
                 <EyeInput
@@ -77,16 +84,17 @@ const ModalAuth = ({ handlerAuth, title, path, link, type }: IPropsModal) => {
                   id="password"
                 />
               </div>
+
               <div>
-                <label htmlFor="password">Повтор пароль</label>
+                <label htmlFor="password">Повтор пароля</label>
                 <EyeInput
-                  placeholder="Введите повтор пароль..."
+                  placeholder="Введите повторно пароль..."
                   name="confirmPassword"
                   id="confirmPassword"
                 />
               </div>
 
-              <Button viewtype="v2">ЗАРИГЕСТРИРОВАТЬСЯ</Button>
+              <Button viewtype="v2">ЗАРЕГИСТРИРОВАТЬСЯ</Button>
             </>
           )}
         </form>

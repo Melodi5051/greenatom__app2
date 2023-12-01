@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import style from "./Table.module.scss";
-import { IDepartment } from "../../types/departmentTypes";
 import { observer } from "mobx-react-lite";
-import { DepartmentKeys } from "../../pages/Department";
+import { EmployeeKeys, IInfoEmployee } from "../../pages/Employee";
+import { EmployeeRole } from "../../types/employerTypes";
+import TableItemEmployee from "../TableItem/TableItemEmployee";
 
 interface IPropsTable {
-  dataTable: IDepartment[] | null;
+  dataTable: IInfoEmployee[] | null;
   keys: string[];
 }
 
@@ -16,18 +17,14 @@ const Table: React.FC<IPropsTable> = ({ dataTable, keys }) => {
         <div className={style.tr}>
           {keys.map((el: string, index) => (
             <div className={style.td} key={index}>
-              {DepartmentKeys[el as keyof typeof DepartmentKeys]}
+              {EmployeeKeys[el as keyof typeof EmployeeKeys]}
             </div>
           ))}
         </div>
       </div>
       <div className={style.tbody}>
-        {dataTable?.map((el: IDepartment, index: number) => (
-          <div className={style.tr} key={index}>
-            <div className={style.td}>{el.id}</div>
-            <div className={style.td}>{el.name}</div>
-            <div className={style.td}>{el.amountOfEmployee}</div>
-          </div>
+        {dataTable?.map((el: IInfoEmployee, index: number) => (
+          <TableItemEmployee {...el} key={index} />
         ))}
       </div>
     </div>

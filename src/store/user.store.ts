@@ -1,14 +1,50 @@
 import { makeAutoObservable } from "mobx";
-import { IUser } from "../types/userTypes";
+import { IEmployee, UserRole } from "../types/employerTypes";
 
 class User__Store {
-  user: IUser | null = null;
+  user: IEmployee | null = null;
+  userRole: string = "";
+  routesByRole: any = {
+    ROLE_ADMIN: {
+      Сотрудники: "/сотрудники",
+      Продукты: "/продукты",
+    },
+    ROLE_MANAGER: {
+      Продукты: "/продукты",
+      Заказы: "/заказы",
+      Корзина: "/корзина",
+    },
+    // "ROLE_DIRECTOR": {
+    //   'routeName': '/somepath',
+    //   'routeName': '/somepath'
+    // },
+    ROLE_WAREHOUSE_WORKER: {
+      Склад: "/склад",
+    },
+    ROLE_COURIER: {
+      Доставка: "/доставка",
+    },
+  };
+
   constructor() {
     makeAutoObservable(this);
   }
-  setUser(dataUser: any) {
+  setUser(dataUser: IEmployee) {
     this.user = dataUser;
   }
+  setRole(roleUser: UserRole | string) {
+    console.log(roleUser);
+    this.userRole = roleUser;
+  }
+
+  setRoutesByRole = (userRole: any) => {
+    if (userRole !== undefined) {
+      if (userRole in this.routesByRole) {
+        return this.routesByRole[userRole];
+      }
+    }
+    return;
+  };
 }
 
 export const userStore = new User__Store();

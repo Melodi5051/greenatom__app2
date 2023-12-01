@@ -5,9 +5,10 @@ header {
   border-bottom: 1px solid #000;
   justify-content: space-between;
   flex: 0 0 auto;
+
   .divActions {
     width: 100%;
-    padding: 20px 50px;
+    padding: 0px 50px;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
@@ -27,19 +28,23 @@ header {
 
     .divLogo {
       display: flex;
+
       a {
         display: flex;
         text-decoration: none;
+        align-items: center;
 
         span {
           color: black;
         }
+
         &:active {
           span {
             color: black;
           }
         }
       }
+
       > a > img {
         display: inline;
       }
@@ -50,7 +55,6 @@ header {
 
       .divLogoLabel {
         font-size: index.$fontSize-logo;
-        height: 70px;
         border-left: 1px solid black;
         max-height: min-content;
         text-transform: uppercase;
@@ -58,13 +62,17 @@ header {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
+        min-width: max-content;
         .divLogoLabelSublabel {
           // color: black;
           color: index.$color-blue-2;
         }
       }
     }
+  }
+
+  .UserRoleAdmin {
+    background: red;
   }
 }
 
@@ -74,7 +82,5 @@ header {
   }
 
   header .divActions .divLogo .divLogoLabel {
-    border-left: none;
-    padding: 0;
   }
 }

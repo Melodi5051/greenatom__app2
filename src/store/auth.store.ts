@@ -5,7 +5,6 @@ class Auth__Store {
     makeAutoObservable(this);
   }
   isAuth = false;
-
   setIsAuth(isAuth: boolean) {
     this.isAuth = isAuth;
   }

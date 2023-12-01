@@ -1,0 +1,47 @@
+.errorPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    align-items: center;
+    padding: 0px 10px;
+
+    .errorStatusContent {
+
+        .errorStatus {
+            font-size: 101px;
+            color: #6cace4;
+            text-shadow: 10px 2px 4px rgba(0, 0, 0, 0.2);
+            transition: 0.1s ease;
+        }
+    }
+
+    .errorPageText {
+        margin-bottom: 25px;
+        color: #6cace4;
+        text-align: center;
+        line-height: 40px;
+        font-size: 41px;
+        transition: 0.1s ease;
+    }
+
+    .btnBack {
+        background: none;
+        padding: 10px 20px;
+        font-size: 17px;
+        text-transform: uppercase;
+        border: 5px solid #6cace4;
+        color: #6cace4;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .btnBack:hover {
+        background: #6cace4;
+        color: white;
+        text-decoration: double;
+    }
+}
