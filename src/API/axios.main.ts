@@ -1,8 +1,5 @@
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../helpers/localstorage.helper";
-import { resreshTokenHelper } from "../helpers/auth.helper";
-import { mainStore } from "../store/main.store";
-import { userStore } from "../store/user.store";
 import { authStore } from "../store/auth.store";
 
 export const getMe = async (): Promise<any> => {

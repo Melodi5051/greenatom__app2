@@ -14,6 +14,7 @@ import {
   removeTokenToLocalStorage,
 } from "../../helpers/localstorage.helper";
 import { Link } from "react-router-dom";
+import Navbar from "../Navbar/Navbar";
 
 const Header = () => {
   const handleLogout = () => {
@@ -22,95 +23,7 @@ const Header = () => {
     removeCurrentPathToLocalStorage();
   };
 
-  const handleNavMenu = () => {
-    switch (userStore.userRole) {
-      case "ROLE_ADMIN":
-        return (
-          <>
-            <Link to={"/сотрудники"}>
-              <Button viewtype="text">Сотрудники</Button>
-            </Link>
-            <Link to={"/продукты"}>
-              <Button viewtype="text">Продукты</Button>
-            </Link>
-            <Link to={"/профиль"}>
-              <Button viewtype="admin">
-                {userStore.user?.username}
-                <img src={SvgWhiteUserIcon} />
-              </Button>
-            </Link>
-            <Button viewtype="text" onClick={handleLogout}>
-              Выйти
-              <img src={SvgLogoutIcon} alt="Выйти" />
-            </Button>
-          </>
-        );
-      case "ROLE_MANAGER":
-        return (
-          <>
-            <Link to={"/продукты"}>
-              <Button viewtype="text">Продукты</Button>
-            </Link>
-            <Link to={"/заказы"}>
-              <Button viewtype="text">Заказы</Button>
-            </Link>
-            <Link to={"/корзина"}>
-              <Button viewtype="text">
-                Корзина
-                <img src={SvgBasket} />
-              </Button>
-            </Link>
-            <Link to={"/профиль"}>
-              <Button viewtype="manager">
-                {userStore.user?.username}
-                <img src={SvgWhiteUserIcon} />
-              </Button>
-            </Link>
-            <Button viewtype="text" onClick={handleLogout}>
-              Выйти
-              <img src={SvgLogoutIcon} alt="Выйти" />
-            </Button>
-          </>
-        );
-      case "ROLE_COURIER":
-        return (
-          <>
-            <Link to={"/доставка"}>
-              <Button viewtype="text">Доставка</Button>
-            </Link>
-            <Link to={"/профиль"}>
-              <Button viewtype="courier">
-                {userStore.user?.username}
-                <img src={SvgWhiteUserIcon} />
-              </Button>
-            </Link>
-            <Button viewtype="text" onClick={handleLogout}>
-              Выйти
-              <img src={SvgLogoutIcon} alt="Выйти" />
-            </Button>
-          </>
-        );
-      default:
-        return (
-          <>
-            {/* <Link to={"/register"}>
-                    <Button viewtype="text">Регистрация</Button>
-                  </Link> */}
-            <Link to={"/авторизация"}>
-              <Button viewtype="v2">
-                Войти
-                <img src={SvgUserIcon} />
-                <img src={SvgWhiteUserIcon} />
-              </Button>
-            </Link>
-          </>
-        );
-        break;
-    }
-  };
-
   useEffect(() => {
-    handleNavMenu();
     console.log(authStore.isAuth);
   }, [userStore.userRole]);
 
@@ -130,7 +43,25 @@ const Header = () => {
                 </p>
               </div>
             </Link>
-            <div className={styles.divActionsButtons}>{handleNavMenu()}</div>
+            <div className={styles.divActionsButtons}>
+              {authStore.isAuth ? (
+                <Navbar
+                  userData={userStore.user}
+                  handleLogout={handleLogout}
+                  userRoutes={userStore.setRoutesByRole}
+                />
+              ) : (
+                <>
+                  <Link to={"/авторизация"}>
+                    <Button viewtype="v2">
+                      Войти
+                      <img src={SvgUserIcon} />
+                      <img src={SvgWhiteUserIcon} />
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </header>

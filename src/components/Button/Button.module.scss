@@ -1,5 +1,4 @@
-@use '../../index.scss';
-
+@use "../../index.scss";
 
 .button {
   display: inline-flex;
@@ -9,7 +8,7 @@
   gap: 10px;
   outline: none;
   cursor: pointer;
-  transition: all .09s ease-in-out;
+  transition: all 0.09s ease-in-out;
   border: none;
   color: black;
 
@@ -20,32 +19,31 @@
 
   &.v1 {
     border-radius: 5px;
-    border: 1px solid #6CACE4;
-    background: #FFF;
+    border: 1px solid #6cace4;
+    background: #fff;
   }
 
   &.v1:hover {
     border-radius: 5px;
-    background: #6CACE4;
+    background: #6cace4;
     color: white;
   }
 
   &.v1:active {
     border-radius: 5px;
-    background: #369BF3;
+    background: #369bf3;
     color: white;
   }
 
-
   &.v2 {
     border-radius: 5px;
-    border: 1px solid #025EA1;
-    background: #FFF;
+    border: 1px solid #025ea1;
+    background: #fff;
   }
 
   &.v2:hover {
     border-radius: 5px;
-    background: #025EA1;
+    background: #025ea1;
     color: white;
   }
 
@@ -55,30 +53,29 @@
     color: white;
   }
 
-
-  &.withIcon>img {
+  &.withIcon > img {
     width: 20px;
     height: 20px;
   }
 
   &.text {
     border-radius: 5px;
-    background: #FFF;
+    background: #fff;
   }
 
   &.text:active {
-    transform: scale(.97);
+    transform: scale(0.97);
   }
 
   &.admin {
     border-radius: 5px;
-    background: #CE4C4C;
+    background: #ce4c4c;
     color: white;
   }
 
   &.manager {
     border-radius: 5px;
-    background: #6CACE4;
+    background: #6cace4;
     color: white;
   }
 

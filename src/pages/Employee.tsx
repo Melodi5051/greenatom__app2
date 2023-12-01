@@ -65,7 +65,9 @@ const Employer = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setinfoEmployee(transformData(employeeStore.dataEmployees));
+    if (employeeStore.dataEmployees.length) {
+      setinfoEmployee(transformData(employeeStore.dataEmployees));
+    }
   }, [employeeStore.dataEmployees]);
 
   useEffect(() => {

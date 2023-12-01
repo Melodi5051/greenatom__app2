@@ -5,6 +5,7 @@ header {
   border-bottom: 1px solid #000;
   justify-content: space-between;
   flex: 0 0 auto;
+
   .divActions {
     width: 100%;
     padding: 0px 50px;
@@ -27,6 +28,7 @@ header {
 
     .divLogo {
       display: flex;
+
       a {
         display: flex;
         text-decoration: none;
@@ -35,12 +37,14 @@ header {
         span {
           color: black;
         }
+
         &:active {
           span {
             color: black;
           }
         }
       }
+
       > a > img {
         display: inline;
       }
@@ -78,6 +82,5 @@ header {
   }
 
   header .divActions .divLogo .divLogoLabel {
-
   }
 }

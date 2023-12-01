@@ -33,7 +33,6 @@ const ProtectedRouter = ({ children }: Props) => {
     const refreshAuthToken = () => {
       const refreshToken = getTokenFromLocalStorage("refreshToken");
       if (refreshToken) {
-        console.log(refreshToken);
         try {
           resreshTokenHelper(refreshToken);
           authStore.setIsAuth(true);

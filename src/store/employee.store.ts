@@ -6,7 +6,7 @@ class Employee__Store {
   dataEmployee: IEmployee | null = null;
   currentPage: number = 0;
   maxPage: number = 0;
-  limit: number = 5;
+  limit: number = 10;
   constructor() {
     makeAutoObservable(this);
   }
