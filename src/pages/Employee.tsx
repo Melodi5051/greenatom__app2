@@ -14,6 +14,8 @@ import { mainStore } from "../store/main.store";
 import { authStore } from "../store/auth.store";
 import { checkPhoneNumber } from "../helpers/main.helper";
 import Pagination from "../components/Pagination/Pagination";
+import CreateEmployee from "../components/ModalWindow/ModalWindow";
+import ModalCreateEmployee from "../components/ModalCreateEmployee/ModalCreateEmployee";
 
 export enum EmployeeKeys {
   "fullname" = "ФИО",
@@ -85,6 +87,7 @@ const Employer = () => {
 
   return (
     <div className={style.content}>
+      <ModalCreateEmployee />
       <div>ШАПКА</div>
       {!arrayKeys.length || loading ? (
         <Loader />

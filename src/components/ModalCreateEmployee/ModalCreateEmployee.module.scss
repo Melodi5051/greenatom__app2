@@ -1,0 +1,43 @@
+@use "./../../index.scss" as index;
+
+.title {
+  color: index.$color-blue-1;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+
+  label {
+    color: index.$color-blue-1;
+    display: flex;
+    text-align: start;
+  }
+}
+
+.submitButton {
+  grid-column: -1 / 1;
+}
+
+.positionSelect {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+
+  &:hover,
+  &:focus {
+    border-color: #007bff;
+  }
+}
