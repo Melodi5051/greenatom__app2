@@ -3,6 +3,9 @@ import { getTokenFromLocalStorage } from "../helpers/localstorage.helper";
 import { IDataRegisterEmployee } from "../types/userTypes";
 import { IEmployee } from "../types/employerTypes";
 import { employeeStore } from "../store/employee.store";
+import { getNewJWTToken } from "./axios.auth";
+import { resreshTokenHelper } from "../helpers/auth.helper";
+import { getALLEmployeeHelper } from "../helpers/employee.helper";
 const employeeApi = "http://45.130.43.231:8080/api/employees/";
 
 const axiosConfig = () => ({
@@ -34,6 +37,7 @@ export const createEmployee = async (
 };
 
 export const getALLEmployee = async (): Promise<any> => {
+  console.log(1);
   try {
     const response = await axios.get(
       `http://45.130.43.231:8080/api/employees?pagePosition=${employeeStore.currentPage}&pageSize=${employeeStore.limit}&sortBy=id`,
@@ -48,7 +52,10 @@ export const getALLEmployee = async (): Promise<any> => {
     employeeStore.setMaxPage(totalPages);
     return content;
   } catch (error) {
-    return error;
+    resreshTokenHelper(
+      getTokenFromLocalStorage("refreshToken"),
+      getALLEmployeeHelper
+    );
   }
 };
 

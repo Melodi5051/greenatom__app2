@@ -11,7 +11,6 @@
   transition: all 0.09s ease-in-out;
   border: none;
   color: black;
-
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -53,6 +52,41 @@
     color: white;
   }
 
+  &.v3 {
+    border-radius: 5px;
+    border: 1px solid #ce4c4c;
+    background: #fff;
+  }
+
+  &.v3:hover {
+    border-radius: 5px;
+    background: #ce4c4c;
+    color: white;
+  }
+
+  &.v3:active {
+    border-radius: 5px;
+    background: #ce4c4c;
+    color: white;
+  }
+
+  &.v4 {
+    border-radius: 5px;
+    border: 1px solid #1e4705;
+    background: #fff;
+  }
+
+  &.v4:hover {
+    border-radius: 5px;
+    background: #1e4705;
+    color: white;
+  }
+
+  &.v4:active {
+    border-radius: 5px;
+    background: #1e4705;
+    color: white;
+  }
   &.withIcon > img {
     width: 20px;
     height: 20px;

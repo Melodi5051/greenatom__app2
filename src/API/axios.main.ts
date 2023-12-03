@@ -1,6 +1,8 @@
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../helpers/localstorage.helper";
 import { authStore } from "../store/auth.store";
+import { resreshTokenHelper } from "../helpers/auth.helper";
+import { getMeHelper } from "../helpers/main.helper";
 
 export const getMe = async (): Promise<any> => {
   try {
@@ -16,8 +18,6 @@ export const getMe = async (): Promise<any> => {
 
     return response.data;
   } catch (error: any) {
-    if (error.response.status === 401) {
-      authStore.setIsAuth(false);
-    }
+    resreshTokenHelper(getTokenFromLocalStorage("refreshToken"), getMeHelper);
   }
 };

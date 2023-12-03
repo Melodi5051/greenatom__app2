@@ -8,8 +8,8 @@ import { IDataRegisterEmployee } from "../types/userTypes";
 export const getALLEmployeeHelper = (): void => {
   mainStore.setLoading(true);
   getALLEmployee().then((response: IEmployee[]) => {
-    mainStore.setLoading(false);
     employeeStore.setDataEmployees(response);
+    mainStore.setLoading(false);
   });
 };
 

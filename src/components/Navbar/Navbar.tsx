@@ -28,7 +28,7 @@ const Navbar = ({ userData, handleLogout, userRoutes }: Navbar) => {
               )
             )}
           <Link to={"/профиль"}>
-            <Button viewtype="v2">{userData?.username}</Button>
+            <Button viewtype="v3">{userData?.username}</Button>
           </Link>
           <Button viewtype="text">
             <img src={SvgLogoutIcon} onClick={handleLogout} />

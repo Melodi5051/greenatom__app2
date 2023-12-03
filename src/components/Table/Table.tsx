@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import style from "./Table.module.scss";
 import { observer } from "mobx-react-lite";
 import { EmployeeKeys, IInfoEmployee } from "../../pages/Employee";
-import { EmployeeRole } from "../../types/employerTypes";
 import TableItemEmployee from "../TableItem/TableItemEmployee";
 
 interface IPropsTable {
@@ -20,6 +19,7 @@ const Table: React.FC<IPropsTable> = ({ dataTable, keys }) => {
               {EmployeeKeys[el as keyof typeof EmployeeKeys]}
             </div>
           ))}
+          <div></div>
         </div>
       </div>
       <div className={style.tbody}>

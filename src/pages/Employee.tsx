@@ -14,6 +14,7 @@ import { mainStore } from "../store/main.store";
 import { authStore } from "../store/auth.store";
 import { checkPhoneNumber } from "../helpers/main.helper";
 import Pagination from "../components/Pagination/Pagination";
+import TableHeader from "../components/TableHeader/TableHeader";
 
 export enum EmployeeKeys {
   "fullname" = "ФИО",
@@ -65,7 +66,7 @@ const Employer = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (employeeStore.dataEmployees.length) {
+    if (employeeStore.dataEmployees) {
       setinfoEmployee(transformData(employeeStore.dataEmployees));
     }
   }, [employeeStore.dataEmployees]);
@@ -87,11 +88,11 @@ const Employer = () => {
 
   return (
     <div className={style.content}>
-      <div>ШАПКА</div>
       {!arrayKeys.length || loading ? (
         <Loader />
       ) : (
         <>
+          <TableHeader />
           <Table dataTable={infoEmployee} keys={arrayKeys} />
           <Pagination maxPages={employeeStore.maxPage} />
         </>

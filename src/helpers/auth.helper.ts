@@ -39,9 +39,15 @@ export const loginHelper = (dataUser: IDataLogin): void => {
   }
   console.log("ERROR");
 };
-export const resreshTokenHelper = (refreshToken: string): void => {
+export const resreshTokenHelper = (
+  refreshToken: string,
+  func?: () => void
+): void => {
   getNewJWTToken(refreshToken).then((response: string) => {
     setTokenToLocalStorage("token", response);
     authStore.setIsAuth(true);
+    if (func) {
+      func();
+    }
   });
 };
