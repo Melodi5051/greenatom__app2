@@ -5,6 +5,7 @@ import Footer from "../components/Footer/Footer";
 import style from "./../styles/layout.module.scss";
 import Loader from "../components/Loader/Loader";
 import { getMeHelper } from "../helpers/main.helper";
+import { NotifyStack } from "../components/Notify/Notify";
 const Layout = () => {
   return (
     <>
@@ -17,7 +18,7 @@ const Layout = () => {
         <Footer />
       </div>
       {/* <Footer /> */}
-    </div>
+    </>
   );
 };
 
