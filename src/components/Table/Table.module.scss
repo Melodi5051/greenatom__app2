@@ -15,14 +15,17 @@
   }
   .tr {
     display: grid;
+    align-items: center;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     border: 1px solid #025ea1;
-    padding: 15px 20px;
+    padding: 10px 20px;
   }
 
   .th,
   .td {
+    display: flex;
     font-size: 16px;
+    gap: 10px;
     font-weight: 400;
     padding: 8px;
     text-align: start;

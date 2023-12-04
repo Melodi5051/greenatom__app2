@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import styles from "./Button.module.scss";
 
-interface IPropsButton extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
-  viewtype?: "v1" | "v2" | "text"
+interface IPropsButton
+  extends React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
+  viewtype?:
+    | "v1"
+    | "v2"
+    | "v3"
+    | "v4"
+    | "text"
+    | "admin"
+    | "manager"
+    | "courier";
 }
 
 /**
@@ -24,10 +36,11 @@ interface IPropsButton extends React.DetailedHTMLProps<React.ButtonHTMLAttribute
  * @returns 
  */
 const Button: React.FC<IPropsButton> = (props) => {
-  const btnClassName = `${styles.button} ${styles[props?.viewtype || "v1"]} ${styles.withIcon}`;
+  const btnClassName = `${styles.button} ${styles[props?.viewtype || "v1"]} ${
+    styles.withIcon
+  }`;
 
   const childrens = React.Children.toArray(props.children);
-
 
   const [showSecondIcon, setShowSecondIcon] = useState(false);
 
@@ -35,30 +48,25 @@ const Button: React.FC<IPropsButton> = (props) => {
   // если дочерний элемент 1 - просто рисуем кнопку
   if (childrens.length <= 2) {
     return (
-      <button
-        className={btnClassName}
-        {...props}
-      >
+      <button className={btnClassName} {...props}>
         {props.children}
       </button>
     );
   } else {
     // если вторым ребенком передаем иконку
     // она должна быть в черном и белом исполнении
-    return <button
-      className={btnClassName}
-      onMouseMove={() => setShowSecondIcon(true)}
-      onMouseLeave={() => setShowSecondIcon(false)}
-      {...props}
-    >
-      {childrens[0]}
-      {showSecondIcon
-        ? childrens[2]
-        : childrens[1]
-      }
-    </button>
+    return (
+      <button
+        className={btnClassName}
+        onMouseMove={() => setShowSecondIcon(true)}
+        onMouseLeave={() => setShowSecondIcon(false)}
+        {...props}
+      >
+        {childrens[0]}
+        {showSecondIcon ? childrens[2] : childrens[1]}
+      </button>
+    );
   }
-
 };
 
 export default Button;

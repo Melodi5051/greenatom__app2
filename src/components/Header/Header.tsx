@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Header.module.scss";
 import SvgIcon from "../../assets/svg/logo.svg";
 import Button from "../Button/Button";
 import { authStore } from "../../store/auth.store";
 import SvgWhiteUserIcon from "../../assets/svg/ui-white-user-profile.svg";
+import SvgBasket from "../../assets/svg/ui-basket.svg";
 import SvgUserIcon from "../../assets/svg/ui-user-profile.svg";
 import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
 import { observer } from "mobx-react-lite";
@@ -13,12 +14,20 @@ import {
   removeTokenToLocalStorage,
 } from "../../helpers/localstorage.helper";
 import { Link } from "react-router-dom";
+import Navbar from "../Navbar/Navbar";
 
 const Header = () => {
   const handleLogout = () => {
-    removeTokenToLocalStorage();
+    removeTokenToLocalStorage("token");
+    removeTokenToLocalStorage("refreshToken");
     removeCurrentPathToLocalStorage();
   };
+
+  useEffect(() => {
+    console.log(authStore.isAuth);
+  }, [userStore.userRole]);
+
+  console.log("User role: ", userStore.userRole);
   return (
     <>
       <header>
@@ -28,39 +37,22 @@ const Header = () => {
               <img src={SvgIcon} alt="" />
               <div className={styles.divLogoLabel}>
                 <p>
-                  <span>гринатом</span>
+                  <span>росатом</span>
                   <br />
-                  <span className={styles.divLogoLabelSublabel}>
-                    торговля и склад
-                  </span>
+                  <span className={styles.divLogoLabelSublabel}>маркет</span>
                 </p>
               </div>
             </Link>
             <div className={styles.divActionsButtons}>
               {authStore.isAuth ? (
-                <>
-                  <Link to={"/департаменты"}>
-                    <Button viewtype="text">Департаменты</Button>
-                  </Link>
-                  <Link to={"/документы"}>
-                    <Button viewtype="text">Документы</Button>
-                  </Link>
-                  <Link to={"/заявки"}>
-                    <Button viewtype="text">Заявки</Button>
-                  </Link>
-                  <Link to={"/профиль"}>
-                    <Button viewtype="text">{userStore.user?.username}</Button>
-                  </Link>
-                  <Button viewtype="text">
-                    <img src={SvgLogoutIcon} onClick={handleLogout} />
-                  </Button>
-                </>
+                <Navbar
+                  userData={userStore.user}
+                  handleLogout={handleLogout}
+                  userRoutes={userStore.setRoutesByRole}
+                />
               ) : (
                 <>
-                  <Link to={"/register"}>
-                    <Button viewtype="text">Регистрация</Button>
-                  </Link>
-                  <Link to={"/login"}>
+                  <Link to={"/авторизация"}>
                     <Button viewtype="v2">
                       Войти
                       <img src={SvgUserIcon} />

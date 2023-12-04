@@ -2,17 +2,10 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
-import { toJS } from "mobx";
-import { userStore } from "../store/user.store";
-import { mainStore } from "../store/main.store";
-import { observer } from "mobx-react-lite";
 import style from "./../styles/layout.module.scss";
-import { getAllDepartmentHepler } from "../helpers/department.helpre";
-import { NotifyStack } from "../components/Notify/Notify";
+import Loader from "../components/Loader/Loader";
+import { getMeHelper } from "../helpers/main.helper";
 const Layout = () => {
-  useEffect(() => {}, [mainStore.loading]);
-  useEffect(() => {}, [userStore.user]);
-  getAllDepartmentHepler();
   return (
     <>
       <NotifyStack />
@@ -23,7 +16,8 @@ const Layout = () => {
         </div>
         <Footer />
       </div>
-    </>
+      {/* <Footer /> */}
+    </div>
   );
 };
 

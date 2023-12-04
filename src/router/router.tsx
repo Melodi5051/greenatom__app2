@@ -3,12 +3,13 @@ import Layout from "../pages/Layout";
 import ProtectedRouter from "../components/ProtectedRouter";
 import React from "react";
 import Loader from "../components/Loader/Loader";
+import ErrorPage from "../pages/ErrorPage";
 
 const Login = React.lazy(() => import("../pages/Login"));
-const Register = React.lazy(() => import("../pages/Register"));
 const Main = React.lazy(() => import("../components/Main/Main"));
-const Department = React.lazy(() => import("../pages/Department"));
-const Document = React.lazy(() => import("../pages/Document"));
+// const Department = React.lazy(() => import("../pages/Department"));
+const Product = React.lazy(() => import("../pages/Product"));
+const Employer = React.lazy(() => import("../pages/Employee"));
 // const Department = React.lazy(
 //   () => import("../components/Department/Department")
 // ); // Assuming you have a Department component Assuming you have a Documents component
@@ -22,24 +23,24 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
-    errorElement: <div>ErrorPage</div>,
+    errorElement: <ErrorPage />,
     children: [
       {
-        path: "/login",
+        path: "/авторизация",
         element: (
           <React.Suspense fallback={<Loader />}>
             <Login />
           </React.Suspense>
         ),
       },
-      {
-        path: "/register",
-        element: (
-          <React.Suspense fallback={<Loader />}>
-            <Register />
-          </React.Suspense>
-        ),
-      },
+      // {
+      //   path: "/register",
+      //   element: (
+      //     <React.Suspense fallback={<Loader />}>
+      //       <Register />
+      //     </React.Suspense>
+      //   ),
+      // },
 
       {
         path: "/",
@@ -47,6 +48,16 @@ export const router = createBrowserRouter([
           <React.Suspense fallback={<Loader />}>
             <ProtectedRouter>
               <Main />
+            </ProtectedRouter>
+          </React.Suspense>
+        ),
+      },
+      {
+        path: "/сотрудники",
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <ProtectedRouter>
+              <Employer />
             </ProtectedRouter>
           </React.Suspense>
         ),
@@ -61,32 +72,32 @@ export const router = createBrowserRouter([
           </React.Suspense>
         ),
       },
+      // {
+      //   path: "/департаменты",
+      //   element: (
+      //     <React.Suspense fallback={<Loader />}>
+      //       <ProtectedRouter>
+      //         <Department />
+      //       </ProtectedRouter>
+      //     </React.Suspense>
+      //   ),
+      // },
       {
-        path: "/департаменты",
+        path: "/продукты",
         element: (
           <React.Suspense fallback={<Loader />}>
             <ProtectedRouter>
-              <Department />
+              <Product />
             </ProtectedRouter>
           </React.Suspense>
         ),
       },
       {
-        path: "/документы",
-        element: (
-          <React.Suspense fallback={<Loader />}>
-            <ProtectedRouter>
-              <Document />
-            </ProtectedRouter>
-          </React.Suspense>
-        ),
-      },
-      {
-        path: "/заявки",
+        path: "/заказы",
         element: (
           <React.Suspense fallback={<div>Loading...</div>}>
             <ProtectedRouter>
-              <div>заявки</div>
+              <div>заказы</div>
             </ProtectedRouter>
           </React.Suspense>
         ),

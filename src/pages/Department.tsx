@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "../components/Table/Table";
 import style from "./../styles/department.module.scss";
-import { getAllDepartmentHepler } from "../helpers/department.helpre";
+import { getAllDepartmentHepler } from "../helpers/department.helper";
 import { departmentStore } from "../store/department.store";
 import { observer } from "mobx-react-lite";
 import { mainStore } from "../store/main.store";
@@ -27,14 +27,14 @@ const Department = () => {
   useEffect(() => {
     setArrayKeys(extractKeys(departmentStore.departmentsData));
   }, [departmentStore.departmentsData]);
-
   return (
     <div className={style.content}>
       <div>ШАПКА</div>
       {mainStore.loading ? (
         <Loader />
       ) : (
-        <Table dataTable={departmentStore.departmentsData} keys={arrayKeys} />
+        // <Table dataTable={departmentStore.departmentsData} keys={arrayKeys} />
+        <div>sdfs</div>
       )}
       <div>Пагинация</div>
     </div>
