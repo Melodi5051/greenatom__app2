@@ -84,10 +84,6 @@ const Employer = () => {
     }
   }, [infoEmployee, employeeStore.dataEmployees]);
 
-  // useEffect(() => {
-  //   getEmployeeByIdHelper(3);
-  // }, []);
-
   return (
     <div className={style.content}>
       {!arrayKeys.length || loading ? (

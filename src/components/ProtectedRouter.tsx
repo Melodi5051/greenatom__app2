@@ -47,10 +47,6 @@ const ProtectedRouter = ({ children }: Props) => {
     refreshAuthToken();
   }, []);
 
-  useEffect(() => {
-    getALLEmployeeHelper();
-    getMeHelper();
-  }, [loading]);
   return (
     <div>{authStore.isAuth ? children : <Navigate replace to="/login" />}</div>
   );
