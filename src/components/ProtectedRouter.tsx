@@ -52,9 +52,7 @@ const ProtectedRouter = ({ children }: Props) => {
     getMeHelper();
   }, [loading]);
   return (
-    <div>
-      {authStore.isAuth ? children : <Navigate replace to="/авторизация" />}
-    </div>
+    <div>{authStore.isAuth ? children : <Navigate replace to="/login" />}</div>
   );
 };
 

@@ -15,6 +15,7 @@ import {
 } from "../../helpers/localstorage.helper";
 import { Link } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
+import { getMeHelper } from "../../helpers/main.helper";
 
 const Header = () => {
   const handleLogout = () => {
@@ -25,7 +26,10 @@ const Header = () => {
 
   useEffect(() => {
     console.log(authStore.isAuth);
-  }, [userStore.userRole]);
+    if (authStore.isAuth) {
+      getMeHelper();
+    }
+  }, [authStore.isAuth]);
 
   console.log("User role: ", userStore.userRole);
   return (
@@ -33,7 +37,7 @@ const Header = () => {
       <header>
         <div className={styles.divActions}>
           <div className={styles.divLogo}>
-            <Link to={"/"}>
+            <Link to={"/employees"}>
               <img src={SvgIcon} alt="" />
               <div className={styles.divLogoLabel}>
                 <p>
@@ -44,7 +48,7 @@ const Header = () => {
               </div>
             </Link>
             <div className={styles.divActionsButtons}>
-              {authStore.isAuth ? (
+              {authStore.isAuth && userStore.user ? (
                 <Navbar
                   userData={userStore.user}
                   handleLogout={handleLogout}
@@ -52,7 +56,7 @@ const Header = () => {
                 />
               ) : (
                 <>
-                  <Link to={"/авторизация"}>
+                  <Link to={"/login"}>
                     <Button viewtype="v2">
                       Войти
                       <img src={SvgUserIcon} />

@@ -15,6 +15,8 @@ import { authStore } from "../store/auth.store";
 import { checkPhoneNumber } from "../helpers/main.helper";
 import Pagination from "../components/Pagination/Pagination";
 import TableHeader from "../components/TableHeader/TableHeader";
+import CreateEmployee from "../components/ModalWindow/ModalWindow";
+import ModalCreateEmployee from "../components/ModalCreateEmployee/ModalCreateEmployee";
 
 export enum EmployeeKeys {
   "fullname" = "ФИО",

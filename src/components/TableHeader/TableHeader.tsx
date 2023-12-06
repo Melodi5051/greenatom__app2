@@ -2,6 +2,7 @@ import React from "react";
 import refreshSVG from "./../../assets/svg/ui-refresh.svg";
 import Button from "../Button/Button";
 import style from "./TableHeader.module.scss";
+import ModalCreateEmployee from "../ModalCreateEmployee/ModalCreateEmployee";
 const TableHeader = () => {
   return (
     <div className={style.wrapper}>
@@ -9,7 +10,7 @@ const TableHeader = () => {
         <h1>Сотрудники</h1>
         <img src={refreshSVG} alt="" />
       </div>
-      <Button viewtype="v2">НОВЫЙ СОТРУДНИК</Button>
+      <ModalCreateEmployee />
     </div>
   );
 };
