@@ -7,6 +7,8 @@ import { notificator } from "../../store/notify.store";
 import { observable } from "mobx";
 import { observer } from "mobx-react-lite";
 
+export type INotifyType = "info" | "warning" | "error" | "positive" | "grey";
+
 export interface IPropsNotify {
   children: React.ReactNode;
   type?: "info" | "warning" | "error" | "positive" | "grey";

@@ -5,6 +5,7 @@ import { authStore } from "../store/auth.store";
 import { Navigate } from "react-router-dom";
 import ModalAuth from "../components/ModalAuth/ModalAuth";
 import { notificator } from "../store/notify.store";
+import { authentificator } from "../store/auth2.store";
 
 const Login = () => {
   const handlerLogin = (e: React.FormEvent<HTMLFormElement>) => {
@@ -13,9 +14,10 @@ const Login = () => {
     const obj = Object.fromEntries(form.entries()) as unknown as IDataLogin;
     // loginHelper(obj);
     console.log(obj);
-    notificator.push({children: "Тут должен быть логин"})
+    authentificator.signin(obj);
+    notificator.push({children: "Тут должен быть логин"});
   };
-  return authStore.isAuth ? (
+  return authentificator.varAuthStatus ? (
     <Navigate replace to={"/"} />
   ) : (
     <ModalAuth

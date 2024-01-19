@@ -1,12 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styles from "./Header.module.scss";
 import SvgIcon from "../../assets/svg/logo.svg";
 import Button from "../Button/Button";
-import { authStore } from "../../store/auth.store";
 import SvgWhiteUserIcon from "../../assets/svg/ui-white-user-profile.svg";
-import SvgBasket from "../../assets/svg/ui-basket.svg";
 import SvgUserIcon from "../../assets/svg/ui-user-profile.svg";
-import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
 import { observer } from "mobx-react-lite";
 import { userStore } from "../../store/user.store";
 import {
@@ -15,16 +12,17 @@ import {
 } from "../../helpers/localstorage.helper";
 import { Link } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
+import { authentificator } from "../../store/auth2.store";
 
 const Header = () => {
   const handleLogout = () => {
-    removeTokenToLocalStorage("token");
-    removeTokenToLocalStorage("refreshToken");
-    removeCurrentPathToLocalStorage();
+    // removeTokenToLocalStorage("token");
+    // removeTokenToLocalStorage("refreshToken");
+    // removeCurrentPathToLocalStorage();
   };
 
   useEffect(() => {
-    console.log(authStore.isAuth);
+    console.log(authentificator.varAuthStatus);
   }, [userStore.userRole]);
 
   console.log("User role: ", userStore.userRole);
@@ -44,7 +42,7 @@ const Header = () => {
               </div>
             </Link>
             <div className={styles.divActionsButtons}>
-              {authStore.isAuth ? (
+              {authentificator.varAuthStatus ? (
                 <Navbar
                   userData={userStore.user}
                   handleLogout={handleLogout}

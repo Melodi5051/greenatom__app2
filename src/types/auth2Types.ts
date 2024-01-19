@@ -6,8 +6,8 @@
  * Ответ от сервера при логине
  */
 export interface ITokenData extends Object {
-    accessToken?: string
-    refreshToken?: string
+    accessToken?: string // сохраняем в localStorage
+    refreshToken?: string // сервер устанавливает в cookie ?
 }
 
 /**
