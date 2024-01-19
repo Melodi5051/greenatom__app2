@@ -9,11 +9,9 @@ const Footer = () => {
           <img src={SvgIcon} alt="" />
           <div className={styles.divLogoLabel}>
             <p>
-              Гринатом
+              <span>росатом</span>
               <br />
-              <span className={styles.divLogoLabelSublabel}>
-                торговля и склад
-              </span>
+              <span className={styles.divLogoLabelSublabel}>маркет</span>
             </p>
           </div>
         </div>

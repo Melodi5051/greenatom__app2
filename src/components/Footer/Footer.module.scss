@@ -26,7 +26,7 @@ footer {
       }
 
       .divLogoLabel {
-        height: 70px;
+        font-size: index.$fontSize-logo;
         border-left: 1px solid black;
         max-height: min-content;
         text-transform: uppercase;
@@ -34,9 +34,9 @@ footer {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
+        min-width: max-content;
         .divLogoLabelSublabel {
-          // text-transform: initial;
+          // color: black;
           color: index.$color-blue-2;
         }
       }
