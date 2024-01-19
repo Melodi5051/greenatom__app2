@@ -24,7 +24,7 @@ class Authentificator {
   /**
    * `true`, если пользователь авторизован
    */
-  varAuthStatus: boolean | string = false;
+  varAuthStatus: "not" | "pending" | "complete" = "pending";
 
   /**
    * Объект-ответ от сервера с данными залогиненного пользователя
@@ -47,7 +47,7 @@ class Authentificator {
   _updateTokens(responseData: ITokenData) {
     if (responseData?.accessToken) LocalStorage.set("at", responseData?.accessToken);
     if (responseData?.refreshToken) LocalStorage.set("rf", responseData?.refreshToken || "");
-    this.varAuthStatus = true;
+    this.varAuthStatus = "complete";
     this.varTokenData = { ...responseData };
   }
 
@@ -81,6 +81,7 @@ class Authentificator {
    * Получает accessToken с помощью существующего refreshToken, который берется из localStorage.
    */
   async getAccessToken() {
+    this.varAuthStatus = "pending";
     try {
       const body = {refreshToken: LocalStorage.get("rt")};
   

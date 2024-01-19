@@ -61,7 +61,7 @@ const ProtectedRouter = ({ children }: Props) => {
   return (
     <div>
       {
-        authentificator.varAuthStatus === true
+        authentificator.varAuthStatus === "complete"
         ? children
         : (authentificator.varAuthStatus === "pending")
           ? <Loader />
