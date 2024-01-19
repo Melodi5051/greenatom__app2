@@ -53,7 +53,7 @@ const ProtectedRouter = ({ children }: Props) => {
   }, [loading]);
   return (
     <div>
-      {authStore.isAuth ? children : <Navigate replace to="/авторизация" />}
+      {authStore.isAuth ? children : <Navigate replace to="/auth" />}
     </div>
   );
 };

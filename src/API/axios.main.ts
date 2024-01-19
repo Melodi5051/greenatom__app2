@@ -3,6 +3,7 @@ import { getTokenFromLocalStorage } from "../helpers/localstorage.helper";
 import { authStore } from "../store/auth.store";
 import { resreshTokenHelper } from "../helpers/auth.helper";
 import { getMeHelper } from "../helpers/main.helper";
+import { notificator } from "../store/notify.store";
 
 export const getMe = async (): Promise<any> => {
   try {
@@ -18,6 +19,7 @@ export const getMe = async (): Promise<any> => {
 
     return response.data;
   } catch (error: any) {
-    resreshTokenHelper(getTokenFromLocalStorage("refreshToken"), getMeHelper);
+    notificator.push({children: `Ошибка логина: ${error}`, type: "error"});
+    // resreshTokenHelper(getTokenFromLocalStorage("refreshToken"), getMeHelper);
   }
 };

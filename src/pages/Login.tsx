@@ -4,13 +4,16 @@ import { IDataLogin } from "../types/userTypes";
 import { authStore } from "../store/auth.store";
 import { Navigate } from "react-router-dom";
 import ModalAuth from "../components/ModalAuth/ModalAuth";
+import { notificator } from "../store/notify.store";
 
 const Login = () => {
   const handlerLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const obj = Object.fromEntries(form.entries()) as unknown as IDataLogin;
-    loginHelper(obj);
+    // loginHelper(obj);
+    console.log(obj);
+    notificator.push({children: "Тут должен быть логин"})
   };
   return authStore.isAuth ? (
     <Navigate replace to={"/"} />

@@ -27,7 +27,7 @@ const Navbar = ({ userData, handleLogout, userRoutes }: Navbar) => {
                 </Link>
               )
             )}
-          <Link to={"/профиль"}>
+          <Link to={"/profile"}>
             <Button viewtype="v3">{userData?.username}</Button>
           </Link>
           <Button viewtype="text">

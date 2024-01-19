@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { Navigate } from "react-router-dom";
 import ModalAuth from "../components/ModalAuth/ModalAuth";
 import { IDataRegister } from "../types/userTypes";
+import { notificator } from "../store/notify.store";
 // import { registerHepler } from "../helpers/auth.helper";
 
 const Register = () => {
@@ -13,6 +14,7 @@ const Register = () => {
     const form = new FormData(e.currentTarget);
     const obj = Object.fromEntries(form.entries()) as unknown as IDataRegister;
     // registerHepler(obj);
+    notificator.push({children: "Тут должна быть регистрация"});
   };
 
   return authStore.isAuth ? (

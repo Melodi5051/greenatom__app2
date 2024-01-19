@@ -52,7 +52,7 @@ const Header = () => {
                 />
               ) : (
                 <>
-                  <Link to={"/авторизация"}>
+                  <Link to={"/auth"}>
                     <Button viewtype="v2">
                       Войти
                       <img src={SvgUserIcon} />

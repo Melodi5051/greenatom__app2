@@ -5,7 +5,7 @@
   user-select: none;
   cursor: pointer;
   z-index: 99;
-  width: 25vw;
+  width: 30vw;
   text-align: left;
   color: white;
   padding: 20px 30px;
@@ -78,7 +78,7 @@
 
 .notifyStackDiv {
   z-index: 98;
-  width: 25vw;
+  width: max-content;
   text-align: left;
   position: absolute;
   color: white;
@@ -88,4 +88,10 @@
 
   max-height: 95vh;
   overflow: hidden;
+}
+
+@media (max-width: 1200px) {
+  .notify {
+    width: 95vw;
+  }
 }

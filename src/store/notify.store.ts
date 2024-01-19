@@ -9,10 +9,10 @@ class Notificator {
 
   /**
    * Добавляет уведомление в стек
-   * @param param0 React children и тип уведомления (`"info" | "warning" | "error" | "positive" | "grey"`)
+   * @param param0 React children и тип уведомления (`"info" | "warning" | "error" | "positive" | "grey"`). **По умолчанию строка `info`**
    */
   push({ children, type }: IPropsNotify) {
-    this.notifystack.unshift({ children, type, uid: Date.now() })
+    this.notifystack.unshift({ children, type: type || "info", uid: Date.now() })
     if (this.notifystack.length >= 10) this.pop();
   }
 
@@ -32,4 +32,7 @@ class Notificator {
   }
 }
 
+/**
+ * MobX обработчик уведомлений в правом верхнем углу экрана. Предоставляет необходимые методы для работы
+ */
 export const notificator = new Notificator();

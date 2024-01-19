@@ -53,10 +53,10 @@ export const getALLEmployee = async (): Promise<any> => {
     employeeStore.setMaxPage(totalPages);
     return content;
   } catch (error) {
-    resreshTokenHelper(
-      getTokenFromLocalStorage("refreshToken"),
-      getALLEmployeeHelper
-    );
+    // resreshTokenHelper(
+    //   getTokenFromLocalStorage("refreshToken"),
+    //   getALLEmployeeHelper
+    // );
   }
 };
 

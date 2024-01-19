@@ -2,6 +2,7 @@ import axios from "axios";
 import { mainStore } from "../store/main.store";
 import { getTokenFromLocalStorage } from "../helpers/localstorage.helper";
 import { departmentStore } from "../store/department.store";
+import { notificator } from "../store/notify.store";
 
 export const getAllDepartments = async (): Promise<any> => {
   try {
@@ -21,6 +22,7 @@ export const getAllDepartments = async (): Promise<any> => {
     departmentStore.setCurrentPage(response.data.totalPages);
     return response.data.content;
   } catch (error) {
+    notificator.push({children: `${error}`, type: "error"});
     console.log(error);
   }
 };
