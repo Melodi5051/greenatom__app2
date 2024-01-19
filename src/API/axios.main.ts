@@ -7,7 +7,7 @@ import { getMeHelper } from "../helpers/main.helper";
 export const getMe = async (): Promise<any> => {
   try {
     const response = await axios.get(
-      "http://45.130.43.231:8080/api/employees/me",
+      process.env.REACT_APP_BACKEND_ORIGIN + "/api/employees/me",
       {
         headers: {
           "Content-Type": "application/json",

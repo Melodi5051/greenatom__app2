@@ -6,7 +6,7 @@ import { departmentStore } from "../store/department.store";
 export const getAllDepartments = async (): Promise<any> => {
   try {
     const response = await axios.get(
-      "http://5.35.83.142:8082/api/department/",
+      process.env.REACT_APP_BACKEND_ORIGIN + "/api/department/",
       {
         params: {
           page: departmentStore.currentPage,

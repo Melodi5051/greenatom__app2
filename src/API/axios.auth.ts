@@ -6,7 +6,7 @@ import { authStore } from "../store/auth.store";
 export const authRegister = async (dataUser: IDataRegister): Promise<any> => {
   try {
     const response = await axios.post(
-      "http://45.130.43.231:8080/api/auth/signin",
+      process.env.REACT_APP_BACKEND_ORIGIN + "/api/auth/signin",
       dataUser,
       {
         headers: { "Content-Type": "application/json" },
@@ -21,7 +21,7 @@ export const authRegister = async (dataUser: IDataRegister): Promise<any> => {
 export const authLogin = async (dataUser: IDataLogin): Promise<any> => {
   try {
     const response = await axios.post(
-      "http://45.130.43.231:8080/api/auth/signin",
+      process.env.REACT_APP_BACKEND_ORIGIN + "/api/auth/signin",
       dataUser,
       {
         headers: {
@@ -39,7 +39,7 @@ export const authLogin = async (dataUser: IDataLogin): Promise<any> => {
 export const getNewJWTToken = async (refreshToken: string): Promise<any> => {
   try {
     const response = await axios.post(
-      "http://45.130.43.231:8080/api/auth/access-token",
+      process.env.REACT_APP_BACKEND_ORIGIN + "/api/auth/access-token",
       {
         refreshToken: refreshToken,
       },

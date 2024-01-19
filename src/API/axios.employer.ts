@@ -6,7 +6,8 @@ import { employeeStore } from "../store/employee.store";
 import { getNewJWTToken } from "./axios.auth";
 import { resreshTokenHelper } from "../helpers/auth.helper";
 import { getALLEmployeeHelper } from "../helpers/employee.helper";
-const employeeApi = "http://45.130.43.231:8080/api/employees/";
+import { notificator } from "../store/notify.store";
+const employeeApi = process.env.REACT_APP_BACKEND_ORIGIN + "/api/employees/";
 
 const axiosConfig = () => ({
   headers: {
@@ -20,7 +21,7 @@ export const createEmployee = async (
 ): Promise<any> => {
   try {
     const response = await axios.post(
-      "http://45.130.43.231:8080/api/auth/signup",
+      process.env.REACT_APP_BACKEND_ORIGIN + "/api/auth/signup",
       dataUser,
       {
         headers: {
@@ -40,7 +41,7 @@ export const getALLEmployee = async (): Promise<any> => {
   console.log(1);
   try {
     const response = await axios.get(
-      `http://45.130.43.231:8080/api/employees?pagePosition=${employeeStore.currentPage}&pageSize=${employeeStore.limit}&sortBy=id`,
+      process.env.REACT_APP_BACKEND_ORIGIN + `/api/employees?pagePosition=${employeeStore.currentPage}&pageSize=${employeeStore.limit}&sortBy=id`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -64,6 +65,7 @@ export const getEmployeeById = async (id: number): Promise<any> => {
     const response = await axios.get(`${employeeApi}${id}`, axiosConfig());
     return response.data;
   } catch (error) {
+    notificator.push({children: "Ошибка при получении данных пользователя", type: "error"});
     console.log("Ошибка при получении данных пользователя", error);
     return error;
   }
@@ -74,6 +76,7 @@ export const deleteEmployeeById = async (id: number): Promise<any> => {
     const response = await axios.delete(`${employeeApi}${id}`, axiosConfig());
     return response.data;
   } catch (error) {
+    notificator.push({children: `Ошибка при удалении сотрудника: ${error}`, type: "error"});
     console.error("Ошибка при удалении сотрудника:", error);
     return error;
   }
@@ -84,6 +87,7 @@ export const patchEmployeeById = async (id: number): Promise<any> => {
     const response = await axios.patch(`${employeeApi}${id}`, axiosConfig());
     return response.data;
   } catch (error) {
+    notificator.push({children: "Ошибка при изменении работника", type: "error"});
     console.log("Ошибка при изменении работника", error);
     return error;
   }
