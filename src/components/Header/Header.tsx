@@ -22,7 +22,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    console.log(authentificator.varAuthStatus);
+    console.log(userStore.userRole);
   }, [userStore.userRole]);
 
   console.log("User role: ", userStore.userRole);
@@ -42,7 +42,7 @@ const Header = () => {
               </div>
             </Link>
             <div className={styles.divActionsButtons}>
-              {authentificator.varAuthStatus ? (
+              {authentificator.isAuth() ? (
                 <Navbar
                   userData={userStore.user}
                   handleLogout={handleLogout}
