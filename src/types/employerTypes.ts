@@ -15,12 +15,14 @@ export enum EmployeeRole {
   "ROLE_CLIENT_INTERMEDIARY" = "Клиент",
 }
 
+// синхронизировать с src/router/router.tsx
 export type IRoles =
   "ROLE_ADMIN" |
   "ROLE_MANAGER" |
-  "ROLE_DIRECTOR" |
+  // "ROLE_DIRECTOR" |
   "ROLE_WAREHOUSE_WORKER" |
-  "ROLE_COURIER"
+  "ROLE_COURIER" |
+  "ROLE_SUPER_ADMIN"
 
 
 export interface IEmployee {

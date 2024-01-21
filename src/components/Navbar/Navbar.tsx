@@ -5,43 +5,28 @@ import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
 import { observer } from "mobx-react-lite";
 import Loader from "../Loader/Loader";
 import { authentificator } from "../../store/auth2.store";
+import { ROUTES_BY_ROLE } from "../../router/router";
 interface Navbar {
   handleLogout(): void;
 }
 
 const Navbar = ({ handleLogout }: Navbar) => {
-  return (
-    <>
-      {!authentificator.isAuth() ? (
-        <Loader />
-      ) : (
-        <>
-          {/* {userData &&
-            Object.entries(userRoutes(userData.role.name)).map(
-              (el: any, index: number) => (
-                <Link key={index} to={el[1]}>
-                  <Button viewtype="text">{el[0]}</Button>
-                </Link>
-              )
-            )} */}
-
-          {/* {
-            userData && ROUTES_BY_ROLE[`${userData.role.name}`]
-          } */}
-
-          {
-            
-          }
-          <Link to={"/profile"}>
-            <Button viewtype="v3">{authentificator.constUserData.username}</Button>
-          </Link>
-          <Button viewtype="text">
-            <img src={SvgLogoutIcon} onClick={handleLogout} />
-          </Button>
-        </>
-      )}
-    </>
-  );
-};
+  return <>
+    {authentificator.gotUserData()
+      ? ROUTES_BY_ROLE[`${authentificator.constUserData.role.name}`].map((arr: any, index: number) => {
+        return (<Link key={index} to={arr.route}>
+          <Button viewtype="text">{arr.name}</Button>
+        </Link>)
+      })
+      : <Loader />
+    }
+    <Link to={"/profile"}>
+      <Button viewtype="v3">{authentificator.constUserData.username}</Button>
+    </Link>
+    <Button viewtype="text">
+      <img src={SvgLogoutIcon} onClick={handleLogout} />
+    </Button>
+  </>
+}
 
 export default observer(Navbar);

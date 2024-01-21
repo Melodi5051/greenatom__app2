@@ -2,6 +2,7 @@
   flex-direction: column;
 
   .content {
+    min-height: 80vh;
     display: flex;
     flex-direction: column;
     height: 100%;

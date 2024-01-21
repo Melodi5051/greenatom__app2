@@ -85,6 +85,16 @@ class Authentificator {
   }
 
   /**
+   * Возвращает `true`, если данные о текущем пользователе сохранены в MobX. 
+   * 
+   * Используется для определения поведения отрисовки определенных компонентов, использующих данные о пользователе.
+   */
+  gotUserData() : boolean {
+    return Boolean(Object.keys(this.constUserData).length);
+  }
+
+
+  /**
    * Вход в сервис и сохранение accessToken и refreshToken
    * @param formBody Объект, данные формы на странице `/auth`
    */
@@ -149,8 +159,8 @@ class Authentificator {
         }
       );
 
-      this.constUserData = { ...response.data };
-      return this.constUserData;
+      this.constUserData = JSON.parse(JSON.stringify(response.data));
+      return JSON.parse(JSON.stringify(this.constUserData));
     } catch (error) {
       notificator.push({ children: `${error}`, type: "error" });
       throw new Error("Закончилась авторизация. Пожалуйста, войдите в аккаунт снова!");

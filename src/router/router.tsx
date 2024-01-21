@@ -21,7 +21,7 @@ const Employer = React.lazy(() => import("../pages/Employee"));
 
 // по хорошему эти роуты и правила перехода по ролям должны быть в бэкенде и подтягиваться сюда через их API
 // тогда админ их мог бы редактировать со своего профиля в специальном интерфейсе
-export const ROUTES_BY_ROLE = {
+export const ROUTES_BY_ROLE: any = {
   ROLE_ADMIN: [
     {route: "/employees", name: "Сотрудники"},
     {route: "/products", name: "Продукты"}
@@ -36,9 +36,19 @@ export const ROUTES_BY_ROLE = {
   ],
   ROLE_COURIER: [
     {route: "/delivery", name: "Доставка"}
+  ],
+  ROLE_SUPER_ADMIN: [
+    {route: "/employees", name: "Сотрудники"},
+    {route: "/products", name: "Продукты"},
+    {route: "/orders", name: "Заказы"},
+    {route: "/cart", name: "Корзина"},
+    {route: "/garage", name: "Склад"},
+    {route: "/delivery", name: "Доставка"}
+  ],
+  ROLE_UNDEFINED: [
+    // роль без доступа к вкладкам
   ]
-}
-
+} as object
 
 export const router = createBrowserRouter([
   {
