@@ -12,6 +12,7 @@ interface IPropsButton
     | "v3"
     | "v4"
     | "text"
+    | "textUnderline"
     | "admin"
     | "manager"
     | "courier";

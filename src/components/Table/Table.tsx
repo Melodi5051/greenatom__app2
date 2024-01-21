@@ -1,4 +1,7 @@
 import React from 'react';
+import style from "./Table.module.scss";
+import { classnames } from '../../helpers/main.helper';
+import { InputSimple } from '../Input/Input';
 
 export interface TableRow {
   [key: string]: string | number;
@@ -14,24 +17,32 @@ const Table: React.FC<TableProps> = ({ data }) => {
     return <p>No data available</p>;
   }
 
+  console.log("ТАБЛИЦА ОТРИСОВАНА")
+
   // Возвращаем JSX с использованием useMemo
   return (
-    <table>
-      <thead>
-        <tr>
-          {Object.keys(data[0]).map((header, index) => (
-            <th key={index}>{header}</th>
-          ))}
-        </tr>
-      </thead>
+    <table className={classnames(style.table)}>
       <tbody>
-        {data.map((row, rowIndex) => (
-          <tr key={rowIndex}>
-            {Object.keys(row).map((header, colIndex) => (
-              <td key={colIndex}>{row[header]}</td>
-            ))}
-          </tr>
-        ))}
+        <tr>
+          {
+            Object.keys(data[0]).map((name, index) => <th key={index}>{name}</th>)
+          }
+        </tr>
+        {
+          data.map((d, index) => {
+            return <tr key={index}>
+              {
+                Object.keys(d).map((v, jndex) => {
+                  if (typeof d[v] !== "object")
+                    return <td key={jndex}>{d[v]}</td>
+                  else
+                    return <td key={jndex}>{Object.values(d[v]).join(", ")}</td>
+                })
+              }
+            </tr>
+          })
+        }
+
       </tbody>
     </table>
   );

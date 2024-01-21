@@ -101,6 +101,21 @@
     transform: scale(0.97);
   }
 
+  &.textUnderline {
+    border-radius: 5px;
+    background: #fff;
+  }
+
+  &.textUnderline:hover {
+    border-radius: 5px;
+    background: #fff;
+    text-decoration: underline;
+  }
+
+  &.textUnderline:active {
+    transform: scale(0.97);
+  }
+
   &.admin {
     border-radius: 5px;
     background: #ce4c4c;

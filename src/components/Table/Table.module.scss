@@ -1,2 +1,58 @@
 @use "../../index.scss" as index;
 
+// .table {
+//   width: 100%;
+//   border-collapse: collapse;
+//   margin-bottom: 20px;
+//   cursor: pointer;
+//   margin: 0;
+
+//   th, td {
+//     border: 1px solid #ddd;
+//     padding: 8px;
+//     text-align: left;
+//   }
+
+//   th {
+//     background-color: #f2f2f2;
+//     text-align: center;
+//   }
+
+//   tr:nth-child(even) {
+//     background-color: #f9f9f9;
+//   }
+
+//   tr:hover {
+//     background-color: #f1f1f1;
+//   }
+// }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  user-select: none;
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 5vw;
+  }
+
+  th {
+    background-color: #f2f2f2;
+    text-align: center;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+}

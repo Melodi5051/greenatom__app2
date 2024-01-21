@@ -4,6 +4,26 @@ input {
   box-sizing: border-box;
 }
 
+.inputSimple {
+  outline: none;
+  // width: 280px;
+  display: flex;
+  padding: 7px 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid #7f7f7f;
+  border-radius: 5px;
+  background: #fff;
+  cursor: text;
+  transition: all 0.2s ease-in;
+
+  &:focus {
+    border: 1px solid #025ea1;
+  }
+
+}
+
 .input {
   outline: none;
   width: 280px;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import LocalStorage from "../helpers/localstorage2.helper";
 import { notificator } from "./notify.store";
 import { IEmployee, IQueryAllEmployees } from "../types/employerTypes";
@@ -53,11 +53,13 @@ class Employee {
         }
       );
 
-      this.constEmployeesData = JSON.parse(JSON.stringify(response.data)).content
-      return JSON.parse(JSON.stringify(response.data)).content;
+      runInAction(() => {
+        this.constEmployeesData = JSON.parse(JSON.stringify(response.data.content));
+      })
+      return JSON.parse(JSON.stringify(response.data.content));
     } catch (error) {
       notificator.push({ children: `${error}`, type: "error" });
-      return 1;
+      return [];
     }
   }
 }
