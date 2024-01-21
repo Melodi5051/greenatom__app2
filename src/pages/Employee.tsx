@@ -8,6 +8,7 @@ import { IQueryAllEmployees } from "../types/employerTypes";
 import Loader from "../components/Loader/Loader";
 import Input, { InputSimple } from "../components/Input/Input";
 import Button from "../components/Button/Button";
+import { observer } from "mobx-react-lite";
 
 interface IPropsEmployee {}
 
@@ -18,7 +19,6 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
 
   const refreshTable = () => {
     employee.getAll({ pagePosition, pageSize } as IQueryAllEmployees);
-    setData([]);
   };
 
   useEffect(() => {
@@ -60,4 +60,4 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
   );
 };
 
-export default Employee;
+export default observer(Employee);

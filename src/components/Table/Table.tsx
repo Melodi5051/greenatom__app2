@@ -1,7 +1,7 @@
 import React from 'react';
 import style from "./Table.module.scss";
 import { classnames } from '../../helpers/main.helper';
-import { InputSimple } from '../Input/Input';
+import { observer } from 'mobx-react-lite';
 
 export interface TableRow {
   [key: string]: string | number;
@@ -11,12 +11,7 @@ export interface TableProps {
   data: TableRow[];
 }
 
-const Table: React.FC<TableProps> = ({ data }) => {
-  // Проверяем, есть ли данные
-  if (!data || data.length === 0) {
-    return <p>No data available</p>;
-  }
-
+const Table: React.FC<TableProps> = observer(({ data }) => {
   console.log("ТАБЛИЦА ОТРИСОВАНА")
 
   // Возвращаем JSX с использованием useMemo
@@ -46,6 +41,6 @@ const Table: React.FC<TableProps> = ({ data }) => {
       </tbody>
     </table>
   );
-};
+});
 
 export default React.memo(Table);

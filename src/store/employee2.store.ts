@@ -52,9 +52,9 @@ class Employee {
           params: { ...queryParameters }
         }
       );
-
+      
       runInAction(() => {
-        this.constEmployeesData = JSON.parse(JSON.stringify(response.data.content));
+        this.constEmployeesData = response.data.content;
       })
       return JSON.parse(JSON.stringify(response.data.content));
     } catch (error) {
