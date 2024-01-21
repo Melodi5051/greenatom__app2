@@ -1,9 +1,9 @@
-import axios, { Axios, AxiosError, AxiosStatic } from "axios";
+import axios, { } from "axios";
 import { makeAutoObservable } from "mobx";
 import { IAuthForm, ITokenData, ITokensData } from "../types/auth2Types";
-import exception from "../helpers/exceptor.helper";
 import { notificator } from "./notify.store";
 import LocalStorage from "../helpers/localstorage2.helper";
+import { IEmployee, UserRole } from "../types/employerTypes";
 
 /**
  * Заголовки, используемые в запросах к API для текущего стора
@@ -37,11 +37,6 @@ class Authentificator {
   // поля
 
   /**
-   * `complete`, если пользователь авторизован
-   */
-  varAuthStatus: "not" | "pending" | "complete" = "not";
-
-  /**
    * Объект-ответ от сервера с данными залогиненного пользователя
    */
   varTokenData: ITokensData = new Object();
@@ -49,7 +44,7 @@ class Authentificator {
   /**
    * Данные текущего пользователя
    */
-  constUserData = new Object();
+  constUserData: IEmployee = {} as IEmployee;
 
   /**
    * username текущего пользователя
@@ -62,7 +57,9 @@ class Authentificator {
    * @returns Данные из токена
    */
   _tokenData(): ITokenData {
-    return parseJwt(LocalStorage.get("at") || "");
+    if (LocalStorage.get("at")) return parseJwt(`${LocalStorage.get("at")}`)
+    else return {} as ITokenData
+
   }
 
   /**
@@ -73,8 +70,7 @@ class Authentificator {
     if (responseData?.accessToken) {
       LocalStorage.set("at", responseData?.accessToken)
     }
-    if (responseData?.refreshToken) LocalStorage.set("rf", responseData?.refreshToken);
-    this.varAuthStatus = "complete";
+    if (responseData?.refreshToken) LocalStorage.set("rt", responseData?.refreshToken);
     this.varTokenData = { ...responseData };
     console.log("Токены обновлены")
   }
@@ -92,7 +88,6 @@ class Authentificator {
    * @param formBody Объект, данные формы на странице `/auth`
    */
   async signin(formBody: IAuthForm) {
-    this.varAuthStatus = "pending";
     try {
       const response = await axios.post(
         process.env.REACT_APP_BACKEND_ORIGIN + "/api/auth/signin",
@@ -109,7 +104,6 @@ class Authentificator {
 
     } catch (error) {
       notificator.push({ children: `${error}`, type: "error" });
-      this.varAuthStatus = "not";
       return 1;
     }
   }
@@ -118,7 +112,6 @@ class Authentificator {
    * Получает accessToken с помощью существующего refreshToken, который берется из localStorage.
    */
   async getAccessToken() {
-    this.varAuthStatus = "pending";
     try {
       const body = { refreshToken: LocalStorage.get("rt") };
 
@@ -134,7 +127,6 @@ class Authentificator {
       return 0;
     } catch (error) {
       notificator.push({ children: `${error}`, type: "error" });
-      this.varAuthStatus = "not";
       return 1;
     }
   }
@@ -160,7 +152,36 @@ class Authentificator {
       return this.constUserData;
     } catch (error) {
       notificator.push({ children: `${error}`, type: "error" });
+      throw new Error("Закончилась авторизация, просим новый токен");
       return {};
+    }
+  }
+
+  /**
+   * Обновляет авторизацию в сервисе. Получает обновленные jwt и refresh токены
+   */
+  async refresh() {
+    try {
+      const response = await axios.post(
+        process.env.REACT_APP_BACKEND_ORIGIN + `/api/auth/refresh`,
+        {
+          refreshToken: LocalStorage.get("rt")
+        },
+        {
+          headers: {
+            ...DEFAULT_HEADERS,
+            Authorization: `Bearer ${LocalStorage.get("at")}`
+          }
+        }
+      );
+
+      this._updateTokens(response.data);
+      // this.constUserData = { ...response.data };
+      // return this.constUserData;
+      return 0;
+    } catch (error) {
+      notificator.push({ children: `${error}`, type: "error" });
+      return 1;
     }
   }
 
@@ -172,10 +193,9 @@ class Authentificator {
   signout() {
     notificator.push({ children: `Вы вышли из аккаунта ${this.constCurrentUserId}` });
     LocalStorage.clear();
-    this.varAuthStatus = "not";
     this.varTokenData = "";
     this.constCurrentUserId = 0;
-    this.constUserData = {};
+    this.constUserData = {} as IEmployee;
   }
 
 }

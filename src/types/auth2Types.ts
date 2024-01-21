@@ -2,6 +2,8 @@
  * Интерфейсы для работы с авторизацией
  */
 
+import { UserRole } from "./employerTypes";
+
 /**
  * Ответ от сервера при логине
  */
@@ -16,21 +18,6 @@ export interface ITokensData extends Object {
 export interface IAuthForm extends Object {
     username: string
     password: string
-}
-
-export interface IEmployee {
-    description: string
-    id: number
-    firstname: string
-    surname: string
-    patronymic: string
-    username: string
-    jobPosition: string
-    salary: number
-    email: string
-    phoneNumber: string
-    address: string
-    role: Object | Array<any>
 }
 
 export interface ITokenData {

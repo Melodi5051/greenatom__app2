@@ -14,6 +14,7 @@ import { getALLEmployeeHelper } from "../helpers/employee.helper";
 import { authentificator } from "../store/auth2.store";
 import Loader from "./Loader/Loader";
 import LocalStorage from "../helpers/localstorage2.helper";
+import { notificator } from "../store/notify.store";
 
 type Props = { children: React.ReactNode };
 
@@ -24,15 +25,11 @@ const ProtectedRouter = ({ children }: Props) => {
 
   useEffect(() => {
     authentificator.getMe()
-    .then(content => {
-      if (Object.keys({...content}).includes("id")) {
-        setIsAuth(true)
-        setCurrentUser({...content});
-      }
-      console.log(authentificator.isAuth())
-      return content;
+    .then(content => console.log({...content}))
+    .catch(async (error) => {
+      notificator.push({children: `ERROR ${error}`});
+      return await authentificator.refresh();
     })
-    .then(content => console.log({...content}));
   }, [])
 
   return (
