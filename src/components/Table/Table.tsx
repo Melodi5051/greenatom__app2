@@ -1,34 +1,40 @@
-import React from "react";
-import style from "./Table.module.scss";
-import { observer } from "mobx-react-lite";
-import { EmployeeKeys, IInfoEmployee } from "../../pages/Employee";
-import TableItemEmployee from "../TableItem/TableItemEmployee";
+import React from 'react';
 
-interface IPropsTable {
-  dataTable: IInfoEmployee[] | null;
-  keys: string[];
+export interface TableRow {
+  [key: string]: string | number;
 }
 
-const Table: React.FC<IPropsTable> = ({ dataTable, keys }) => {
+export interface TableProps {
+  data: TableRow[];
+}
+
+const Table: React.FC<TableProps> = ({ data }) => {
+  // Проверяем, есть ли данные
+  if (!data || data.length === 0) {
+    return <p>No data available</p>;
+  }
+
+  // Возвращаем JSX с использованием useMemo
   return (
-    <div className={style.table}>
-      <div className={style.thead}>
-        <div className={style.tr}>
-          {keys.map((el: string, index) => (
-            <div className={style.td} key={index}>
-              {EmployeeKeys[el as keyof typeof EmployeeKeys]}
-            </div>
+    <table>
+      <thead>
+        <tr>
+          {Object.keys(data[0]).map((header, index) => (
+            <th key={index}>{header}</th>
           ))}
-          <div></div>
-        </div>
-      </div>
-      <div className={style.tbody}>
-        {dataTable?.map((el: IInfoEmployee, index: number) => (
-          <TableItemEmployee {...el} key={index} />
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {Object.keys(row).map((header, colIndex) => (
+              <td key={colIndex}>{row[header]}</td>
+            ))}
+          </tr>
         ))}
-      </div>
-    </div>
+      </tbody>
+    </table>
   );
 };
 
-export default observer(Table);
+export default React.memo(Table);

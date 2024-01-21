@@ -13,17 +13,15 @@ const Login = () => {
     const form = new FormData(e.currentTarget);
     const obj = Object.fromEntries(form.entries()) as unknown as IDataLogin;
     // loginHelper(obj);
-    console.log(obj);
     
     
     const signInStatus = await authentificator.signin(obj);
     if (!signInStatus) {
       setIsAuth(true)
-      console.log(signInStatus)
       navigate("/", {replace: true});
     } else throw Error("Ошибка входа")
   };
-  return authentificator.isAuth() || isAuth ? (
+  return authentificator.isAuth() && authentificator.gotUserData() ? (
     <Navigate replace to={"/"} />
   ) : (
     <ModalAuth

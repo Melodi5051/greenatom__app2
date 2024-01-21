@@ -8,7 +8,7 @@ import ErrorPage from "../pages/ErrorPage";
 const Login = React.lazy(() => import("../pages/Login"));
 const Main = React.lazy(() => import("../components/Main/Main"));
 // const Department = React.lazy(() => import("../pages/Department"));
-const Product = React.lazy(() => import("../pages/Product"));
+// const Product = React.lazy(() => import("../pages/Product"));
 const Employer = React.lazy(() => import("../pages/Employee"));
 // const Department = React.lazy(
 //   () => import("../components/Department/Department")
@@ -21,6 +21,8 @@ const Employer = React.lazy(() => import("../pages/Employee"));
 
 // по хорошему эти роуты и правила перехода по ролям должны быть в бэкенде и подтягиваться сюда через их API
 // тогда админ их мог бы редактировать со своего профиля в специальном интерфейсе
+
+// поле description отображается на главной странице как подпись к названию страницы
 export const ROUTES = {
   employees:  { route: "/employees", name: "Сотрудники", description: "Просмотр сотрудников, изменение учетных данных сотрудников" },
   products:   { route: "/products", name: "Продукты", description: "Редактирование продуктов и номенклатурных групп" },
@@ -31,6 +33,14 @@ export const ROUTES = {
 }
 
 export const ROUTES_BY_ROLE: any = {
+  ROLE_SUPER_ADMIN: [
+    ROUTES.employees,
+    ROUTES.products,
+    ROUTES.orders,
+    ROUTES.cart,
+    ROUTES.warehouse,
+    ROUTES.delivery,
+  ],
   ROLE_ADMIN: [
     ROUTES.employees,
     ROUTES.products
@@ -45,14 +55,6 @@ export const ROUTES_BY_ROLE: any = {
   ],
   ROLE_COURIER: [
     ROUTES.delivery
-  ],
-  ROLE_SUPER_ADMIN: [
-    ROUTES.employees,
-    ROUTES.products,
-    ROUTES.orders,
-    ROUTES.cart,
-    ROUTES.warehouse,
-    ROUTES.delivery,
   ],
   ROLE_UNDEFINED: [
     // роль без доступа к вкладкам
@@ -122,16 +124,16 @@ export const router = createBrowserRouter([
       //     </React.Suspense>
       //   ),
       // },
-      {
-        path: ROUTES.products.route,
-        element: (
-          <React.Suspense fallback={<Loader />}>
-            <ProtectedRouter>
-              <Product />
-            </ProtectedRouter>
-          </React.Suspense>
-        ),
-      },
+      // {
+      //   path: ROUTES.products.route,
+      //   element: (
+      //     <React.Suspense fallback={<Loader />}>
+      //       <ProtectedRouter>
+      //         <Product />
+      //       </ProtectedRouter>
+      //     </React.Suspense>
+      //   ),
+      // },
       {
         path: ROUTES.orders.route,
         element: (

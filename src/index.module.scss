@@ -1,0 +1,26 @@
+@use "./index.scss" as index;
+// общие стили для всего приложения
+
+
+.noa {
+  text-decoration: none;
+  color: index.$color-black;
+}
+
+.secondaryText {
+  color: index.$color-grey-2;
+}
+
+.taL {
+  text-align: left;
+}
+
+.section {
+  margin: 3% 0;
+}
+
+.textOverflow {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

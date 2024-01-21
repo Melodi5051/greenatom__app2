@@ -1,104 +1,74 @@
 import React, { useEffect, useState } from "react";
-import { employeeStore } from "../store/employee.store";
-import { IEmployee } from "../types/employerTypes";
-import { observer } from "mobx-react-lite";
+import styles from "../styles/employeepage.module.scss";
+import stylesIndex from "../index.module.scss";
+import Table, { TableRow } from "../components/Table/Table";
+import { classnames } from "../helpers/main.helper";
+import { employee, flattenObject } from "../store/employee2.store";
+import { IQueryAllEmployees } from "../types/employerTypes";
 import Loader from "../components/Loader/Loader";
-import style from "./../styles/department.module.scss";
-import Table from "../components/Table/Table";
-import { getALLEmployee } from "../API/axios.employer";
-import {
-  getALLEmployeeHelper,
-  getEmployeeByIdHelper,
-} from "../helpers/employee.helper";
-import { mainStore } from "../store/main.store";
-import { authStore } from "../store/auth.store";
-import { checkPhoneNumber } from "../helpers/main.helper";
-import Pagination from "../components/Pagination/Pagination";
-import TableHeader from "../components/TableHeader/TableHeader";
 
-export enum EmployeeKeys {
-  "fullname" = "ФИО",
-  "jobPosition" = "Должность",
-  "salary" = "Зарплата",
-  "mail" = "Почта",
-  "phoneNumber" = "Номер телефона",
+interface IPropsEmployee {
+
 }
-export interface IInfoEmployee {
-  fullname: string;
-  jobPosition: string;
-  salary: number;
-  mail: string;
-  phoneNumber: string;
-}
-const extractKeys = (dataTable: IInfoEmployee[] | null) => {
-  if (dataTable && dataTable.length > 0) {
-    return Object.keys(dataTable[0]) as (keyof typeof EmployeeKeys)[];
-  }
-  return [];
-};
 
-const transformData = (data: IEmployee[] | null) => {
-  return (
-    data?.map((item) => {
-      const {
-        firstname,
-        surname,
-        patronymic,
-        jobPosition,
-        salary,
-        phoneNumber,
-        email,
-      } = item;
-      return {
-        fullname: `${firstname} ${surname} ${patronymic}`,
-        jobPosition,
-        salary,
-        mail: email,
-        phoneNumber: phoneNumber,
-      };
-    }) || []
-  );
-};
+const Employee: React.FC<IPropsEmployee> = (props) => {
+  const [pageSize, setPageSize] = useState(10);
+  const [pagePosition, setPagePosition] = useState(0);
 
-const Employer = () => {
-  const [infoEmployee, setinfoEmployee] = useState<any[]>([]);
-  const [arrayKeys, setArrayKeys] = useState<(keyof typeof EmployeeKeys)[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (employeeStore.dataEmployees) {
-      setinfoEmployee(transformData(employeeStore.dataEmployees));
+  const exampleData = [
+    {
+      "id": 7,
+      "firstname": "superadmin",
+      "surname": "superadmin",
+      "patronymic": "superadmin",
+      "jobPosition": "SUPER_ADMIN",
+      "salary": 100000,
+      "email": "superadmin@crm.ru",
+      "phoneNumber": "895436848",
+      "username": "Superadmin",
+      "role": {
+        "name": "ROLE_SUPER_ADMIN"
+      },
+      "address": "Moscow"
+    },
+    {
+      "id": 8,
+      "firstname": "technicalUser",
+      "surname": "technicalUSer",
+      "patronymic": "technicalUser",
+      "jobPosition": "ROLE_CLIENT_INTERMEDIARY",
+      "salary": 100000,
+      "email": "techUser1@crm.ru",
+      "phoneNumber": "895436848",
+      "username": "technicalUser_t_t_1",
+      "role": {
+        "name": "ROLE_CLIENT_INTERMEDIARY"
+      },
+      "address": "Moscow"
     }
-  }, [employeeStore.dataEmployees]);
+  ]
 
   useEffect(() => {
-    getALLEmployeeHelper();
-  }, [employeeStore.currentPage]);
-
-  useEffect(() => {
-    if (infoEmployee.length > 0) {
-      setLoading(false);
-      setArrayKeys(extractKeys(infoEmployee));
-    }
-  }, [infoEmployee, employeeStore.dataEmployees]);
-
-  // useEffect(() => {
-  //   getEmployeeByIdHelper(3);
-  // }, []);
+    // employee.getAll({ pagePosition: pagePosition, pageSize: pageSize } as IQueryAllEmployees)
+  }, [])
 
   return (
-    <div className={style.content}>
-      {!arrayKeys.length || loading ? (
-        <Loader />
-      ) : (
-        <>
-          <TableHeader />
-          <Table dataTable={infoEmployee} keys={arrayKeys} />
-          <Pagination maxPages={employeeStore.maxPage} />
-        </>
-      )}
+    <div className={classnames(stylesIndex.taL)}>
+      <h2>Сотрудники</h2>
+      <Table data={exampleData.map(value => {
+        // @ts-ignore
+        delete value.role;
+      }) as any || []} />
+      {/* {
+        Boolean(Object.keys(employee.constEmployeesData).length)
+          ? <>
+            <Table data={employee.constEmployeesData as any} />
+          </>
+          : <Loader />
+      } */}
+
     </div>
   );
 };
 
-export default observer(Employer);
+export default Employee;

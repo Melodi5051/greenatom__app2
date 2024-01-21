@@ -1,28 +1,28 @@
 import React, { useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { authentificator } from "../store/auth2.store";
 import { notificator } from "../store/notify.store";
+import Loader from "./Loader/Loader";
 
 type Props = { children: React.ReactNode };
 
 const ProtectedRouter = ({ children }: Props) => {
+  const navigate = useNavigate();
   useEffect(() => {
     authentificator.getMe()
     .then(content => console.log({...content}))
     .catch((error) => {
       notificator.push({children: `${error}`});
-      authentificator.refresh()
-      .then(operationcode => {
-        console.log(authentificator.isAuth())
-      })
+      navigate("/auth", {replace: true});
+      // authentificator.refresh()
     })
   }, [])
 
   return (
     <div>
       {
-        authentificator.isAuth() ? children : <Navigate replace to="/auth"/>
+        authentificator.gotUserData() ? children : <Loader />
       }
     </div>
   )

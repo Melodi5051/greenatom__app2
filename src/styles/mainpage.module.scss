@@ -1,6 +1,5 @@
 @use "./../index.scss" as index;
 
-
 .noa {
   text-decoration: none;
   color: index.$color-black;
@@ -23,7 +22,6 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
 
 .containerCard {
   display: flex;

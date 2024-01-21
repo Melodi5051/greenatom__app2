@@ -1,5 +1,5 @@
 import axios, { } from "axios";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { IAuthForm, ITokenData, ITokensData } from "../types/auth2Types";
 import { notificator } from "./notify.store";
 import LocalStorage from "../helpers/localstorage2.helper";
@@ -76,10 +76,10 @@ class Authentificator {
   }
 
   isAuth(): boolean {
-    console.log(this._tokenData())
-    console.log("Exp at", this._tokenData().exp, new Date(this._tokenData().exp))
-    console.log("Exp at * 1000", this._tokenData().exp, new Date(this._tokenData().exp * 1000))
-    console.log("Now", Date.now(), new Date(Date.now()))
+    // console.log(this._tokenData())
+    // console.log("Exp at", this._tokenData().exp, new Date(this._tokenData().exp))
+    // console.log("Exp at * 1000", this._tokenData().exp, new Date(this._tokenData().exp * 1000))
+    // console.log("Now", Date.now(), new Date(Date.now()))
     return (Date.now() < (this._tokenData().exp * 1000)) // умножаем, чтобы превратить дату окончания с 1970 на 2024 год
     // return ((Date.now() < (this._tokenData().exp * 1000)) && !!Object.keys(this.constUserData).length) // умножаем, чтобы превратить дату окончания с 1970 на 2024 год
   }
@@ -159,7 +159,9 @@ class Authentificator {
         }
       );
 
-      this.constUserData = JSON.parse(JSON.stringify(response.data));
+      runInAction(() => {
+        this.constUserData = JSON.parse(JSON.stringify(response.data));
+      })
       return JSON.parse(JSON.stringify(this.constUserData));
     } catch (error) {
       notificator.push({ children: `${error}`, type: "error" });

@@ -41,3 +41,34 @@ export interface IEmployee {
   };
   address: string;
 }
+
+export enum EmployeeKeys {
+  "fullname" = "ФИО",
+  "jobPosition" = "Должность",
+  "salary" = "Зарплата",
+  "mail" = "Почта",
+  "phoneNumber" = "Номер телефона",
+}
+export interface IInfoEmployee {
+  fullname: string;
+  jobPosition: string;
+  salary: number;
+  mail: string;
+  phoneNumber: string;
+}
+
+export interface IQueryAllEmployees {
+  pagePosition: number
+  pageSize: number
+  firstname: number
+  surname: string
+  patronymic: string
+  address: string
+  email: string
+  phoneNumber: string
+  salary: number
+  username: string
+  jobPosition: IRoles
+  sortBy: string | "id"
+  sortDirection: undefined | "ASC" | "DESC"
+}
