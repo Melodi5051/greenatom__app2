@@ -1,0 +1,68 @@
+@use "./../index.scss" as index;
+
+
+.noa {
+  text-decoration: none;
+  color: index.$color-black;
+}
+
+.secondaryText {
+  color: index.$color-grey-2;
+}
+
+.taL {
+  text-align: left;
+}
+
+.section {
+  margin: 3% 0;
+}
+
+.textOverflow {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+.containerCard {
+  display: flex;
+  flex-wrap: wrap;
+
+  div {
+    // flex: 0 0 auto; // Это означает, что дочерние div не будут увеличивать размер, но сохранят свой размер по содержимому
+    // margin: 5px; // Регулируйте отступы между дочерними div по вашему желанию
+    flex: 1 1 calc(33.33% - 10px); // Рассчитывает ширину блока в зависимости от окна, с учетом отступов
+    margin: 5px;
+    box-sizing: border-box; // Учитывает padding и border внутри ширины блока
+  }
+}
+
+.actionCard {
+  user-select: none;
+  cursor: pointer;
+  margin: 10px;
+  padding: 20px;
+
+  max-width: 35vw;
+  min-width: 5vw;
+
+  -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+
+  transition: index.$defaultTransition;
+
+  text-decoration: none;
+  text-transform: none;
+  color: index.$color-black;
+  background-color: index.$color-white;
+
+  border-radius: 5px;
+
+  &:active {
+    -webkit-box-shadow: 0px 5px 25px 2px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 5px 25px 2px rgba(34, 60, 80, 0.2);
+    box-shadow: 0px 5px 25px 2px rgba(34, 60, 80, 0.2);
+  }
+}

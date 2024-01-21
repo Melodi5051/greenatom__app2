@@ -88,6 +88,9 @@ $fontStack-monospace: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
 $fontSize: 16px;
 $fontSize-logo: 20px;
 
+$fontSizeH1: 1.8em;
+$defaultTransition: all 0.09s ease-in-out;
+
 // Цвета
 $color-primary: #025ea1;
 $color-blue-1: #003274;
@@ -129,4 +132,29 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+
+h1 {
+  font-size: $fontSizeH1;
+}
+
+h2 {
+  font-size: $fontSizeH1 - .1em;
+}
+
+h3 {
+  font-size: $fontSizeH1 - .2em;
+}
+
+h4 {
+  font-size: $fontSizeH1 - .3em;
+}
+
+h5 {
+  font-size: $fontSizeH1 - .4em;
+}
+
+h6 {
+  font-size: $fontSizeH1 - .5em;
 }

@@ -11,7 +11,7 @@ const ProtectedRouter = ({ children }: Props) => {
     authentificator.getMe()
     .then(content => console.log({...content}))
     .catch((error) => {
-      notificator.push({children: `ERROR ${error}`});
+      notificator.push({children: `${error}`});
       authentificator.refresh()
       .then(operationcode => {
         console.log(authentificator.isAuth())

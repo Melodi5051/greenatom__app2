@@ -21,29 +21,38 @@ const Employer = React.lazy(() => import("../pages/Employee"));
 
 // по хорошему эти роуты и правила перехода по ролям должны быть в бэкенде и подтягиваться сюда через их API
 // тогда админ их мог бы редактировать со своего профиля в специальном интерфейсе
+export const ROUTES = {
+  employees:  { route: "/employees", name: "Сотрудники", description: "Просмотр сотрудников, изменение учетных данных сотрудников" },
+  products:   { route: "/products", name: "Продукты", description: "Редактирование продуктов и номенклатурных групп" },
+  orders:     { route: "/orders", name: "Заказы", description: "Просмотр и управление заказами" },
+  cart:       { route: "/cart", name: "Корзина", description: "Просмотр собственной корзины" },
+  warehouse:  { route: "/warehouse", name: "Склад", description: "Учет товаров на складе" },
+  delivery:   { route: "/delivery", name: "Доставка", description: "Оперирование статусами доставки" }
+}
+
 export const ROUTES_BY_ROLE: any = {
   ROLE_ADMIN: [
-    {route: "/employees", name: "Сотрудники"},
-    {route: "/products", name: "Продукты"}
+    ROUTES.employees,
+    ROUTES.products
   ],
   ROLE_MANAGER: [
-    {route: "/products", name: "Продукты"},
-    {route: "/orders", name: "Заказы"},
-    {route: "/cart", name: "Корзина"}
+    ROUTES.products,
+    ROUTES.orders,
+    ROUTES.cart
   ],
   ROLE_WAREHOUSE_WORKER: [
-    {route: "/garage", name: "Склад"}
+    ROUTES.warehouse
   ],
   ROLE_COURIER: [
-    {route: "/delivery", name: "Доставка"}
+    ROUTES.delivery
   ],
   ROLE_SUPER_ADMIN: [
-    {route: "/employees", name: "Сотрудники"},
-    {route: "/products", name: "Продукты"},
-    {route: "/orders", name: "Заказы"},
-    {route: "/cart", name: "Корзина"},
-    {route: "/garage", name: "Склад"},
-    {route: "/delivery", name: "Доставка"}
+    ROUTES.employees,
+    ROUTES.products,
+    ROUTES.orders,
+    ROUTES.cart,
+    ROUTES.warehouse,
+    ROUTES.delivery,
   ],
   ROLE_UNDEFINED: [
     // роль без доступа к вкладкам
@@ -84,7 +93,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/employees",
+        path: ROUTES.employees.route,
         element: (
           <React.Suspense fallback={<Loader />}>
             <ProtectedRouter>
@@ -114,7 +123,7 @@ export const router = createBrowserRouter([
       //   ),
       // },
       {
-        path: "/products",
+        path: ROUTES.products.route,
         element: (
           <React.Suspense fallback={<Loader />}>
             <ProtectedRouter>
@@ -124,7 +133,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/orders",
+        path: ROUTES.orders.route,
         element: (
           <React.Suspense fallback={<div>Loading...</div>}>
             <ProtectedRouter>

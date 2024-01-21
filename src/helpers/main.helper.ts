@@ -21,3 +21,8 @@ export const checkPhoneNumber = (phoneNumber: string): string => {
   }
   return phoneNumber;
 };
+
+
+export const classnames = (...args: string[]): string => {
+  return args.join(" ");
+}
