@@ -29,6 +29,7 @@ const ProtectedRouter = ({ children }: Props) => {
         setIsAuth(true)
         setCurrentUser({...content});
       }
+      console.log(authentificator.isAuth())
       return content;
     })
     .then(content => console.log({...content}));
