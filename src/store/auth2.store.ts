@@ -81,6 +81,7 @@ class Authentificator {
     console.log("Exp at * 1000", this._tokenData().exp, new Date(this._tokenData().exp * 1000))
     console.log("Now", Date.now(), new Date(Date.now()))
     return (Date.now() < (this._tokenData().exp * 1000)) // умножаем, чтобы превратить дату окончания с 1970 на 2024 год
+    // return ((Date.now() < (this._tokenData().exp * 1000)) && !!Object.keys(this.constUserData).length) // умножаем, чтобы превратить дату окончания с 1970 на 2024 год
   }
 
   /**
@@ -152,7 +153,7 @@ class Authentificator {
       return this.constUserData;
     } catch (error) {
       notificator.push({ children: `${error}`, type: "error" });
-      throw new Error("Закончилась авторизация, просим новый токен");
+      throw new Error("Закончилась авторизация. Пожалуйста, войдите в аккаунт снова!");
       return {};
     }
   }
@@ -191,7 +192,7 @@ class Authentificator {
    * Так как на бэкенде нет специального метода для прекращения сессии - делаем это очисткой localStorage и хранилища MobX
    */
   signout() {
-    notificator.push({ children: `Вы вышли из аккаунта ${this.constCurrentUserId}` });
+    notificator.push({ children: `Вы вышли из аккаунта ${this.constUserData.username}` });
     LocalStorage.clear();
     this.varTokenData = "";
     this.constCurrentUserId = 0;

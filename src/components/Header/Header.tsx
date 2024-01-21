@@ -6,26 +6,27 @@ import SvgWhiteUserIcon from "../../assets/svg/ui-white-user-profile.svg";
 import SvgUserIcon from "../../assets/svg/ui-user-profile.svg";
 import { observer } from "mobx-react-lite";
 import { userStore } from "../../store/user.store";
-import {
-  removeCurrentPathToLocalStorage,
-  removeTokenToLocalStorage,
-} from "../../helpers/localstorage.helper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import { authentificator } from "../../store/auth2.store";
 
 const Header = () => {
-  const handleLogout = () => {
-    // removeTokenToLocalStorage("token");
-    // removeTokenToLocalStorage("refreshToken");
-    // removeCurrentPathToLocalStorage();
-  };
+  
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(userStore.userRole);
   }, [userStore.userRole]);
 
-  console.log("User role: ", userStore.userRole);
+  const handleLogout = () => {
+    // removeTokenToLocalStorage("token");
+    // removeTokenToLocalStorage("refreshToken");
+    // removeCurrentPathToLocalStorage();
+    authentificator.signout();
+    navigate("/auth", {replace: true})
+  };
+
+
   return (
     <>
       <header>
@@ -42,11 +43,10 @@ const Header = () => {
               </div>
             </Link>
             <div className={styles.divActionsButtons}>
+              {/* {!!Object.keys(authentificator.constUserData).length ? ( */}
               {authentificator.isAuth() ? (
                 <Navbar
-                  userData={userStore.user}
                   handleLogout={handleLogout}
-                  userRoutes={userStore.setRoutesByRole}
                 />
               ) : (
                 <>

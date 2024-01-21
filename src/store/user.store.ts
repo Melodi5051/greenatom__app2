@@ -6,23 +6,23 @@ class User__Store {
   userRole: string = "";
   routesByRole: any = {
     ROLE_ADMIN: {
-      Сотрудники: "/сотрудники",
-      Продукты: "/продукты",
+      Сотрудники: "/employees",
+      Продукты: "/products",
     },
     ROLE_MANAGER: {
-      Продукты: "/продукты",
-      Заказы: "/заказы",
-      Корзина: "/корзина",
+      Продукты: "/products",
+      Заказы: "/orders",
+      Корзина: "/cart",
     },
     // "ROLE_DIRECTOR": {
     //   'routeName': '/somepath',
     //   'routeName': '/somepath'
     // },
     ROLE_WAREHOUSE_WORKER: {
-      Склад: "/склад",
+      Склад: "/garage",
     },
     ROLE_COURIER: {
-      Доставка: "/доставка",
+      Доставка: "/delivery",
     },
   };
 

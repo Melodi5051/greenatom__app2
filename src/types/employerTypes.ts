@@ -15,6 +15,14 @@ export enum EmployeeRole {
   "ROLE_CLIENT_INTERMEDIARY" = "Клиент",
 }
 
+export type IRoles =
+  "ROLE_ADMIN" |
+  "ROLE_MANAGER" |
+  "ROLE_DIRECTOR" |
+  "ROLE_WAREHOUSE_WORKER" |
+  "ROLE_COURIER"
+
+
 export interface IEmployee {
   id: number;
   firstname: string;
@@ -26,7 +34,8 @@ export interface IEmployee {
   phoneNumber: string;
   username: string;
   role: {
-    name: UserRole;
+    // name: UserRole;
+    name: IRoles;
   };
   address: string;
 }
