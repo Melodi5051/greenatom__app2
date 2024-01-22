@@ -1,22 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import stylesIndex from "../index.module.scss";
 import styles from "./../styles/employeepage.module.scss";
 import Table from "../components/Table/Table";
 import { classnames } from "../helpers/main.helper";
 import { employee } from "../store/employee2.store";
-import { IQueryAllEmployees } from "../types/employerTypes";
+import { IEmployee, IQueryAllEmployees } from "../types/employerTypes";
 import Loader from "../components/Loader/Loader";
-import Input, { InputSimple } from "../components/Input/Input";
-import Button from "../components/Button/Button";
 import { observer } from "mobx-react-lite";
 import { notificator } from "../store/notify.store";
-import { modalmobx } from "../store/modal.store";
-import { authentificator } from "../store/auth2.store";
-import { useNavigate } from "react-router-dom";
-import Select from "../components/Select/Select";
 import { ROUTES_BY_ROLE } from "../router/router";
+import { find } from "lodash";
 
 interface IPropsEmployee { }
+
+/**
+ * При вызове заполняет все найденные селекторы данными. Селекторы берутся из ключей самих данных
+ * 
+ * @param e Событие клика по селектору
+ * @param data Значения, которые надо использовать
+ */
+const fillCurrentFormBySelectorValue = (e: ChangeEvent<HTMLInputElement>, data: any) => {
+  // @ts-ignore
+  const optionName: string = e.target?.options[Number(e.target.value)].innerText;
+  const emplObj: IEmployee = find(Object.values(employee.constEmployeesData), {id: Number(optionName.charAt(0))}) as IEmployee;
+  const emplValues = Object.values(emplObj as Object);
+  const emplKeys = Object.keys(emplObj as Object);
+
+  emplKeys.forEach((selectorPart: string) => {
+    const element = document.querySelector(`#${selectorPart}`) as any
+    if (element && `#${selectorPart}` !== `#${e.currentTarget.id}`)
+      element.value = emplObj[selectorPart];
+  })
+}
 
 const Employee: React.FC<IPropsEmployee> = (props) => {
   const [pageSize, setPageSize] = useState(20);
@@ -44,7 +59,7 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
         1. передача функций в компонент через пропсы
         2. по двойному клику на ячейку открывается модалка, в которой можно изменить ее значение и отправляем новое значение на сервер
         3. если нет эндпоинта для изменения значения - выскакивает уведомление, что значение изменить нельзя
-        4. Наименования кнопок как в 1С - "Записать" и "Записать и закрыть"
+        4. √ Наименования кнопок как в 1С - "Записать" и "Записать и закрыть"
       */}
       {!!Object.keys(data).length ? (
         <>
@@ -89,7 +104,9 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
               },
               edit: {
                 nessesaryFields: [ {title: "id", inputType: "select", props: {
-                  options: employee.constEmployeesData.map((empl) => {return {name: empl.id}})
+                  // @ts-ignore
+                  options: employee.constEmployeesData.map((empl) => {return {name: `${empl.id} (${empl.username} ${empl.role.name})`}}),
+                  onChange: fillCurrentFormBySelectorValue
                 }} ],
                 optionalFields: [ 
                   "firstname",

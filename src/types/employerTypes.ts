@@ -47,6 +47,8 @@ export interface IEmployee {
   exp: number
   iat: number
   sub: string
+
+  [key: string]: any
 }
 
 export enum EmployeeKeys {

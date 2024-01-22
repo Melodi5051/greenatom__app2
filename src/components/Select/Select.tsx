@@ -15,7 +15,7 @@ interface ISelect extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTM
 
 const Select: React.FC<ISelect> = (props) => {
     return <>
-        <select className={styles.select} name={props.name} id={props.name} defaultValue={0}>
+        <select className={styles.select} name={props.name} id={props.name} defaultValue={0} {...props}>
             {props.options && props.options.map((value: ISelectOption, index: number) => {
                 return <option value={index} key={index}>{value.name}</option>
             })}

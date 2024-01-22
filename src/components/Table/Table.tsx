@@ -191,11 +191,15 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
 
                   modalmobx.hide()
                 }}>Записать и закрыть</Button>
+
+
                 <Button viewtype="v4" onClick={() => {
                   context.actions.add.writeCallback()
                     .then(refreshTable)
                     .catch((error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }))
                 }}>Записать </Button>
+
+
                 <Button viewtype="v3" onClick={() => {
                   modalmobx.hide()
                 }}>Закрыть</Button>
@@ -212,7 +216,7 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
             <>
               <h4>({context.title}) Изменение записи</h4>
               <p>Здесь можно изменить одно или несколько полей в выбранной записи</p>
-              <p>Укажите идентификатор записи, которую надо изменить</p>
+              <p>Укажите идентификатор записи, которую надо изменить, затем введите новое значение в необходимое поле</p>
 
               <table className={classnames(styles.inputs)}>
                 <tbody>
@@ -232,11 +236,15 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
 
                   modalmobx.hide()
                 }}>Записать и закрыть</Button>
+
+
                 <Button viewtype="v4" onClick={() => {
                   context.actions.edit.writeCallback()
                     .then(refreshTable)
                     .catch((error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }))
                 }}>Записать </Button>
+
+
                 <Button viewtype="v3" onClick={() => {
                   modalmobx.hide()
                 }}>Закрыть</Button>
@@ -248,13 +256,13 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
           Изменить
         </Button>
         <Button viewtype="text">
-          Фильтрация
+          Удалить
         </Button>
         <Button viewtype="text">
-          Отображение
+          Фильтр
         </Button>
         <Button viewtype="text">
-          Сортировка
+          Вид
         </Button>
         <Button viewtype="text" onClick={() => { refreshTable(); notificator.push({ children: "Данные обновлены" }) }}>
           Обновить
