@@ -22,6 +22,8 @@ export interface TableProps {
   context: TableContext
 }
 
+export type IFormFieldConfig = (string | { title: string; inputType: React.HTMLInputTypeAttribute | "select"; props?: {[key: string]: any} })
+
 export interface TableContext {
   /**
    * Название таблицы
@@ -61,14 +63,14 @@ export interface TableContext {
        * 
        * Отображаются **всегда** в этой форме
        */
-      nessesaryFields: (string | { title: string; inputType: React.HTMLInputTypeAttribute | "select"; })[]
+      nessesaryFields: IFormFieldConfig[]
 
       /**
        * Поля, необязательные для заполнения. Перечислять поля, используемые для общения с сервером
        * 
        * Отображаются **всегда** в этой форме
        */
-      optionalFields?: string[]
+      optionalFields?: IFormFieldConfig[]
 
       /**
        * Колбек для кнопок "Записать" и "Записать и закрыть". Закрытие формы добавления новой записи в таблицу происходит автоматически для кнопки "Записать и закрыть"
@@ -87,14 +89,14 @@ export interface TableContext {
        * 
        * Отображаются **всегда** в этой форме
        */
-      nessesaryFields: string[]
+      nessesaryFields: IFormFieldConfig[]
 
       /**
        * Поля, необязательные для заполнения. Перечислять поля, используемые для общения с сервером
        * 
        * Отображаются **всегда** в этой форме
        */
-      optionalFields?: string[]
+      optionalFields?: IFormFieldConfig[]
 
       /**
        * Колбек для кнопок "Записать" и "Записать и закрыть". Закрытие формы добавления новой записи в таблицу происходит автоматически для кнопки "Записать и закрыть"
@@ -114,7 +116,7 @@ const AutogenModalForm = observer(({ context, pathToFields }: {context: TableCon
   if (!isEmpty(targetObject))
     return <>
       {
-        targetObject.map((alias: string | { title: string; inputType: string; }, index: number) => {
+        targetObject.map((alias: IFormFieldConfig, index: number) => {
           if (typeof alias === "string")
             return <tr className={styles.someInput} key={index}>
               <td>
@@ -132,7 +134,7 @@ const AutogenModalForm = observer(({ context, pathToFields }: {context: TableCon
               <td>
                 {
                   alias.inputType === "select"
-                    ? <Select id={alias.title} options={Object.keys(ROUTES_BY_ROLE).map(v => { return { name: v } })} />
+                    ? <Select id={alias.title} {...alias.props} />
                     : alias.inputType === "password"
                       ? <EyeInput id={alias.title} />
                       : <Input type={alias.inputType} id={alias.title} />

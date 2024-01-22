@@ -10,7 +10,7 @@ interface ISelectOption extends React.DetailedHTMLProps<React.OptionHTMLAttribut
 
 
 interface ISelect extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
-    options: ISelectOption[]
+    options?: ISelectOption[]
 }
 
 const Select: React.FC<ISelect> = (props) => {

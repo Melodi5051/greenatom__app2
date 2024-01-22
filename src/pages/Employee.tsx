@@ -14,6 +14,7 @@ import { modalmobx } from "../store/modal.store";
 import { authentificator } from "../store/auth2.store";
 import { useNavigate } from "react-router-dom";
 import Select from "../components/Select/Select";
+import { ROUTES_BY_ROLE } from "../router/router";
 
 interface IPropsEmployee { }
 
@@ -80,12 +81,16 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                   {title: "password", inputType: "password"},
                   {title: "repeatPassword", inputType: "password"},
                   "address",
-                  {title: "role.name", inputType: "select"}
+                  {title: "role.name", inputType: "select", props: {
+                    options: Object.keys(ROUTES_BY_ROLE).map(v => { return { name: v } })
+                  }}
                 ],
                 writeCallback: async () => notificator.push({children: "Данные записаны"})
               },
               edit: {
-                nessesaryFields: [ "id" ],
+                nessesaryFields: [ {title: "id", inputType: "select", props: {
+                  options: employee.constEmployeesData.map((empl) => {return {name: empl.id}})
+                }} ],
                 optionalFields: [ 
                   "firstname",
                   "surname",
