@@ -2,14 +2,14 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import stylesIndex from "../index.module.scss";
 import styles from "./../styles/employeepage.module.scss";
 import Table from "../components/Table/Table";
-import { classnames } from "../helpers/main.helper";
+import { classnames, objFromMobx } from "../helpers/main.helper";
 import { employee } from "../store/employee2.store";
 import { IEmployee, INewEmployee, IQueryAllEmployees } from "../types/employerTypes";
 import Loader from "../components/Loader/Loader";
 import { observer } from "mobx-react-lite";
 import { notificator } from "../store/notify.store";
 import { ROUTES_BY_ROLE } from "../router/router";
-import { find } from "lodash";
+import { find, isEmpty, get, omitBy } from "lodash";
 
 interface IPropsEmployee { }
 
@@ -105,7 +105,7 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                 ],
                 writeCallback: async (form: INewEmployee) => {
                   console.log("employees.tsx", form)
-                  // const response = await 
+                  const response = await employee.create(form);
                 }
               },
               edit: {
@@ -113,8 +113,11 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                   {
                     title: "id", inputType: "select", props: {
                       // @ts-ignore
-                      options: employee.constEmployeesData.map((empl) => { return { name: `${empl.id} (${empl.username} ${empl.role.name})` } }),
-                      onChange: (e: React.ChangeEvent<HTMLInputElement>) => fillCurrentFormBySelectorValue(e, employee.constEmployeesData)
+                      // options: employee.constEmployeesData.map((empl) => { return { name: `${empl.id} (${empl.username} ${empl.role.name})` } }),
+                      options: employee.constEmployeesData.map((empl) => { return { name: `${empl.id}` } }),
+                      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                        // fillCurrentFormBySelectorValue(e, employee.constEmployeesData)
+                      }
                     }
                   }
                 ],
@@ -131,7 +134,11 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                   "address",
                   // "role.name"
                 ],
-                writeCallback: async () => notificator.push({ children: "Данные обновлены" })
+                writeCallback: async (form: any) => {
+                  console.log("employees.tsx", form)
+                  // omitBy(form, isEmpty) // очистит все пустые значения
+                  // const response = await employee.edit(selectorUserId, form);
+                }
               }
             }
           }} />

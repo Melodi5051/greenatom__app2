@@ -8,6 +8,7 @@ import Button from '../Button/Button';
 import Input, { EyeInput } from '../Input/Input';
 import Select from '../Select/Select';
 import { get, isEmpty, result } from 'lodash';
+import { AxiosResponse } from 'axios';
 
 
 export type FormActions = "add" | "edit";
@@ -23,6 +24,31 @@ export interface TableProps {
 
 export interface IHardFieldConfig { title: string; inputType: React.HTMLInputTypeAttribute | "select"; props?: { [key: string]: any } }
 export type IFormFieldConfig = (string | IHardFieldConfig)
+
+export interface ITableContextAction {
+  /**
+   * Поля, обязательные для заполнения. Перечислять поля, используемые для общения с сервером
+   * 
+   * Если значение для поля нестандартное (выпадающий список Select), то можно указать не строку, а объект указанной структуры
+   * 
+   * Отображаются **всегда** в этой форме
+   */
+  nessesaryFields: IFormFieldConfig[]
+
+  /**
+   * Поля, необязательные для заполнения. Перечислять поля, используемые для общения с сервером
+   * 
+   * Отображаются **всегда** в этой форме
+   */
+  optionalFields?: IFormFieldConfig[]
+
+  /**
+   * Колбек для кнопок "Записать" и "Записать и закрыть". Закрытие формы добавления новой записи в таблицу происходит автоматически для кнопки "Записать и закрыть"
+   * 
+   * Например здесь может быть функция запроса на сервер
+   */
+  writeCallback: (form: any) => Promise<any>
+}
 
 export interface TableContext {
   /**
@@ -60,58 +86,12 @@ export interface TableContext {
     /**
      * Форма добавления новой записи в таблицу
      */
-    add: {
-      /**
-       * Поля, обязательные для заполнения. Перечислять поля, используемые для общения с сервером
-       * 
-       * Если значение для поля нестандартное (выпадающий список Select), то можно указать не строку, а объект указанной структуры
-       * 
-       * Отображаются **всегда** в этой форме
-       */
-      nessesaryFields: IFormFieldConfig[]
-
-      /**
-       * Поля, необязательные для заполнения. Перечислять поля, используемые для общения с сервером
-       * 
-       * Отображаются **всегда** в этой форме
-       */
-      optionalFields?: IFormFieldConfig[]
-
-      /**
-       * Колбек для кнопок "Записать" и "Записать и закрыть". Закрытие формы добавления новой записи в таблицу происходит автоматически для кнопки "Записать и закрыть"
-       * 
-       * Например здесь может быть функция запроса на сервер
-       */
-      writeCallback: (form: any) => Promise<any>
-    },
+    add: ITableContextAction,
 
     /**
      * Форма редактирования существующей записи в таблице
      */
-    edit: {
-      /**
-       * Поля, обязательные для заполнения. Перечислять поля, используемые для общения с сервером
-       * 
-       * Отображаются **всегда** в этой форме
-       */
-      nessesaryFields: IFormFieldConfig[]
-
-      /**
-       * Поля, необязательные для заполнения. Перечислять поля, используемые для общения с сервером
-       * 
-       * Отображаются **всегда** в этой форме
-       */
-      optionalFields?: IFormFieldConfig[]
-
-      /**
-       * Колбек для кнопок "Записать" и "Записать и закрыть". Закрытие формы добавления новой записи в таблицу происходит автоматически для кнопки "Записать и закрыть"
-       * 
-       * Например здесь может быть функция запроса на сервер
-       */
-      writeCallback: () => Promise<any>
-    },
-
-
+    edit: ITableContextAction,
   }
 }
 
@@ -155,12 +135,12 @@ const AutogenModalForm = observer(({ context, pathToFields }: { context: TableCo
 
 
 
-const ModalTableForm = ({ context, pathToFields }: { context: TableContext, pathToFields: string }) => {
+const ModalTableForm = observer(({ context, pathToFields }: { context: TableContext, pathToFields: string }) => {
   const targetObject = get(context.actions, pathToFields);
 
   const mapConverterFields = (v: IFormFieldConfig) => {
-    if (typeof v === "string") 
-      return {title: v, inputType: "text"}
+    if (typeof v === "string")
+      return { title: v, inputType: "text" }
     else
       return v
   }
@@ -189,7 +169,12 @@ const ModalTableForm = ({ context, pathToFields }: { context: TableContext, path
 
     // логика обработки данных формы
     targetObject.writeCallback(resultObject)
-      .then(context.refreshTable)
+      .then((response: AxiosResponse<any, any>) => {
+        // проверить на ложную ошибку
+        notificator.push({ children: `Создана новая запись в таблицу`, type: "positive" })
+        modalmobx.setChildren('');
+        context.refreshTable();
+      })
       .catch((error: Error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }));
   }
 
@@ -231,7 +216,7 @@ const ModalTableForm = ({ context, pathToFields }: { context: TableContext, path
     )
   else
     return null;
-};
+});
 
 
 const Table: React.FC<TableProps> = observer(({ data, context }) => {
@@ -269,7 +254,7 @@ const Table: React.FC<TableProps> = observer(({ data, context }) => {
             <>
               <h4>({context.title}) Изменение записи</h4>
               <p>Здесь можно изменить одно или несколько полей в выбранной записи</p>
-              <p>Укажите идентификатор записи, которую надо изменить, затем введите новое значение в необходимое поле</p>
+              <p>Укажите идентификатор записи, которую надо изменить, затем введите новое значение в необходимое поле. Остальные поля оставьте пустыми</p>
 
               <ModalTableForm context={context} pathToFields='edit' />
             </>
