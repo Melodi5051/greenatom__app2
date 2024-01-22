@@ -36,7 +36,7 @@ type AnyObject = Record<string, any>;
  * @param value Значение
  * @returns Измененный объект
  */
-export function updateObject(obj: AnyObject, path: string, value: any): AnyObject {
+export function createFieldsByPath(obj: AnyObject, path: string, value: any): AnyObject {
   const keys = path.split('.');
   const lastKey = keys.pop() as string;
 

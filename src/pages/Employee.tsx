@@ -4,7 +4,7 @@ import styles from "./../styles/employeepage.module.scss";
 import Table from "../components/Table/Table";
 import { classnames } from "../helpers/main.helper";
 import { employee } from "../store/employee2.store";
-import { IEmployee, IQueryAllEmployees } from "../types/employerTypes";
+import { IEmployee, INewEmployee, IQueryAllEmployees } from "../types/employerTypes";
 import Loader from "../components/Loader/Loader";
 import { observer } from "mobx-react-lite";
 import { notificator } from "../store/notify.store";
@@ -22,7 +22,7 @@ interface IPropsEmployee { }
 const fillCurrentFormBySelectorValue = (e: ChangeEvent<HTMLInputElement>, data: any) => {
   // @ts-ignore
   const optionName: string = e.target?.options[Number(e.target.value)].innerText;
-  const emplObj: IEmployee = find(Object.values(employee.constEmployeesData), {id: Number(optionName.charAt(0))}) as IEmployee;
+  const emplObj: IEmployee = find(Object.values(data), { id: Number(optionName.charAt(0)) }) as IEmployee;
   const emplValues = Object.values(emplObj as Object);
   const emplKeys = Object.keys(emplObj as Object);
 
@@ -63,8 +63,9 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
       */}
       {!!Object.keys(data).length ? (
         <>
-          <Table data={data as any} refreshTable={refreshTable} context={{
+          <Table data={data as any} context={{
             title: "Сотрудники",
+            refreshTable: refreshTable,
             headerAlias: {
               id: "ID",
               firstname: "Имя",
@@ -85,7 +86,7 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
             },
             actions: {
               add: {
-                nessesaryFields: [ 
+                nessesaryFields: [
                   "firstname",
                   "surname",
                   "patronymic",
@@ -93,22 +94,31 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                   "salary",
                   "email",
                   "phoneNumber",
-                  {title: "password", inputType: "password"},
-                  {title: "repeatPassword", inputType: "password"},
+                  { title: "password", inputType: "password" },
+                  { title: "repeatPassword", inputType: "password" },
                   "address",
-                  {title: "role.name", inputType: "select", props: {
-                    options: Object.keys(ROUTES_BY_ROLE).map(v => { return { name: v } })
-                  }}
+                  {
+                    title: "role.name", inputType: "select", props: {
+                      options: Object.keys(ROUTES_BY_ROLE).map(v => { return { name: v } })
+                    }
+                  }
                 ],
-                writeCallback: async () => notificator.push({children: "Данные записаны"})
+                writeCallback: async (form: INewEmployee) => {
+                  console.log("employees.tsx", form)
+                  // const response = await 
+                }
               },
               edit: {
-                nessesaryFields: [ {title: "id", inputType: "select", props: {
-                  // @ts-ignore
-                  options: employee.constEmployeesData.map((empl) => {return {name: `${empl.id} (${empl.username} ${empl.role.name})`}}),
-                  onChange: fillCurrentFormBySelectorValue
-                }} ],
-                optionalFields: [ 
+                nessesaryFields: [
+                  {
+                    title: "id", inputType: "select", props: {
+                      // @ts-ignore
+                      options: employee.constEmployeesData.map((empl) => { return { name: `${empl.id} (${empl.username} ${empl.role.name})` } }),
+                      onChange: (e: React.ChangeEvent<HTMLInputElement>) => fillCurrentFormBySelectorValue(e, employee.constEmployeesData)
+                    }
+                  }
+                ],
+                optionalFields: [
                   "firstname",
                   "surname",
                   "patronymic",
@@ -121,7 +131,7 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                   "address",
                   // "role.name"
                 ],
-                writeCallback: async () => notificator.push({children: "Данные обновлены"})
+                writeCallback: async () => notificator.push({ children: "Данные обновлены" })
               }
             }
           }} />

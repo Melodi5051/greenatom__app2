@@ -81,3 +81,19 @@ export interface IQueryAllEmployees {
   sortBy: string | "id"
   sortDirection: undefined | "ASC" | "DESC"
 }
+
+export interface INewEmployee {
+  "firstname": string,
+  "surname": string,
+  "patronymic": string,
+  "jobPosition": string,
+  "salary": number,
+  "email": string,
+  "phoneNumber": string,
+  "password": string,
+  "repeatPassword": string,
+  "role": {
+    "name": IRoles
+  },
+  "address": string
+}

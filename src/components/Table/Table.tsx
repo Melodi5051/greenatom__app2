@@ -1,16 +1,16 @@
-import React, { ReactNode, createElement } from 'react';
+import React, { FormEvent, FormEventHandler, useRef, useState } from 'react';
 import styles from "./Table.module.scss";
-import { classnames } from '../../helpers/main.helper';
+import { classnames, createFieldsByPath } from '../../helpers/main.helper';
 import { observer } from 'mobx-react-lite';
 import { modalmobx } from '../../store/modal.store';
 import { notificator } from '../../store/notify.store';
 import Button from '../Button/Button';
 import Input, { EyeInput } from '../Input/Input';
-import { JsxElement } from 'typescript';
 import Select from '../Select/Select';
-import { ROUTES_BY_ROLE } from '../../router/router';
-import { get, isEmpty } from 'lodash';
+import { get, isEmpty, result } from 'lodash';
 
+
+export type FormActions = "add" | "edit";
 
 export interface TableRow {
   [key: string]: string | number;
@@ -18,17 +18,21 @@ export interface TableRow {
 
 export interface TableProps {
   data: TableRow[];
-  refreshTable: () => void
   context: TableContext
 }
 
-export type IFormFieldConfig = (string | { title: string; inputType: React.HTMLInputTypeAttribute | "select"; props?: {[key: string]: any} })
+export type IFormFieldConfig = (string | { title: string; inputType: React.HTMLInputTypeAttribute | "select"; props?: { [key: string]: any } })
 
 export interface TableContext {
   /**
    * Название таблицы
    */
   title: string
+
+  /**
+   * Функция для обновления данных в таблице
+   */
+  refreshTable: () => void
 
   /**
    * Объект с читабельными подписями для шапки таблицы
@@ -77,7 +81,7 @@ export interface TableContext {
        * 
        * Например здесь может быть функция запроса на сервер
        */
-      writeCallback: () => Promise<any>
+      writeCallback: (form: any) => Promise<any>
     },
 
     /**
@@ -111,7 +115,7 @@ export interface TableContext {
 }
 
 
-const AutogenModalForm = observer(({ context, pathToFields }: {context: TableContext, pathToFields: string}) => {
+const AutogenModalForm = observer(({ context, pathToFields }: { context: TableContext, pathToFields: string }) => {
   const targetObject = get(context.actions, pathToFields);
   if (!isEmpty(targetObject))
     return <>
@@ -123,7 +127,7 @@ const AutogenModalForm = observer(({ context, pathToFields }: {context: TableCon
                 <label htmlFor={alias}>{context.headerAlias[alias] || alias} {pathToFields.includes("nessesary") ? <span>*</span> : null}</label>
               </td>
               <td>
-                <Input id={alias} />
+                <Input name={alias} id={alias} />
               </td>
             </tr>
           else
@@ -134,10 +138,10 @@ const AutogenModalForm = observer(({ context, pathToFields }: {context: TableCon
               <td>
                 {
                   alias.inputType === "select"
-                    ? <Select id={alias.title} {...alias.props} />
+                    ? <Select name={alias.title} id={alias.title} {...alias.props} options={alias.props && alias.props.options} />
                     : alias.inputType === "password"
-                      ? <EyeInput id={alias.title} />
-                      : <Input type={alias.inputType} id={alias.title} />
+                      ? <EyeInput name={alias.title} id={alias.title} />
+                      : <Input name={alias.title} type={alias.inputType} id={alias.title} />
                 }
               </td>
             </tr>
@@ -149,7 +153,65 @@ const AutogenModalForm = observer(({ context, pathToFields }: {context: TableCon
 })
 
 
-const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) => {
+
+const ModalTableForm = ({ context, pathToFields }: { context: TableContext, pathToFields: string }) => {
+  const targetObject = get(context.actions, pathToFields);
+  if (!isEmpty(targetObject))
+    return (
+      <form id={'add-modal'}
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+          e.preventDefault();
+
+          const formData = new FormData(e.currentTarget);
+          const obj: { [key: string]: any } = { ...(Object.fromEntries(formData.entries()) as unknown) as object };
+
+          console.log(e)
+
+          var resultObject = {};
+
+          Object.keys(obj).forEach((k: string) => {
+            if (targetObject)
+              resultObject = createFieldsByPath(resultObject, k, obj[k]);
+          })
+
+          console.log("result", resultObject)
+
+          // логика обработки данных формы
+          targetObject.writeCallback(resultObject)
+            .then(context.refreshTable)
+            .catch((error: Error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }));
+        }}
+      >
+        <table className={classnames(styles.inputs)}>
+          <tbody>
+            {/* автогенерируемые формы на основе context */}
+            <AutogenModalForm context={context} pathToFields={`${pathToFields}.nessesaryFields`} />
+            <AutogenModalForm context={context} pathToFields={`${pathToFields}.optionalFields`} />
+          </tbody>
+        </table>
+        <div className={classnames(styles.modalButtons)}>
+          <Button type='submit' viewtype="v2" onClick={() => {
+            // onSubmit(formE);
+            modalmobx.hide()
+          }}>Записать и закрыть</Button>
+
+
+          <Button type='submit' viewtype="v4" onClick={() => {
+          }}>Записать</Button>
+
+
+          <Button viewtype="v3" onClick={() => {
+            modalmobx.hide()
+          }}>Закрыть</Button>
+        </div>
+      </form>
+    )
+  else
+    return null;
+};
+
+
+const Table: React.FC<TableProps> = observer(({ data, context }) => {
   console.log("ТАБЛИЦА ОТРИСОВАНА")
 
   const TABLE_RAW_HEADER = [...Object.keys(data[0])];
@@ -158,7 +220,6 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
   // Возвращаем JSX с использованием useMemo
   return (
     <>
-
       <div className={classnames(styles.operations)}>
         <Button viewtype="text" onClick={() => {
           modalmobx.setChildren(
@@ -168,42 +229,11 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
 
               {/* 
                 1. Сделать обработку onSubmit, функцию "Записать" вынести отдельно
-                2. Изменить вид формы Изменение записи. Для ID изменить: 1, 2, 3
+                2. √ Изменить вид формы Изменение записи. Для ID изменить: 1, 2, 3
                 3. Прокрутка таблицы без прокрутки шапки таблицы и блока
                   с операциями
               */}
-              <form id='modal-addEntity' action="">
-                <table className={classnames(styles.inputs)}>
-                  <tbody>
-                    {/* автогенерируемые формы на основе context */}
-                    <AutogenModalForm context={context} pathToFields='add.nessesaryFields'/>
-                    <AutogenModalForm context={context} pathToFields='add.optionalFields'/>
-                  </tbody>
-                </table>
-              </form>
-
-              <div className={classnames(styles.modalButtons)}>
-                <Button viewtype="v2" onClick={() => {
-                  // вынести отдельно
-                  context.actions.add.writeCallback()
-                    .then(refreshTable)
-                    .catch((error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }))
-
-                  modalmobx.hide()
-                }}>Записать и закрыть</Button>
-
-
-                <Button viewtype="v4" onClick={() => {
-                  context.actions.add.writeCallback()
-                    .then(refreshTable)
-                    .catch((error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }))
-                }}>Записать </Button>
-
-
-                <Button viewtype="v3" onClick={() => {
-                  modalmobx.hide()
-                }}>Закрыть</Button>
-              </div>
+              <ModalTableForm context={context} pathToFields='add'/>
             </>
           )
           modalmobx.setModalCloseable(true)
@@ -218,37 +248,7 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
               <p>Здесь можно изменить одно или несколько полей в выбранной записи</p>
               <p>Укажите идентификатор записи, которую надо изменить, затем введите новое значение в необходимое поле</p>
 
-              <table className={classnames(styles.inputs)}>
-                <tbody>
-                  {/* автогенерируемые формы на основе context */}
-                  <AutogenModalForm context={context} pathToFields='edit.nessesaryFields'/>
-                  <AutogenModalForm context={context} pathToFields='edit.optionalFields'/>
-                  
-
-                </tbody>
-              </table>
-
-              <div className={classnames(styles.modalButtons)}>
-                <Button viewtype="v2" onClick={() => {
-                  context.actions.edit.writeCallback()
-                    .then(refreshTable)
-                    .catch((error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }))
-
-                  modalmobx.hide()
-                }}>Записать и закрыть</Button>
-
-
-                <Button viewtype="v4" onClick={() => {
-                  context.actions.edit.writeCallback()
-                    .then(refreshTable)
-                    .catch((error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }))
-                }}>Записать </Button>
-
-
-                <Button viewtype="v3" onClick={() => {
-                  modalmobx.hide()
-                }}>Закрыть</Button>
-              </div>
+              <ModalTableForm context={context} pathToFields='edit'/>
             </>
           )
           modalmobx.show()
@@ -264,7 +264,7 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
         <Button viewtype="text">
           Вид
         </Button>
-        <Button viewtype="text" onClick={() => { refreshTable(); notificator.push({ children: "Данные обновлены" }) }}>
+        <Button viewtype="text" onClick={() => { context.refreshTable(); notificator.push({ children: "Данные обновлены" }) }}>
           Обновить
         </Button>
         <Button viewtype="text">

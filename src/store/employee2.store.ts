@@ -2,7 +2,7 @@ import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
 import LocalStorage from "../helpers/localstorage2.helper";
 import { notificator } from "./notify.store";
-import { IEmployee, IQueryAllEmployees } from "../types/employerTypes";
+import { IEmployee, INewEmployee, IQueryAllEmployees } from "../types/employerTypes";
 
 /**
  * Заголовки, используемые в запросах к API для текущего стора
@@ -35,6 +35,31 @@ class Employee {
   }
 
   constEmployeesData: IEmployee[] = [] as IEmployee[];
+
+  /**
+   * Создает нового сотрудника
+   * 
+   * @param data Данные нового сотрудника
+   */
+  async create(data: INewEmployee) {
+    try {
+      const response = await axios.post(
+        process.env.REACT_APP_BACKEND_ORIGIN + `/api/auth/signup`,
+        data,
+        {
+          headers: {
+            ...DEFAULT_HEADERS,
+            Authorization: `Bearer ${LocalStorage.get("at")}`
+          },
+        }
+      );
+
+      return JSON.parse(JSON.stringify(response.data));
+    } catch (error) {
+      notificator.push({ children: `${error}`, type: "error" });
+      return [];
+    }
+  }
 
   /**
    * Возвращает информацию обо всех сотрудниках

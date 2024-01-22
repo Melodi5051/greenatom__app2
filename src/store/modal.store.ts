@@ -61,7 +61,7 @@ class ModalMobX {
    */
   hide() {
     this.activeStatus = false;
-    this.setChildren('');
+    // this.setChildren('');
   }
 }
 
