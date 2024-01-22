@@ -155,6 +155,28 @@ const AutogenModalForm = observer(({ context, pathToFields }: { context: TableCo
 
 
 const ModalTableForm = ({ context, pathToFields }: { context: TableContext, pathToFields: string }) => {
+
+  const submitFunction = (e: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(e.currentTarget);
+    const obj: { [key: string]: any } = { ...(Object.fromEntries(formData.entries()) as unknown) as object };
+
+    console.log(e)
+
+    var resultObject = {};
+
+    Object.keys(obj).forEach((k: string) => {
+      if (targetObject)
+        resultObject = createFieldsByPath(resultObject, k, obj[k]);
+    })
+
+    console.log("result", resultObject)
+
+    // логика обработки данных формы
+    targetObject.writeCallback(resultObject)
+      .then(context.refreshTable)
+      .catch((error: Error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }));
+  }
+
   const targetObject = get(context.actions, pathToFields);
   if (!isEmpty(targetObject))
     return (
@@ -162,24 +184,10 @@ const ModalTableForm = ({ context, pathToFields }: { context: TableContext, path
         onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
           e.preventDefault();
 
-          const formData = new FormData(e.currentTarget);
-          const obj: { [key: string]: any } = { ...(Object.fromEntries(formData.entries()) as unknown) as object };
+          const submitter = (((e.nativeEvent as any).submitter) as HTMLElement)
 
-          console.log(e)
-
-          var resultObject = {};
-
-          Object.keys(obj).forEach((k: string) => {
-            if (targetObject)
-              resultObject = createFieldsByPath(resultObject, k, obj[k]);
-          })
-
-          console.log("result", resultObject)
-
-          // логика обработки данных формы
-          targetObject.writeCallback(resultObject)
-            .then(context.refreshTable)
-            .catch((error: Error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }));
+          if ((submitter.tagName === "BUTTON" && submitter.getAttribute("type") === "submit"))
+            submitFunction(e);
         }}
       >
         <table className={classnames(styles.inputs)}>
@@ -233,7 +241,7 @@ const Table: React.FC<TableProps> = observer(({ data, context }) => {
                 3. Прокрутка таблицы без прокрутки шапки таблицы и блока
                   с операциями
               */}
-              <ModalTableForm context={context} pathToFields='add'/>
+              <ModalTableForm context={context} pathToFields='add' />
             </>
           )
           modalmobx.setModalCloseable(true)
@@ -248,7 +256,7 @@ const Table: React.FC<TableProps> = observer(({ data, context }) => {
               <p>Здесь можно изменить одно или несколько полей в выбранной записи</p>
               <p>Укажите идентификатор записи, которую надо изменить, затем введите новое значение в необходимое поле</p>
 
-              <ModalTableForm context={context} pathToFields='edit'/>
+              <ModalTableForm context={context} pathToFields='edit' />
             </>
           )
           modalmobx.show()
