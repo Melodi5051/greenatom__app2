@@ -52,3 +52,8 @@ export function createFieldsByPath(obj: AnyObject, path: string, value: any): An
 
   return obj;
 }
+
+
+export function objFromMobx(obj: any) {
+  return JSON.parse(JSON.stringify(obj))
+}

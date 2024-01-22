@@ -1,6 +1,6 @@
 import React, { FormEvent, FormEventHandler, useRef, useState } from 'react';
 import styles from "./Table.module.scss";
-import { classnames, createFieldsByPath } from '../../helpers/main.helper';
+import { classnames, createFieldsByPath, objFromMobx } from '../../helpers/main.helper';
 import { observer } from 'mobx-react-lite';
 import { modalmobx } from '../../store/modal.store';
 import { notificator } from '../../store/notify.store';
@@ -21,7 +21,8 @@ export interface TableProps {
   context: TableContext
 }
 
-export type IFormFieldConfig = (string | { title: string; inputType: React.HTMLInputTypeAttribute | "select"; props?: { [key: string]: any } })
+export interface IHardFieldConfig { title: string; inputType: React.HTMLInputTypeAttribute | "select"; props?: { [key: string]: any } }
+export type IFormFieldConfig = (string | IHardFieldConfig)
 
 export interface TableContext {
   /**
@@ -85,7 +86,7 @@ export interface TableContext {
     },
 
     /**
-     * Форма добавления новой записи в таблицу
+     * Форма редактирования существующей записи в таблице
      */
     edit: {
       /**
@@ -155,18 +156,33 @@ const AutogenModalForm = observer(({ context, pathToFields }: { context: TableCo
 
 
 const ModalTableForm = ({ context, pathToFields }: { context: TableContext, pathToFields: string }) => {
+  const targetObject = get(context.actions, pathToFields);
+
+  const mapConverterFields = (v: IFormFieldConfig) => {
+    if (typeof v === "string") 
+      return {title: v, inputType: "text"}
+    else
+      return v
+  }
+
+  const modNessesaryFields = objFromMobx(targetObject).nessesaryFields.map(mapConverterFields)
+  const modOptionalFields = objFromMobx(targetObject)?.optionalFields && objFromMobx(targetObject)?.optionalFields.map(mapConverterFields) || []
+  const allFields: IHardFieldConfig[] = [...modNessesaryFields, ...modOptionalFields];
 
   const submitFunction = (e: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(e.currentTarget);
     const obj: { [key: string]: any } = { ...(Object.fromEntries(formData.entries()) as unknown) as object };
 
-    console.log(e)
+    console.log(allFields)
 
     var resultObject = {};
 
-    Object.keys(obj).forEach((k: string) => {
-      if (targetObject)
-        resultObject = createFieldsByPath(resultObject, k, obj[k]);
+    Object.values(allFields as IHardFieldConfig[]).forEach((fieldObj: IHardFieldConfig) => {
+      // здесь указываем исключения в зависимости от типа инпута
+      if (fieldObj.inputType === "select" && fieldObj?.props && fieldObj?.props?.options)
+        resultObject = createFieldsByPath(resultObject, fieldObj.title, fieldObj.props.options[Number(obj[fieldObj.title])].name)
+      else
+        resultObject = createFieldsByPath(resultObject, fieldObj.title, obj[fieldObj.title])
     })
 
     console.log("result", resultObject)
@@ -177,7 +193,6 @@ const ModalTableForm = ({ context, pathToFields }: { context: TableContext, path
       .catch((error: Error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }));
   }
 
-  const targetObject = get(context.actions, pathToFields);
   if (!isEmpty(targetObject))
     return (
       <form id={'add-modal'}
