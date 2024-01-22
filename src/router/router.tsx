@@ -31,7 +31,8 @@ export const ROUTES = {
   warehouse:  { route: "/warehouse", name: "Склад", description: "Учет товаров на складе" },
   delivery:   { route: "/delivery", name: "Доставка", description: "Оперирование статусами доставки" }
 }
-
+// также здесь находится актуальный перечень ролей в качестве
+// ключей этого объекта
 export const ROUTES_BY_ROLE: any = {
   ROLE_SUPER_ADMIN: [
     ROUTES.employees,

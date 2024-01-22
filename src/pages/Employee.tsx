@@ -13,6 +13,7 @@ import { notificator } from "../store/notify.store";
 import { modalmobx } from "../store/modal.store";
 import { authentificator } from "../store/auth2.store";
 import { useNavigate } from "react-router-dom";
+import Select from "../components/Select/Select";
 
 interface IPropsEmployee { }
 
@@ -64,7 +65,7 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
               // подписи для форм управления таблицей
               password: "Пароль",
               repeatPassword: "Повторите пароль",
-              "role.name": "Название роли"
+              "role.name": "Наименование роли"
             },
             actions: {
               add: {
@@ -76,10 +77,10 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                   "salary",
                   "email",
                   "phoneNumber",
-                  "password",
-                  "repeatPassword",
+                  {title: "password", inputType: "password"},
+                  {title: "repeatPassword", inputType: "password"},
                   "address",
-                  "role.name"
+                  {title: "role.name", inputType: "select"}
                 ],
                 writeCallback: async () => notificator.push({children: "Данные записаны"})
               },
@@ -88,7 +89,7 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                 optionalFields: [ 
                   "firstname",
                   "surname",
-                  "patronomyc",
+                  "patronymic",
                   "jobPosition",
                   "salary",
                   "email",

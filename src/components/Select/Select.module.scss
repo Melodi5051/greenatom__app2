@@ -1,0 +1,52 @@
+@use "../../index.scss" as index;
+
+
+.select {
+  outline: none;
+  width: 280px;
+  display: flex;
+  padding: 7px 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+  border: 1px solid #7f7f7f;
+  
+  option {
+    cursor: pointer;
+  }
+
+  &:focus-within {
+    outline: 1px solid #025ea1;
+    border: 1px solid #025ea1;
+  }
+
+  &:focus {
+    border: 1px solid #025ea1;
+    outline: 1px solid #025ea1;
+  }
+}
+
+
+.selectt {
+  border: 2px solid white;
+  border-radius: 10px;
+  min-width: 100px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  flex-shrink: 0;
+  margin: 10px 0;
+
+  &:focus {
+    border-color: var(--color-input-1);
+  }
+}
+/* 
+@media (max-width: 1200px) {
+  select {
+    width: 100%;
+  }
+} */

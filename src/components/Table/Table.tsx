@@ -1,11 +1,15 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, createElement } from 'react';
 import styles from "./Table.module.scss";
 import { classnames } from '../../helpers/main.helper';
 import { observer } from 'mobx-react-lite';
 import { modalmobx } from '../../store/modal.store';
 import { notificator } from '../../store/notify.store';
 import Button from '../Button/Button';
-import Input from '../Input/Input';
+import Input, { EyeInput } from '../Input/Input';
+import { JsxElement } from 'typescript';
+import Select from '../Select/Select';
+import { ROUTES_BY_ROLE } from '../../router/router';
+import { get, isEmpty } from 'lodash';
 
 
 export interface TableRow {
@@ -53,9 +57,11 @@ export interface TableContext {
       /**
        * Поля, обязательные для заполнения. Перечислять поля, используемые для общения с сервером
        * 
+       * Если значение для поля нестандартное (выпадающий список Select), то можно указать не строку, а объект указанной структуры
+       * 
        * Отображаются **всегда** в этой форме
        */
-      nessesaryFields: string[]
+      nessesaryFields: (string | { title: string; inputType: React.HTMLInputTypeAttribute | "select"; })[]
 
       /**
        * Поля, необязательные для заполнения. Перечислять поля, используемые для общения с сервером
@@ -103,6 +109,44 @@ export interface TableContext {
 }
 
 
+const AutogenModalForm = observer(({ context, pathToFields }: {context: TableContext, pathToFields: string}) => {
+  const targetObject = get(context.actions, pathToFields);
+  if (!isEmpty(targetObject))
+    return <>
+      {
+        targetObject.map((alias: string | { title: string; inputType: string; }, index: number) => {
+          if (typeof alias === "string")
+            return <tr className={styles.someInput} key={index}>
+              <td>
+                <label htmlFor={alias}>{context.headerAlias[alias] || alias} {pathToFields.includes("nessesary") ? <span>*</span> : null}</label>
+              </td>
+              <td>
+                <Input id={alias} />
+              </td>
+            </tr>
+          else
+            return <tr className={styles.someInput} key={index}>
+              <td>
+                <label htmlFor={alias.title}>{context.headerAlias[alias.title] || alias.title}*</label>
+              </td>
+              <td>
+                {
+                  alias.inputType === "select"
+                    ? <Select id={alias.title} options={Object.keys(ROUTES_BY_ROLE).map(v => { return { name: v } })} />
+                    : alias.inputType === "password"
+                      ? <EyeInput id={alias.title} />
+                      : <Input type={alias.inputType} id={alias.title} />
+                }
+              </td>
+            </tr>
+        })
+      }
+    </>
+  else
+    return null
+})
+
+
 const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) => {
   console.log("ТАБЛИЦА ОТРИСОВАНА")
 
@@ -117,36 +161,33 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
         <Button viewtype="text" onClick={() => {
           modalmobx.setChildren(
             <>
-              <h4>({context.title}) Добавление записи</h4>
-              <p>Заполните необходимые поля и нажмите кнопку "Записать" или "Записать и закрыть", чтобы сделать новую запись в таблице {context.title}</p>
+              <h4>({context.title}) Создание записи</h4>
+              <p>Заполните необходимые поля и нажмите кнопку "Записать" или "Записать и закрыть"</p>
 
-              <table className={classnames(styles.inputs)}>
-                <tbody>
-                  {/* автогенерируемые формы на основе context */}
-                  {
-                    context.actions.add.nessesaryFields.map((alias: string, index: number) => {
-                      return <tr className={styles.someInput} key={index}>
-                        <td>
-                          <span>{context.headerAlias[alias] || alias}</span>
-
-                        </td>
-                        <td>
-                          <Input />
-                        </td>
-                      </tr>
-                    })
-                  }
-
-                </tbody>
-              </table>
+              {/* 
+                1. Сделать обработку onSubmit, функцию "Записать" вынести отдельно
+                2. Изменить вид формы Изменение записи. Для ID изменить: 1, 2, 3
+                3. Прокрутка таблицы без прокрутки шапки таблицы и блока
+                  с операциями
+              */}
+              <form id='modal-addEntity' action="">
+                <table className={classnames(styles.inputs)}>
+                  <tbody>
+                    {/* автогенерируемые формы на основе context */}
+                    <AutogenModalForm context={context} pathToFields='add.nessesaryFields'/>
+                    <AutogenModalForm context={context} pathToFields='add.optionalFields'/>
+                  </tbody>
+                </table>
+              </form>
 
               <div className={classnames(styles.modalButtons)}>
                 <Button viewtype="v2" onClick={() => {
+                  // вынести отдельно
                   context.actions.add.writeCallback()
                     .then(refreshTable)
                     .catch((error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }))
 
-                  modalmobx.show(false)
+                  modalmobx.hide()
                 }}>Записать и закрыть</Button>
                 <Button viewtype="v4" onClick={() => {
                   context.actions.add.writeCallback()
@@ -154,7 +195,7 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
                     .catch((error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }))
                 }}>Записать </Button>
                 <Button viewtype="v3" onClick={() => {
-                  modalmobx.show(false)
+                  modalmobx.hide()
                 }}>Закрыть</Button>
               </div>
             </>
@@ -162,30 +203,21 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
           modalmobx.setModalCloseable(true)
           modalmobx.show()
         }}>
-          Добавить
+          Создать
         </Button>
         <Button viewtype="text" onClick={() => {
           modalmobx.setChildren(
             <>
               <h4>({context.title}) Изменение записи</h4>
               <p>Здесь можно изменить одно или несколько полей в выбранной записи</p>
+              <p>Укажите идентификатор записи, которую надо изменить</p>
 
               <table className={classnames(styles.inputs)}>
                 <tbody>
                   {/* автогенерируемые формы на основе context */}
-                  {
-                    context.actions.edit.nessesaryFields.map((alias: string, index: number) => {
-                      return <tr className={styles.someInput} key={index}>
-                        <td>
-                          <span>{context.headerAlias[alias] || alias}</span>
-
-                        </td>
-                        <td>
-                          <Input />
-                        </td>
-                      </tr>
-                    })
-                  }
+                  <AutogenModalForm context={context} pathToFields='edit.nessesaryFields'/>
+                  <AutogenModalForm context={context} pathToFields='edit.optionalFields'/>
+                  
 
                 </tbody>
               </table>
@@ -196,7 +228,7 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
                     .then(refreshTable)
                     .catch((error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }))
 
-                  modalmobx.show(false)
+                  modalmobx.hide()
                 }}>Записать и закрыть</Button>
                 <Button viewtype="v4" onClick={() => {
                   context.actions.edit.writeCallback()
@@ -204,7 +236,7 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
                     .catch((error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }))
                 }}>Записать </Button>
                 <Button viewtype="v3" onClick={() => {
-                  modalmobx.show(false)
+                  modalmobx.hide()
                 }}>Закрыть</Button>
               </div>
             </>
@@ -223,7 +255,7 @@ const Table: React.FC<TableProps> = observer(({ data, refreshTable, context }) =
           Сортировка
         </Button>
         <Button viewtype="text" onClick={() => { refreshTable(); notificator.push({ children: "Данные обновлены" }) }}>
-          Обновить данные
+          Обновить
         </Button>
         <Button viewtype="text">
           Справка

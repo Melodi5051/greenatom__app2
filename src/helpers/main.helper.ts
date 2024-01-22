@@ -26,3 +26,29 @@ export const checkPhoneNumber = (phoneNumber: string): string => {
 export const classnames = (...args: string[]): string => {
   return args.join(" ");
 }
+
+type AnyObject = Record<string, any>;
+
+/**
+ * Устанавливает значение ключа по переданному пути. Если такого путя нет - создает вложенные друг в друга объекты с указанными ключами-названиями
+ * @param obj Оригинальный объект
+ * @param path Путь к создаваемому свойству `key1.key2.key3`
+ * @param value Значение
+ * @returns Измененный объект
+ */
+export function updateObject(obj: AnyObject, path: string, value: any): AnyObject {
+  const keys = path.split('.');
+  const lastKey = keys.pop() as string;
+
+  let currentObj = obj;
+  keys.forEach((key) => {
+    if (!currentObj[key]) {
+      currentObj[key] = {};
+    }
+    currentObj = currentObj[key];
+  });
+
+  currentObj[lastKey] = value;
+
+  return obj;
+}
