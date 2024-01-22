@@ -4,19 +4,30 @@ import { observer } from "mobx-react-lite";
 import { authentificator } from "../store/auth2.store";
 import { notificator } from "../store/notify.store";
 import Loader from "./Loader/Loader";
+import { ROUTES_BY_ROLE } from "../router/router";
 
 type Props = { children: React.ReactNode };
 
 const ProtectedRouter = ({ children }: Props) => {
   const navigate = useNavigate();
   useEffect(() => {
-    authentificator.getMe()
-    .then(content => console.log({...content}))
-    .catch((error) => {
-      notificator.push({children: `${error}`});
-      navigate("/auth", {replace: true});
-      // authentificator.refresh()
-    })
+    console.log(authentificator._tokenData())
+
+    if (["ROLE_SUPER_ADMIN", "ROLE_ADMIN"].includes(authentificator._tokenData().role)) {
+      authentificator.getMe()
+      .then(content => {
+        console.log({...content})
+      })
+      .catch((error) => {
+        notificator.push({children: `${error}`});
+        navigate("/auth", {replace: true});
+        // authentificator.refresh()
+      })
+    } else {
+      authentificator.saveUserData(authentificator._tokenData());
+      navigate("/", {replace: true});
+    }
+
   }, [])
 
   return (

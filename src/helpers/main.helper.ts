@@ -6,7 +6,7 @@ export const getMeHelper = (): void => {
   getMe().then((dataUser: IEmployee) => {
     userStore.setUser(dataUser);
     if (dataUser) {
-      userStore.setRole(dataUser.role.name)
+      userStore.setRole(dataUser.role)
     }
   });
 };

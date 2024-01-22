@@ -25,21 +25,28 @@ export type IRoles =
   "ROLE_SUPER_ADMIN"
 
 
+export type RoleField = IRoles | { name: IRoles };
+export type UnpackRoleField<T> = T extends { name: IRoles } ? T['name'] : T;
+
+
+
 export interface IEmployee {
-  id: number;
-  firstname: string;
-  surname: string;
-  patronymic: string;
-  jobPosition: string;
-  salary: number;
-  email: string;
-  phoneNumber: string;
-  username: string;
-  role: {
-    // name: UserRole;
-    name: IRoles;
-  };
-  address: string;
+  id?: number;
+  firstname?: string;
+  surname?: string;
+  patronymic?: string;
+  jobPosition?: string;
+  salary?: number;
+  email?: string;
+  phoneNumber?: string;
+  username?: string;
+  address?: string
+  
+  role: IRoles
+  employee_id: number
+  exp: number
+  iat: number
+  sub: string
 }
 
 export enum EmployeeKeys {

@@ -13,7 +13,7 @@ interface Navbar {
 const Navbar = ({ handleLogout }: Navbar) => {
   return <>
     {authentificator.gotUserData()
-      ? ROUTES_BY_ROLE[`${authentificator.constUserData.role.name}`].map((arr: any, index: number) => {
+      ? ROUTES_BY_ROLE[`${authentificator.constUserData.role}`].map((arr: any, index: number) => {
         return (<Link key={index} to={arr.route}>
           <Button viewtype="text">{arr.name}</Button>
         </Link>)
@@ -21,7 +21,7 @@ const Navbar = ({ handleLogout }: Navbar) => {
       : <Loader />
     }
     <Link to={"/profile"}>
-      <Button viewtype="v3">{authentificator.constUserData.username}</Button>
+      <Button viewtype="v3">{authentificator.constUserData.sub}</Button>
     </Link>
     <Button viewtype="text">
       <img src={SvgLogoutIcon} onClick={handleLogout} />

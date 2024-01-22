@@ -93,6 +93,12 @@ class Authentificator {
     return Boolean(Object.keys(this.constUserData).length);
   }
 
+  saveUserData(data: object) {
+    runInAction(() => {
+      this.constUserData = {...JSON.parse(JSON.stringify(data)), ...this._tokenData()};
+    })
+  }
+
 
   /**
    * Вход в сервис и сохранение accessToken и refreshToken
@@ -159,9 +165,7 @@ class Authentificator {
         }
       );
 
-      runInAction(() => {
-        this.constUserData = JSON.parse(JSON.stringify(response.data));
-      })
+      this.saveUserData(response.data)
       return JSON.parse(JSON.stringify(this.constUserData));
     } catch (error) {
       notificator.push({ children: `${error}`, type: "error" });
@@ -204,7 +208,7 @@ class Authentificator {
    * Так как на бэкенде нет специального метода для прекращения сессии - делаем это очисткой localStorage и хранилища MobX
    */
   signout() {
-    notificator.push({ children: `Вы вышли из аккаунта ${this.constUserData.username}` });
+    notificator.push({ children: `Вы вышли из аккаунта ${this.constUserData.sub}` });
     LocalStorage.clear();
     this.varTokenData = "";
     this.constCurrentUserId = 0;

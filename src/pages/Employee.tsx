@@ -11,6 +11,8 @@ import Button from "../components/Button/Button";
 import { observer } from "mobx-react-lite";
 import { notificator } from "../store/notify.store";
 import { modalmobx } from "../store/modal.store";
+import { authentificator } from "../store/auth2.store";
+import { useNavigate } from "react-router-dom";
 
 interface IPropsEmployee { }
 
@@ -44,47 +46,14 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
       */}
       {!!Object.keys(data).length ? (
         <>
-          <div style={{ backgroundColor: "#f1f1f1", marginTop: '25px', border: '1px solid #ddd' }}>
-            <Button viewtype="text" style={{ backgroundColor: "#f1f1f1" }} onClick={() => {
-              modalmobx.setChildren(
-                <>
-                  <h4>Добавление значения</h4>
-                  <p>Это новый параграф</p>
-                  <div>
-                    <Button viewtype="v2" onClick={() => modalmobx.show(false)}>Записать и закрыть</Button>
-                    <Button viewtype="v4" onClick={() => modalmobx.show(false)}>Записать </Button>
-                    <Button viewtype="v3" onClick={() => modalmobx.show(false)}>Отмена</Button>
-                  </div>
-                </>
-              )
-              modalmobx.show()
-            }}>
-              Добавить
-            </Button>
-            <Button viewtype="text" style={{ backgroundColor: "#f1f1f1" }} onClick={() => {
-              modalmobx.setChildren(
-                <>
-                  <p>Это другой параграф</p>
-                </>
-              )
-              modalmobx.show()
-            }}>
-              Изменить
-            </Button>
-            <Button viewtype="text" style={{ backgroundColor: "#f1f1f1" }}>
-              Фильтрация
-            </Button>
-            <Button viewtype="text" style={{ backgroundColor: "#f1f1f1" }}>
-              Сортировка
-            </Button>
-            <Button viewtype="text" style={{ backgroundColor: "#f1f1f1" }} onClick={() => { refreshTable(); notificator.push({ children: "Данные обновлены" }) }}>
-              Обновить данные
-            </Button>
-            <Button viewtype="text" style={{ backgroundColor: "#f1f1f1" }}>
-              Справка
-            </Button>
-          </div>
-          <Table data={data as any} />
+          <Table data={data as any} refreshTable={refreshTable} context={{
+            name: "Сотрудники",
+            headerAlias: {
+              id: "Идентификатор",
+              firstname: "Имя",
+              
+            }
+          }} />
         </>
       ) : (
         <Loader sizeDependsOnPage />
