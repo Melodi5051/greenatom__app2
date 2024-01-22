@@ -21,7 +21,6 @@ const ProtectedRouter = ({ children }: Props) => {
       .catch((error) => {
         notificator.push({children: `${error}`});
         navigate("/auth", {replace: true});
-        // authentificator.refresh()
       })
     } else {
       authentificator.saveUserData(authentificator._tokenData());

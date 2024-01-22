@@ -47,11 +47,59 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
       {!!Object.keys(data).length ? (
         <>
           <Table data={data as any} refreshTable={refreshTable} context={{
-            name: "Сотрудники",
+            title: "Сотрудники",
             headerAlias: {
-              id: "Идентификатор",
+              id: "ID",
               firstname: "Имя",
-              
+              surname: "Фамилия",
+              patronymic: "Отчество",
+              jobPosition: "Должность",
+              salary: "З/П",
+              email: "Эл. почта",
+              phoneNumber: "Номер телефона",
+              username: "Логин",
+              role: "Право доступа",
+              address: "Адрес",
+
+              // подписи для форм управления таблицей
+              password: "Пароль",
+              repeatPassword: "Повторите пароль",
+              "role.name": "Название роли"
+            },
+            actions: {
+              add: {
+                nessesaryFields: [ 
+                  "firstname",
+                  "surname",
+                  "patronymic",
+                  "jobPosition",
+                  "salary",
+                  "email",
+                  "phoneNumber",
+                  "password",
+                  "repeatPassword",
+                  "address",
+                  "role.name"
+                ],
+                writeCallback: async () => notificator.push({children: "Данные записаны"})
+              },
+              edit: {
+                nessesaryFields: [ "id" ],
+                optionalFields: [ 
+                  "firstname",
+                  "surname",
+                  "patronomyc",
+                  "jobPosition",
+                  "salary",
+                  "email",
+                  "phoneNumber",
+                  // "password",
+                  // "repeatPassword",
+                  "address",
+                  // "role.name"
+                ],
+                writeCallback: async () => notificator.push({children: "Данные обновлены"})
+              }
             }
           }} />
         </>
