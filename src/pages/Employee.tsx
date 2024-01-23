@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import stylesIndex from "../index.module.scss";
 import styles from "./../styles/employeepage.module.scss";
-import Table from "../components/Table/Table";
+import Table, { clearEmpty } from "../components/Table/Table";
 import { classnames, objFromMobx } from "../helpers/main.helper";
 import { employee } from "../store/employee2.store";
 import { IEmployee, INewEmployee, IQueryAllEmployees } from "../types/employerTypes";
@@ -9,7 +9,7 @@ import Loader from "../components/Loader/Loader";
 import { observer } from "mobx-react-lite";
 import { notificator } from "../store/notify.store";
 import { ROUTES_BY_ROLE } from "../router/router";
-import { find, isEmpty, get, omitBy } from "lodash";
+import { find, isEmpty, get, omitBy, pickBy } from "lodash";
 import { AxiosResponse } from "axios";
 
 interface IPropsEmployee { }
@@ -67,6 +67,8 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
           <Table data={data as any} context={{
             title: "Сотрудники",
             refreshTable: refreshTable,
+            paginator: {pageposition: {value: pagePosition, setter: setPagePosition},
+              pagesize: {value: pageSize, setter: setPageSize}},
             headerAlias: {
               id: "ID",
               firstname: "Имя",
@@ -83,7 +85,10 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
               // подписи для форм управления таблицей
               password: "Пароль",
               repeatPassword: "Повторите пароль",
-              "role.name": "Наименование роли"
+              "role.name": "Наименование роли",
+
+              pagePosition: "Страница",
+              pageSize: "Количество на странице",
             },
             actions: {
               add: {
@@ -106,8 +111,8 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                 ],
                 writeCallback: async (form: INewEmployee) => {
                   console.log("employees.tsx", form)
-                  // const statusCode = await employee.create(form);
-                  // return statusCode
+                  const statusCode = await employee.create(form);
+                  return statusCode
                   return 200
                 }
               },
@@ -135,7 +140,7 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                 ],
                 writeCallback: async (form: any) => {
                   console.log("employees.tsx", form)
-                  const reqBody = omitBy(form, isEmpty)
+                  const reqBody = clearEmpty(form);
                   console.log(reqBody);
                   const statusCode = await employee.edit(reqBody as IEmployee);
                   return statusCode
@@ -153,9 +158,19 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                 ],
                 writeCallback: async (form: any) => {
                   console.log(form)
-                  // const statusCode = await employee.remove(form)
-                  // return statusCode
+                  const statusCode = await employee.remove(form)
+                  return statusCode
                   return 200
+                }
+              },
+              view: {
+                nessesaryFields: [
+                  {title: "pageSize", inputType: "number", dataType: "number"},
+                  {title: "pagePosition", inputType: "number", dataType: "number"},
+                ],
+                writeCallback: async (form: any) => {
+                  console.log(clearEmpty(form));
+                  return 200;
                 }
               }
             }

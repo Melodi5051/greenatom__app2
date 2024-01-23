@@ -1,4 +1,4 @@
-import React, { FormEvent, FormEventHandler, useRef, useState } from 'react';
+import React, {  } from 'react';
 import styles from "./Table.module.scss";
 import { classnames, createFieldsByPath, objFromMobx } from '../../helpers/main.helper';
 import { observer } from 'mobx-react-lite';
@@ -7,8 +7,14 @@ import { notificator } from '../../store/notify.store';
 import Button from '../Button/Button';
 import Input, { EyeInput } from '../Input/Input';
 import Select from '../Select/Select';
-import { get, isEmpty, result, toNumber, toString } from 'lodash';
-import { AxiosResponse } from 'axios';
+import { get, isEmpty, pickBy, toNumber, toString } from 'lodash';
+
+
+export function clearEmpty(obj: object) {
+  return pickBy(obj, (value) => {
+    return value !== undefined && value !== null && value !== '';
+  });
+}
 
 
 export type FormActions = "add" | "edit" | "remove" | "filter" | "view";
@@ -60,6 +66,11 @@ export interface TableContext {
    * Функция для обновления данных в таблице
    */
   refreshTable: () => void
+
+  paginator: {
+    pagesize: { value: number, setter: React.Dispatch<React.SetStateAction<number>> },
+    pageposition: { value: number, setter: React.Dispatch<React.SetStateAction<number>> }
+  }
 
   /**
    * Объект с читабельными подписями для шапки таблицы
@@ -231,7 +242,7 @@ const ModalTableForm = observer(({ context, pathToFields, writeButtonsType = "wr
       // приведение типов данных на основе контекста таблицы
       // необходимо, чтобы на сервер отправлялись данные в нужном формате
       if (fieldObj.dataType)
-        if (fieldObj.dataType === 'number') 
+        if (fieldObj.dataType === 'number' && !isEmpty(data))
           data = toNumber(data)
         else if (fieldObj.dataType === 'string')
           data = toString(data);
@@ -386,7 +397,17 @@ const Table: React.FC<TableProps> = observer(({ data, context }) => {
 
         {
           CONTEXT_ACTIONS.includes('view')
-            ? <Button viewtype="text">
+            ? <Button viewtype="text" onClick={() => {
+              modalmobx.setChildren(
+                <>
+                  <h4>({context.title}) Вид и отображение данных</h4>
+                  <p>Здесь вы можете настроить отображение данных</p>
+
+                  <ModalTableForm context={context} pathToFields='view' writeButtonsType='okcancel' />
+                </>
+              )
+              modalmobx.show()
+            }}>
               Вид
             </Button>
             : null
@@ -396,35 +417,66 @@ const Table: React.FC<TableProps> = observer(({ data, context }) => {
         <Button viewtype="text" onClick={() => { context.refreshTable(); notificator.push({ children: "Данные обновлены" }) }}>
           Обновить
         </Button>
-        <Button viewtype="text">
+        <Button viewtype="text" onClick={() => {
+          notificator.push({ children: "Таблица предназначена для обзора данных из различных источников внутри сервиса, а также для управления этими данными. На данный момент доступно создание, изменение и удаление данных" })
+        }}>
           Справка
         </Button>
       </div>
-      <table className={classnames(styles.table)}>
-        <tbody>
-          <tr>
-            {
-              // Object.keys(data[0]).map((name, index) => <th key={index}>{name}</th>)
-              TABLE_ALIASES_HEADER.map((name, index) => <th key={index} title={TABLE_RAW_HEADER[index]}>{name}</th>)
-            }
-          </tr>
-          {
-            data.map((d, index) => {
-              return <tr key={index}>
-                {
-                  Object.keys(d).map((v, jndex) => {
-                    if (typeof d[v] !== "object")
-                      return <td key={jndex}>{d[v]}</td>
-                    else
-                      return <td key={jndex}>{Object.values(d[v]).join(", ")}</td>
-                  })
-                }
-              </tr>
-            })
-          }
 
-        </tbody>
-      </table>
+      <div className={classnames(styles.tableContainer)}>
+        <table className={classnames(styles.table)}>
+          <tbody>
+            <tr>
+              {
+                TABLE_ALIASES_HEADER.map((name, index) => <th className={styles.tableHeader} key={index} title={TABLE_RAW_HEADER[index]}>{name}</th>)
+              }
+            </tr>
+            {
+              data.map((d, index) => {
+                return <tr key={index}>
+                  {
+                    Object.keys(d).map((v, jndex) => {
+                      if (typeof d[v] !== "object")
+                        return <td key={jndex}>{d[v]}</td>
+                      else
+                        return <td key={jndex}>{Object.values(d[v]).join(", ")}</td>
+                    })
+                  }
+                </tr>
+              })
+            }
+
+          </tbody>
+        </table>
+      </div>
+
+      <div className={classnames(styles.paginator)}>
+        <div style={{ margin: '5px', display: 'flex' }}>
+          <div className={classnames(styles.element)}>
+            <span>Страница:</span>
+            {/* <span>{context.pageposition}</span> */}
+            <input value={context.paginator.pageposition.value} onChange={(e) => {
+              context.paginator.pageposition.setter(Number(e.target.value))
+            }} />
+          </div>
+          <div className={classnames(styles.element)}>
+            <span>Макс. на странице:</span>
+            {/* <span>{context.pageposition}</span> */}
+            <input value={context.paginator.pagesize.value} onChange={(e) => {
+              context.paginator.pagesize.setter(Number(e.target.value))
+            }} />
+          </div>
+        </div>
+
+        <div style={{ margin: '5px', display: 'flex' }}>
+          <div className={classnames(styles.element)}>
+            <button>← Назад</button>
+            <button>Вперед →</button>
+          </div>
+        </div>
+      </div>
+
     </>
   );
 });
