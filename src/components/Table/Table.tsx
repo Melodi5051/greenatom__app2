@@ -72,6 +72,9 @@ export interface TableContext {
     pageposition: { value: number, setter: React.Dispatch<React.SetStateAction<number>> }
   }
 
+
+  mobx: any
+
   /**
    * Объект с читабельными подписями для шапки таблицы
    * 
@@ -451,18 +454,27 @@ const Table: React.FC<TableProps> = observer(({ data, context }) => {
         </table>
       </div>
 
-      <div className={classnames(styles.paginator)}>
+      
+
+    </>
+  );
+});
+
+export default React.memo(Table);
+
+
+
+export const Paginator = ({context}: {context: TableContext}) => {
+  return <div className={classnames(styles.paginator)}>
         <div style={{ margin: '5px', display: 'flex' }}>
           <div className={classnames(styles.element)}>
             <span>Страница:</span>
-            {/* <span>{context.pageposition}</span> */}
             <input value={context.paginator.pageposition.value} onChange={(e) => {
               context.paginator.pageposition.setter(Number(e.target.value))
             }} />
           </div>
           <div className={classnames(styles.element)}>
             <span>Макс. на странице:</span>
-            {/* <span>{context.pageposition}</span> */}
             <input value={context.paginator.pagesize.value} onChange={(e) => {
               context.paginator.pagesize.setter(Number(e.target.value))
             }} />
@@ -471,14 +483,17 @@ const Table: React.FC<TableProps> = observer(({ data, context }) => {
 
         <div style={{ margin: '5px', display: 'flex' }}>
           <div className={classnames(styles.element)}>
-            <button>← Назад</button>
-            <button>Вперед →</button>
+            <button onClick={() => {
+              const newPage = context.paginator.pageposition.value - 1
+            }}>← Назад</button>
+            <button onClick={() => {
+              const newPage = context.paginator.pageposition.value + 1
+
+              // context.refreshTable()
+              context.mobx.getAll({ pagePosition: newPage, pageSize: context.paginator.pagesize.value })
+
+            }}>Вперед →</button>
           </div>
         </div>
       </div>
-
-    </>
-  );
-});
-
-export default React.memo(Table);
+}

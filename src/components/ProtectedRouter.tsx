@@ -29,6 +29,10 @@ const ProtectedRouter = ({ children }: Props) => {
 
   }, [])
 
+  useEffect(() => {
+    if (!window.navigator.onLine) notificator.push({children: "Вы отключены от интернета!", type: "warning"})
+  }, [window.navigator.onLine])
+
   return (
     <div>
       {

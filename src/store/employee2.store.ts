@@ -34,7 +34,7 @@ class Employee {
     makeAutoObservable(this);
   }
 
-  constEmployeesData: IEmployee[] = [] as IEmployee[];
+  constData: IEmployee[] = [] as IEmployee[];
 
   /**
    * Удаляет сотрудника о его ID
@@ -113,7 +113,7 @@ class Employee {
       );
       
       runInAction(() => {
-        this.constEmployeesData = response.data.content;
+        this.constData = response.data.content;
       })
       return JSON.parse(JSON.stringify(response.data.content));
     } catch (error) {
