@@ -37,54 +37,62 @@ class Employee {
   constEmployeesData: IEmployee[] = [] as IEmployee[];
 
   /**
+   * Удаляет сотрудника о его ID
+   * 
+   * @param data Данные формы из таблицы
+   */
+  async remove(data: {id: string | number}) {
+    const response = await axios.delete(
+      process.env.REACT_APP_BACKEND_ORIGIN + `/api/employees/${data.id}`,
+      {
+        headers: {
+          ...DEFAULT_HEADERS,
+          Authorization: `Bearer ${LocalStorage.get("at")}`
+        },
+      }
+    );
+
+    return response.status
+  }
+
+  /**
    * Создает нового сотрудника
    * 
    * @param data Данные нового сотрудника
    */
   async create(data: INewEmployee) {
-    try {
-      const response = await axios.post(
-        process.env.REACT_APP_BACKEND_ORIGIN + `/api/auth/signup`,
-        data,
-        {
-          headers: {
-            ...DEFAULT_HEADERS,
-            Authorization: `Bearer ${LocalStorage.get("at")}`
-          },
-        }
-      );
+    const response = await axios.post(
+      process.env.REACT_APP_BACKEND_ORIGIN + `/api/auth/signup`,
+      data,
+      {
+        headers: {
+          ...DEFAULT_HEADERS,
+          Authorization: `Bearer ${LocalStorage.get("at")}`
+        },
+      }
+    );
 
-      return JSON.parse(JSON.stringify(response.data));
-    } catch (error) {
-      notificator.push({ children: `${error}`, type: "error" });
-      return {};
-    }
+    return response.status
   }
 
   /**
    * Изменяет информацию о сотруднике
    * 
-   * @param id Идентификатор сотрудника
    * @param data Новые данные для patch запроса
    */
-  async edit(id: number, data: IEmployee) {
-    try {
-      const response = await axios.patch(
-        process.env.REACT_APP_BACKEND_ORIGIN + `/api/employees/${id}`,
-        data,
-        {
-          headers: {
-            ...DEFAULT_HEADERS,
-            Authorization: `Bearer ${LocalStorage.get("at")}`
-          },
-        }
-      );
+  async edit(data: IEmployee) {
+    const response = await axios.patch(
+      process.env.REACT_APP_BACKEND_ORIGIN + `/api/employees/${data.id}`,
+      data,
+      {
+        headers: {
+          ...DEFAULT_HEADERS,
+          Authorization: `Bearer ${LocalStorage.get("at")}`
+        },
+      }
+    );
 
-      return response.data;
-    } catch (error) {
-      notificator.push({ children: `${error}`, type: "error" });
-      return {};
-    }
+    return response.status;
   }
 
   /**
@@ -109,7 +117,7 @@ class Employee {
       })
       return JSON.parse(JSON.stringify(response.data.content));
     } catch (error) {
-      notificator.push({ children: `${error}`, type: "error" });
+      notificator.push({ children: `Не удалось обновить данные. Проверьте вход в аккаунт`, type: "error" });
       return [];
     }
   }

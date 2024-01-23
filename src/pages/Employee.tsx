@@ -10,6 +10,7 @@ import { observer } from "mobx-react-lite";
 import { notificator } from "../store/notify.store";
 import { ROUTES_BY_ROLE } from "../router/router";
 import { find, isEmpty, get, omitBy } from "lodash";
+import { AxiosResponse } from "axios";
 
 interface IPropsEmployee { }
 
@@ -91,7 +92,7 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                   "surname",
                   "patronymic",
                   "jobPosition",
-                  "salary",
+                  {title: "salary", inputType: "number", dataType: "number"},
                   "email",
                   "phoneNumber",
                   { title: "password", inputType: "password" },
@@ -105,7 +106,9 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                 ],
                 writeCallback: async (form: INewEmployee) => {
                   console.log("employees.tsx", form)
-                  const response = await employee.create(form);
+                  // const statusCode = await employee.create(form);
+                  // return statusCode
+                  return 200
                 }
               },
               edit: {
@@ -113,11 +116,7 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                   {
                     title: "id", inputType: "select", props: {
                       // @ts-ignore
-                      // options: employee.constEmployeesData.map((empl) => { return { name: `${empl.id} (${empl.username} ${empl.role.name})` } }),
                       options: employee.constEmployeesData.map((empl) => { return { name: `${empl.id}` } }),
-                      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-                        // fillCurrentFormBySelectorValue(e, employee.constEmployeesData)
-                      }
                     }
                   }
                 ],
@@ -126,7 +125,7 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                   "surname",
                   "patronymic",
                   "jobPosition",
-                  "salary",
+                  {title: "salary", inputType: "number", dataType: "number"},
                   "email",
                   "phoneNumber",
                   // "password",
@@ -136,8 +135,27 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
                 ],
                 writeCallback: async (form: any) => {
                   console.log("employees.tsx", form)
-                  // omitBy(form, isEmpty) // очистит все пустые значения
-                  // const response = await employee.edit(selectorUserId, form);
+                  const reqBody = omitBy(form, isEmpty)
+                  console.log(reqBody);
+                  const statusCode = await employee.edit(reqBody as IEmployee);
+                  return statusCode
+                  // return 200
+                }
+              },
+              remove: {
+                nessesaryFields: [
+                  {
+                    title: "id", inputType: "select", props: {
+                      // @ts-ignore
+                      options: employee.constEmployeesData.map((empl) => { return { name: `${empl.id}` } }),
+                    }
+                  }
+                ],
+                writeCallback: async (form: any) => {
+                  console.log(form)
+                  // const statusCode = await employee.remove(form)
+                  // return statusCode
+                  return 200
                 }
               }
             }

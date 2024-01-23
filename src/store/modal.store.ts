@@ -63,6 +63,14 @@ class ModalMobX {
     this.activeStatus = false;
     // this.setChildren('');
   }
+
+  /**
+   * Спрятать модальное окно и удалить дочерние элементы
+   */
+  disable() {
+    this.activeStatus = false;
+    this.setChildren('');
+  }
 }
 
 /**

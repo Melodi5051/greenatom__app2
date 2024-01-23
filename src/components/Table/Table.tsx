@@ -7,11 +7,11 @@ import { notificator } from '../../store/notify.store';
 import Button from '../Button/Button';
 import Input, { EyeInput } from '../Input/Input';
 import Select from '../Select/Select';
-import { get, isEmpty, result } from 'lodash';
+import { get, isEmpty, result, toNumber, toString } from 'lodash';
 import { AxiosResponse } from 'axios';
 
 
-export type FormActions = "add" | "edit";
+export type FormActions = "add" | "edit" | "remove" | "filter" | "view";
 
 export interface TableRow {
   [key: string]: string | number;
@@ -22,7 +22,7 @@ export interface TableProps {
   context: TableContext
 }
 
-export interface IHardFieldConfig { title: string; inputType: React.HTMLInputTypeAttribute | "select"; props?: { [key: string]: any } }
+export interface IHardFieldConfig { title: string; inputType: React.HTMLInputTypeAttribute | "select"; dataType?: "number" | "string"; props?: { [key: string]: any } }
 export type IFormFieldConfig = (string | IHardFieldConfig)
 
 export interface ITableContextAction {
@@ -47,7 +47,7 @@ export interface ITableContextAction {
    * 
    * Например здесь может быть функция запроса на сервер
    */
-  writeCallback: (form: any) => Promise<any>
+  writeCallback: (form: any) => Promise<number>
 }
 
 export interface TableContext {
@@ -86,12 +86,27 @@ export interface TableContext {
     /**
      * Форма добавления новой записи в таблицу
      */
-    add: ITableContextAction,
+    add?: ITableContextAction,
 
     /**
      * Форма редактирования существующей записи в таблице
      */
-    edit: ITableContextAction,
+    edit?: ITableContextAction,
+
+    /**
+     * Форма удаления записей в таблице в таблице
+     */
+    remove?: ITableContextAction,
+
+    /**
+     * Форма для фильтрации данных (поиск по полю З/П, Имя и тд)
+     */
+    filter?: ITableContextAction,
+
+    /**
+     * Форма редактирования просмотра формы - включить или выключить отображение каких либо столбцов
+     */
+    view?: ITableContextAction,
   }
 }
 
@@ -133,9 +148,56 @@ const AutogenModalForm = observer(({ context, pathToFields }: { context: TableCo
     return null
 })
 
+export type FormButtons = "writeclose" | "okcancel";
+
+const ModalTableFormButtons = observer(({ context, type }: { context: TableContext, type: FormButtons }) => {
+  if (type === "writeclose")
+    return <div className={classnames(styles.modalButtons)}>
+      <Button type='submit' viewtype="v2" onClick={() => {
+        // onSubmit(formE);
+        modalmobx.hide()
+      }}>Записать и закрыть</Button>
 
 
-const ModalTableForm = observer(({ context, pathToFields }: { context: TableContext, pathToFields: string }) => {
+      <Button type='submit' viewtype="v4" onClick={() => {
+      }}>Записать</Button>
+
+
+      <Button viewtype="v3" onClick={() => {
+        modalmobx.disable()
+      }}>Закрыть</Button>
+    </div>
+  else if (type === "okcancel")
+    return <div className={classnames(styles.modalButtons)}>
+      <Button type='submit' viewtype="v2" onClick={() => {
+        // onSubmit(formE);
+        modalmobx.hide()
+      }}>OK</Button>
+
+      <Button viewtype="v3" onClick={() => {
+        modalmobx.disable()
+      }}>Отмена</Button>
+    </div>
+  else
+    return <div className={classnames(styles.modalButtons)}>
+      <Button type='submit' viewtype="v2" onClick={() => {
+        // onSubmit(formE);
+        modalmobx.hide()
+      }}>Записать и закрыть</Button>
+
+
+      <Button type='submit' viewtype="v4" onClick={() => {
+      }}>Записать</Button>
+
+
+      <Button viewtype="v3" onClick={() => {
+        modalmobx.disable()
+      }}>Закрыть</Button>
+    </div>
+})
+
+
+const ModalTableForm = observer(({ context, pathToFields, writeButtonsType = "writeclose" }: { context: TableContext, pathToFields: FormActions, writeButtonsType?: FormButtons }) => {
   const targetObject = get(context.actions, pathToFields);
 
   const mapConverterFields = (v: IFormFieldConfig) => {
@@ -149,7 +211,7 @@ const ModalTableForm = observer(({ context, pathToFields }: { context: TableCont
   const modOptionalFields = objFromMobx(targetObject)?.optionalFields && objFromMobx(targetObject)?.optionalFields.map(mapConverterFields) || []
   const allFields: IHardFieldConfig[] = [...modNessesaryFields, ...modOptionalFields];
 
-  const submitFunction = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitFunction = (e: React.FormEvent<HTMLFormElement>, closeAfterSubmit: boolean = true) => {
     const formData = new FormData(e.currentTarget);
     const obj: { [key: string]: any } = { ...(Object.fromEntries(formData.entries()) as unknown) as object };
 
@@ -159,23 +221,43 @@ const ModalTableForm = observer(({ context, pathToFields }: { context: TableCont
 
     Object.values(allFields as IHardFieldConfig[]).forEach((fieldObj: IHardFieldConfig) => {
       // здесь указываем исключения в зависимости от типа инпута
+      var data;
       if (fieldObj.inputType === "select" && fieldObj?.props && fieldObj?.props?.options)
-        resultObject = createFieldsByPath(resultObject, fieldObj.title, fieldObj.props.options[Number(obj[fieldObj.title])].name)
+        data = fieldObj.props.options[Number(obj[fieldObj.title])].name;
       else
-        resultObject = createFieldsByPath(resultObject, fieldObj.title, obj[fieldObj.title])
+        data = obj[fieldObj.title]
+
+
+      // приведение типов данных на основе контекста таблицы
+      // необходимо, чтобы на сервер отправлялись данные в нужном формате
+      if (fieldObj.dataType)
+        if (fieldObj.dataType === 'number') 
+          data = toNumber(data)
+        else if (fieldObj.dataType === 'string')
+          data = toString(data);
+
+      resultObject = createFieldsByPath(resultObject, fieldObj.title, data);
     })
 
     console.log("result", resultObject)
 
     // логика обработки данных формы
-    targetObject.writeCallback(resultObject)
-      .then((response: AxiosResponse<any, any>) => {
-        // проверить на ложную ошибку
-        notificator.push({ children: `Создана новая запись в таблицу`, type: "positive" })
-        modalmobx.setChildren('');
-        context.refreshTable();
-      })
-      .catch((error: Error) => notificator.push({ children: `Ошибка записи в таблицу: ${error}`, type: "error" }));
+    if (!isEmpty(targetObject))
+      targetObject.writeCallback(resultObject)
+        .then((respCode: number) => {
+          // проверить на ложную ошибку
+          // сделать, чтобы кнопки на действия add, edit появлялись тогда
+          // когда заданы соответствующие действия
+          console.log(respCode)
+
+          // если статус код ответа не 200+ вернем ошибку
+          if (respCode / 100 !== 2) throw Error("Ошибка записи в таблицу. Проверьте корректность заполнения данных и попробуйте снова")
+
+          notificator.push({ children: `Внесены изменения в таблицу ${context.title}`, type: "positive" })
+          if (closeAfterSubmit) modalmobx.disable();
+          context.refreshTable();
+        })
+        .catch((error: Error) => notificator.push({ children: `${error}`, type: "error" }));
   }
 
   if (!isEmpty(targetObject))
@@ -187,7 +269,7 @@ const ModalTableForm = observer(({ context, pathToFields }: { context: TableCont
           const submitter = (((e.nativeEvent as any).submitter) as HTMLElement)
 
           if ((submitter.tagName === "BUTTON" && submitter.getAttribute("type") === "submit"))
-            submitFunction(e);
+            submitFunction(e, submitter.getAttribute("viewtype") === 'v2');
         }}
       >
         <table className={classnames(styles.inputs)}>
@@ -197,7 +279,8 @@ const ModalTableForm = observer(({ context, pathToFields }: { context: TableCont
             <AutogenModalForm context={context} pathToFields={`${pathToFields}.optionalFields`} />
           </tbody>
         </table>
-        <div className={classnames(styles.modalButtons)}>
+        <ModalTableFormButtons context={context} type={writeButtonsType} />
+        {/* <div className={classnames(styles.modalButtons)}>
           <Button type='submit' viewtype="v2" onClick={() => {
             // onSubmit(formE);
             modalmobx.hide()
@@ -211,7 +294,7 @@ const ModalTableForm = observer(({ context, pathToFields }: { context: TableCont
           <Button viewtype="v3" onClick={() => {
             modalmobx.hide()
           }}>Закрыть</Button>
-        </div>
+        </div> */}
       </form>
     )
   else
@@ -222,6 +305,8 @@ const ModalTableForm = observer(({ context, pathToFields }: { context: TableCont
 const Table: React.FC<TableProps> = observer(({ data, context }) => {
   console.log("ТАБЛИЦА ОТРИСОВАНА")
 
+  const CONTEXT_ACTIONS = Object.keys(context.actions);
+
   const TABLE_RAW_HEADER = [...Object.keys(data[0])];
   const TABLE_ALIASES_HEADER = [...TABLE_RAW_HEADER].map((plainheader) => context.headerAlias[plainheader] || plainheader)
 
@@ -229,49 +314,85 @@ const Table: React.FC<TableProps> = observer(({ data, context }) => {
   return (
     <>
       <div className={classnames(styles.operations)}>
-        <Button viewtype="text" onClick={() => {
-          modalmobx.setChildren(
-            <>
-              <h4>({context.title}) Создание записи</h4>
-              <p>Заполните необходимые поля и нажмите кнопку "Записать" или "Записать и закрыть"</p>
+        {
+          CONTEXT_ACTIONS.includes('add')
+            ? <Button viewtype="text" onClick={() => {
+              modalmobx.setChildren(
+                <>
+                  <h4>({context.title}) Создание записи</h4>
+                  <p>Заполните необходимые поля и нажмите кнопку "Записать" или "Записать и закрыть"</p>
 
-              {/* 
+                  {/* 
                 1. Сделать обработку onSubmit, функцию "Записать" вынести отдельно
                 2. √ Изменить вид формы Изменение записи. Для ID изменить: 1, 2, 3
                 3. Прокрутка таблицы без прокрутки шапки таблицы и блока
                   с операциями
               */}
-              <ModalTableForm context={context} pathToFields='add' />
-            </>
-          )
-          modalmobx.setModalCloseable(true)
-          modalmobx.show()
-        }}>
-          Создать
-        </Button>
-        <Button viewtype="text" onClick={() => {
-          modalmobx.setChildren(
-            <>
-              <h4>({context.title}) Изменение записи</h4>
-              <p>Здесь можно изменить одно или несколько полей в выбранной записи</p>
-              <p>Укажите идентификатор записи, которую надо изменить, затем введите новое значение в необходимое поле. Остальные поля оставьте пустыми</p>
+                  <ModalTableForm context={context} pathToFields='add' />
+                </>
+              )
+              modalmobx.setModalCloseable(true)
+              modalmobx.show()
+            }}>
+              Создать
+            </Button>
+            : null
+        }
 
-              <ModalTableForm context={context} pathToFields='edit' />
-            </>
-          )
-          modalmobx.show()
-        }}>
-          Изменить
-        </Button>
-        <Button viewtype="text">
-          Удалить
-        </Button>
-        <Button viewtype="text">
-          Фильтр
-        </Button>
-        <Button viewtype="text">
-          Вид
-        </Button>
+        {
+          CONTEXT_ACTIONS.includes('edit')
+            ? <Button viewtype="text" onClick={() => {
+              modalmobx.setChildren(
+                <>
+                  <h4>({context.title}) Изменение записи</h4>
+                  <p>Здесь можно изменить одно или несколько полей в выбранной записи</p>
+                  <p>Укажите идентификатор записи, которую надо изменить, затем введите новое значение в необходимое поле. Остальные поля оставьте пустыми</p>
+
+                  <ModalTableForm context={context} pathToFields='edit' />
+                </>
+              )
+              modalmobx.show()
+            }}>
+              Изменить
+            </Button>
+            : null
+        }
+
+        {
+          CONTEXT_ACTIONS.includes('remove')
+            ? <Button viewtype="text" onClick={() => {
+              modalmobx.setChildren(
+                <>
+                  <h4>({context.title}) Удаление записи</h4>
+                  <p>Выберите идентификатор записи, которую хотите удалить, затем подтвердите действие</p>
+
+                  <ModalTableForm context={context} pathToFields='remove' writeButtonsType='okcancel' />
+                </>
+              )
+              modalmobx.show()
+            }}>
+              Удалить
+            </Button>
+            : null
+        }
+
+        {
+          CONTEXT_ACTIONS.includes('filter')
+            ? <Button viewtype="text">
+              Фильтр
+            </Button>
+            : null
+        }
+
+        {
+          CONTEXT_ACTIONS.includes('view')
+            ? <Button viewtype="text">
+              Вид
+            </Button>
+            : null
+        }
+
+        {/* действия ниже доступны по умолчанию */}
         <Button viewtype="text" onClick={() => { context.refreshTable(); notificator.push({ children: "Данные обновлены" }) }}>
           Обновить
         </Button>
