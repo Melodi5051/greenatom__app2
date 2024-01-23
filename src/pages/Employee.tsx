@@ -6,7 +6,7 @@ import { employee, flattenObject } from "../store/employee2.store";
 import { observer } from "mobx-react-lite";
 // import Table from 'react-bootstrap/Table';
 import { IEmployee, IQueryAllEmployees } from "../types/employerTypes";
-import { Table } from "react-bootstrap";
+import { Button, ButtonGroup, Table } from "react-bootstrap";
 import { isEmpty, isObject } from "lodash";
 import Loader from "../components/Loader/Loader";
 import Spinner from 'react-bootstrap/Spinner';
@@ -46,7 +46,13 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
     */}
         {!isEmpty(employee.constData) ? (
           <>
-            <MyTable mobx={employee}/>
+            <ButtonGroup aria-label="Basic example">
+              <Button variant="light" size="sm">Создать</Button>
+              <Button variant="light" size="sm">Изменить</Button>
+              <Button variant="light" size="sm">Обновить</Button>
+              <Button variant="light" size="sm">Справка</Button>
+            </ButtonGroup>
+            <MyTable mobx={employee} />
           </>
         ) : (
           <>

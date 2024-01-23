@@ -35,9 +35,10 @@
   height: 80vh;
   max-height: 70vh;
   overflow-y: scroll;
+  background-color: #eeeeee;
 }
 
-.tableHeader {
+.tableHeader, thead {
   position: sticky;
   top: 0;
   background-color: #fff;
