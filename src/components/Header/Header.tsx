@@ -1,11 +1,9 @@
-import { useEffect } from "react";
 import styles from "./Header.module.scss";
 import SvgIcon from "../../assets/svg/logo.svg";
 import Button from "../Button/Button";
 import SvgWhiteUserIcon from "../../assets/svg/ui-white-user-profile.svg";
 import SvgUserIcon from "../../assets/svg/ui-user-profile.svg";
 import { observer } from "mobx-react-lite";
-import { userStore } from "../../store/user.store";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import { authentificator } from "../../store/auth2.store";
@@ -14,9 +12,6 @@ const Header = () => {
   
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(userStore.userRole);
-  }, [userStore.userRole]);
 
   const handleLogout = () => {
     // removeTokenToLocalStorage("token");

@@ -13,7 +13,7 @@ interface IPropsMainPage {
 }
 
 const MainPage: React.FC<IPropsMainPage> = (props) => {
-  return <>
+  return <div className="p-5 mx-auto">
     <div className={classnames(styles.taL, styles.section)}>
       <h1>Добрый день, {authentificator.constUserData.sub}!</h1>
       <p>За последнее время не произошло никаких изменений</p>
@@ -58,7 +58,7 @@ const MainPage: React.FC<IPropsMainPage> = (props) => {
         }
       </div>
     </div>
-  </>
+  </div>
 
 };
 
