@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, {  } from "react";
 import stylesIndex from "../index.module.scss";
 import styles from "./../styles/employeepage.module.scss";
-import { classnames, objFromMobx } from "../helpers/main.helper";
-import { employee, flattenObject } from "../store/employee2.store";
+import { classnames } from "../helpers/main.helper";
+import { employee } from "../store/employee2.store";
 import { observer } from "mobx-react-lite";
 // import Table from 'react-bootstrap/Table';
-import { IEmployee, IQueryAllEmployees } from "../types/employerTypes";
-import { Button, ButtonGroup, Table } from "react-bootstrap";
-import { isEmpty, isObject } from "lodash";
-import Loader from "../components/Loader/Loader";
-import Spinner from 'react-bootstrap/Spinner';
 import MyTable, { IMyTableMOBX } from "../components/MyTable/MyTable";
+import { mytablepaginator } from "../store/table.store";
 
 interface IPropsEmployee { }
 
@@ -31,8 +27,8 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
     */}
 
         <MyTable mobx={employee as IMyTableMOBX} paginator={{
-          pagePosition: 0,
-          pageSize: 40,
+          pagePosition: mytablepaginator.page,
+          pageSize: mytablepaginator.size,
         }} />
 
       </div>

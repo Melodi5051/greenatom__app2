@@ -10,6 +10,7 @@ import Button from "../Button/Button";
 import styles from "./AutoGenForm.module.scss";
 import { notificator } from "../../store/notify.store";
 import { modalmobx } from "../../store/modal.store";
+import { mytablepaginator } from "../../store/table.store";
 
 /**
  * 
@@ -17,14 +18,18 @@ import { modalmobx } from "../../store/modal.store";
 type ITableMobxFormAction = "create" | "edit" | "remove"
 export type ITableFormAction = "create" | "edit" | "remove" | "filter" | "properties" | "help"
 
+
+export type IButtonsType = "writeclose" | "okclose"
+
 interface IPropsAutoGenForm {
   mobx: IMyTableMOBX
   action: ITableFormAction
+  buttonsType?: IButtonsType
 }
 
 interface IPropsFormButtons {
   mobx: IMyTableMOBX
-  type: "writeclose" | "okclose"
+  type: IButtonsType
 }
 
 
@@ -63,10 +68,10 @@ const submitForm = (e: React.FormEvent<HTMLFormElement>, mobx: IMyTableMOBX, act
   
   console.log(requestBody);
 
-  mobx[action as ITableMobxFormAction](requestBody as any)
+  mobx[action as ITableMobxFormAction] && mobx[action as ITableMobxFormAction](requestBody as any)
   .then((resp: number) => {
     console.log(resp);
-    // mobx.getAll({  })
+    mobx.getAll({ [mytablepaginator.pageName]: mytablepaginator.page, [mytablepaginator.sizeName]: mytablepaginator.size })
     notificator.push({children: "Изменена таблица", type: "positive"})
   })
   .catch((resp: number) => {
@@ -81,16 +86,16 @@ const submitForm = (e: React.FormEvent<HTMLFormElement>, mobx: IMyTableMOBX, act
 const FormButtons: React.FC<IPropsFormButtons> = (props) => {
   if (props.type === "okclose")
     return <div className={styles.formButtons}>
-      <Button type="submit" viewtype="v1">
+      <Button type="submit" viewtype="v2">
         Ок
       </Button>
-      <Button viewtype="v2" onClick={() => modalmobx.disable()}>
+      <Button viewtype="v3" onClick={() => modalmobx.disable()}>
         Закрыть
       </Button>
     </div>
   else
     return <div className={styles.formButtons}>
-      <Button type="submit" viewtype="v2">
+      <Button type="submit" viewtype="v2" onClick={() => modalmobx.hide()}>
         Записать и закрыть
       </Button>
       <Button type="submit" viewtype="v2">
@@ -159,7 +164,7 @@ const AutoGenForm: React.FC<IPropsAutoGenForm> = (props) => {
               }
             </tbody>
           </Table>
-          <FormButtons mobx={props.mobx} type="writeclose" />
+          <FormButtons mobx={props.mobx} type={props.buttonsType || "writeclose"} />
         </form>
       </div>
     </div>

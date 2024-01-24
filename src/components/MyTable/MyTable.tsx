@@ -10,6 +10,7 @@ import Loader from "../Loader/Loader";
 import { modalmobx } from "../../store/modal.store";
 import Create from "./Modals/Create";
 import AutoGenForm, { ITableFormAction } from "../AutoGenForm/AutoGenForm";
+import { mytablepaginator } from "../../store/table.store";
 
 
 export interface IConstTableAlias {
@@ -58,17 +59,9 @@ interface IMyTableProps {
 }
 
 interface IMyTableButtonGroup extends IMyTableProps {
-  paginatorNew: {
-    page: { value: number, setter: React.Dispatch<React.SetStateAction<number>> }
-    size: { value: number, setter: React.Dispatch<React.SetStateAction<number>> }
-  }
 }
 
 interface IPaginator extends IMyTableProps {
-  paginatorNew: {
-    page: { value: number, setter: React.Dispatch<React.SetStateAction<number>> }
-    size: { value: number, setter: React.Dispatch<React.SetStateAction<number>> }
-  }
 }
 
 
@@ -103,7 +96,7 @@ const MyTableButtonGroup: React.FC<IMyTableButtonGroup> = ((props) => {
         variant="light"
         size="sm"
         onClick={() => {
-          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="filter" />)
+          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="filter" buttonsType="okclose"/>)
           modalmobx.show()
         }}
       >Фильтр</Button>
@@ -111,19 +104,19 @@ const MyTableButtonGroup: React.FC<IMyTableButtonGroup> = ((props) => {
         variant="light"
         size="sm"
         onClick={() => {
-          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="properties" />)
+          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="properties" buttonsType="okclose"/>)
           modalmobx.show()
         }}
       >Свойства</Button>
       <Button
         variant="light"
         size="sm"
-        onClick={() => { props.mobx.getAll({ ...props.paginator }); props.paginatorNew.page.setter(Object.values(props.paginator)[0]); props.paginatorNew.size.setter(Object.values(props.paginator)[1]); notificator.push({ children: "Данные обновлены" }) }}>Обновить</Button>
+        onClick={() => { props.mobx.getAll(zipObject(Object.keys(props.paginator), [mytablepaginator.page, mytablepaginator.size])); ; notificator.push({ children: "Данные обновлены" }) }}>Обновить</Button>
       <Button
         variant="light"
         size="sm"
         onClick={() => {
-          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="help" />)
+          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="help" buttonsType="okclose"/>)
           modalmobx.show()
         }}
       >Справка</Button>
@@ -142,8 +135,8 @@ const MyTableItem: React.FC<{ value: any, [key: string]: any }> = (props) => {
 const Paginator: React.FC<IPaginator> = (props) => {
   const fetchData = (pageValue?: number | string, sizeValue?: number | string) => {
 
-    const page = pageValue !== undefined ? pageValue : props.paginatorNew.page.value;
-    const size = sizeValue !== undefined ? sizeValue : props.paginatorNew.size.value;
+    const page = pageValue !== undefined ? pageValue : mytablepaginator.page;
+    const size = sizeValue !== undefined ? sizeValue : mytablepaginator.size;
 
     props.mobx.getAll(zipObject(Object.keys(props.paginator), [toNumber(page), toNumber(size)]))
   }
@@ -151,15 +144,13 @@ const Paginator: React.FC<IPaginator> = (props) => {
 
   const makeNextPage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (toNumber(e.target.value) >= 0) {
-      // if (!(toNumber(e.target.value) >= props.paginatorNew.page.value && isEmpty(props.mobx.constData)) && toNumber(e.target.value) >= 0)
-      // notificator.push({children: "Это последняя страница"})
-      props.paginatorNew.page.setter(toNumber(e.target.value))
+      mytablepaginator.setPage(toNumber(e.target.value));
     }
   }
 
   const makePageSize = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (toNumber(e.target.value) >= 0 && toNumber(e.target.value) <= 999) {
-      props.paginatorNew.size.setter(toNumber(e.target.value))
+      mytablepaginator.setSize(toNumber(e.target.value));
     }
   }
 
@@ -174,7 +165,7 @@ const Paginator: React.FC<IPaginator> = (props) => {
             aria-label="Страница"
             id="basic-addon1"
             aria-describedby="basic-addon1"
-            value={props.paginatorNew.page.value}
+            value={mytablepaginator.page}
             onChange={(e) => {
               makeNextPage(e as any);
               fetchData(e.target.value);
@@ -187,7 +178,7 @@ const Paginator: React.FC<IPaginator> = (props) => {
             aria-label="Размер страницы"
             id="basic-addon2"
             aria-describedby="basic-addon2"
-            value={props.paginatorNew.size.value}
+            value={mytablepaginator.size}
             onChange={(e) => {
               makePageSize(e as any)
               fetchData(undefined, e.target.value);
@@ -214,20 +205,20 @@ const Paginator: React.FC<IPaginator> = (props) => {
             variant="light"
             size="sm"
             onClick={() => {
-              if (props.paginatorNew.page.value - 1 >= 0) {
-                props.paginatorNew.page.setter(props.paginatorNew.page.value - 1);
-                fetchData(props.paginatorNew.page.value - 1)
+              if (mytablepaginator.page - 1 >= 0) {
+                mytablepaginator.setPage(mytablepaginator.page - 1);
+                fetchData(mytablepaginator.page)
               }
             }}
-            disabled={props.paginatorNew.page.value === 0}
+            disabled={mytablepaginator.page === 0}
           >← Назад</Button>
 
           <Button
             variant="light"
             size="sm"
             onClick={() => {
-              props.paginatorNew.page.setter(props.paginatorNew.page.value + 1);
-              fetchData(props.paginatorNew.page.value + 1)
+              mytablepaginator.setPage(mytablepaginator.page + 1);
+              fetchData(mytablepaginator.page)
             }}
             disabled={isEmpty(props.mobx.constData)}
           >Вперед →</Button>
@@ -243,8 +234,9 @@ const Paginator: React.FC<IPaginator> = (props) => {
  * Ворой аргумент в пагинаторе - Размер страницы
  */
 const MyTable: React.FC<IMyTableProps> = (props) => {
-  const [page, setPage] = useState(Object.values(props.paginator)[0])
-  const [size, setSize] = useState(Object.values(props.paginator)[1])
+
+  mytablepaginator.setPageName(Object.keys(props.paginator)[0])
+  mytablepaginator.setSizeName(Object.keys(props.paginator)[1])
 
   useEffect(() => {
     props.mobx.getAll(props.paginator)
@@ -254,10 +246,7 @@ const MyTable: React.FC<IMyTableProps> = (props) => {
 
   return (
     <>
-      <MyTableButtonGroup mobx={props.mobx} paginator={props.paginator} paginatorNew={{
-        page: { value: page, setter: setPage },
-        size: { value: size, setter: setSize }
-      }} />
+      <MyTableButtonGroup mobx={props.mobx} paginator={props.paginator} />
       <div className={styles.tableContainer}>
         {
           isEmpty(props.mobx.constData)
@@ -290,10 +279,7 @@ const MyTable: React.FC<IMyTableProps> = (props) => {
             </Table>
         }
       </div>
-      <Paginator mobx={props.mobx} paginator={props.paginator} paginatorNew={{
-        page: { value: page, setter: setPage },
-        size: { value: size, setter: setSize }
-      }} />
+      <Paginator mobx={props.mobx} paginator={props.paginator} />
     </>
   )
 };
