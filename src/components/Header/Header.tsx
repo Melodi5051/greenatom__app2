@@ -47,7 +47,7 @@ const Header = () => {
       <header>
         <div className={styles.divActions}>
           <div className={styles.divLogo}>
-            <Link to={"/"}>
+            <Link to={"/"} className={styles.divLogoLink}>
               <img src={SvgIcon} alt="" />
               <div className={styles.divLogoLabel}>
                 <p>

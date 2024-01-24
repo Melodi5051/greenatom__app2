@@ -2,13 +2,13 @@
 
 header {
   user-select: none;
-  border-bottom: 1px solid #000;
-  justify-content: space-between;
+  border-bottom: 1px solid #003274;
   flex: 0 0 auto;
+  justify-content: space-between;
+  width: 100%;
 
   .divActions {
-    width: 100%;
-    padding: 0px 50px;
+    padding: 5px 50px;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
@@ -29,7 +29,7 @@ header {
     .divLogo {
       display: flex;
 
-      a {
+      .divLogoLink {
         display: flex;
         text-decoration: none;
         align-items: center;
@@ -45,11 +45,11 @@ header {
         }
       }
 
-      >a>img {
+      >.divLogoLink>img {
         display: inline;
       }
 
-      >a>* {
+      >.divLogoLink>* {
         padding: 0 17px;
       }
 
