@@ -1,16 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import styles from "./MyTable.module.scss";
 import { Button, ButtonGroup, Form, InputGroup, Spinner, Table } from "react-bootstrap";
 import { IEmployee } from "../../types/employerTypes";
 import { isEmpty, isObject, toNumber, zipObject } from "lodash";
 import { observer } from "mobx-react-lite";
-import { classnames } from "../../helpers/main.helper";
+import { classnames, objFromMobx } from "../../helpers/main.helper";
 import { notificator } from "../../store/notify.store";
 import Loader from "../Loader/Loader";
+import { modalmobx } from "../../store/modal.store";
+import Create from "./Modals/Create";
+import AutoGenForm, { ITableFormAction } from "../AutoGenForm/AutoGenForm";
 
 
-interface IMyTableProps {
-  /**
+export interface IConstTableAlias {
+  [key: string]: {
+    title: string,
+    formTag?: ITableFormAction[],
+    dataType?: "number" | "string",
+    inputType?: React.HTMLInputTypeAttribute | "selector",
+    props?: {[key: string]: () => any},
+    notInForm?: boolean
+  }
+}
+
+/**
    * Ссылка на хранилище MobX
    * 
    * В хранилище обязательно должны быть следующие поля:
@@ -22,15 +35,22 @@ interface IMyTableProps {
    * - `getAll` - метод на получение и обновление данных. Аргументом передается пагинация
    * - `create`, `remove`, `edit` - методы на создание, удаление и изменение данных. Аргументом передается объект.
    */
-  mobx: {
-    constData: { [key: string]: any }
-    constTableAlias: { [key: string]: any }
+export interface IMyTableMOBX {
+  constData: { [key: string]: any }
+  // constTableAlias: { [key: string]: any }
+  constTableAlias: IConstTableAlias
+  constTableTitle: string
 
-    getAll: (queryParameters: { [key: string]: any }) => Promise<{ [key: string]: any }>
-    create: (data: Record<any, any>) => Promise<number>
-    remove: (data: { id: string | number }) => Promise<number>
-    edit: (data: Record<any, any>) => Promise<number>
-  }
+  getAll: (queryParameters: { [key: string]: any }) => Promise<{ [key: string]: any }>
+  create: (data: Record<any, any>) => Promise<number>
+  remove: (data: { id: string | number }) => Promise<number>
+  edit: (data: Record<any, any>) => Promise<number>
+}
+
+
+
+interface IMyTableProps {
+  mobx: IMyTableMOBX
 
   paginator: {
     [key: string]: number
@@ -55,13 +75,58 @@ interface IPaginator extends IMyTableProps {
 const MyTableButtonGroup: React.FC<IMyTableButtonGroup> = ((props) => {
   return (<>
     <ButtonGroup aria-label="Операции над таблицей">
-      <Button variant="light" size="sm">Создать</Button>
-      <Button variant="light" size="sm">Изменить</Button>
-      <Button variant="light" size="sm">Фильтр</Button>
-      <Button variant="light" size="sm">Свойства</Button>
-      <Button variant="light" size="sm"
+      <Button
+        variant="light"
+        size="sm"
+        onClick={() => {
+          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="create" />)
+          modalmobx.show()
+        }}
+      >Создать</Button>
+      <Button
+        variant="light"
+        size="sm"
+        onClick={() => {
+          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="edit" />)
+          modalmobx.show()
+        }}
+      >Изменить</Button>
+      <Button
+        variant="light"
+        size="sm"
+        onClick={() => {
+          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="remove" />)
+          modalmobx.show()
+        }}
+      >Удалить</Button>
+      <Button
+        variant="light"
+        size="sm"
+        onClick={() => {
+          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="filter" />)
+          modalmobx.show()
+        }}
+      >Фильтр</Button>
+      <Button
+        variant="light"
+        size="sm"
+        onClick={() => {
+          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="properties" />)
+          modalmobx.show()
+        }}
+      >Свойства</Button>
+      <Button
+        variant="light"
+        size="sm"
         onClick={() => { props.mobx.getAll({ ...props.paginator }); props.paginatorNew.page.setter(Object.values(props.paginator)[0]); props.paginatorNew.size.setter(Object.values(props.paginator)[1]); notificator.push({ children: "Данные обновлены" }) }}>Обновить</Button>
-      <Button variant="light" size="sm">Справка</Button>
+      <Button
+        variant="light"
+        size="sm"
+        onClick={() => {
+          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="help" />)
+          modalmobx.show()
+        }}
+      >Справка</Button>
     </ButtonGroup>
   </>)
 })
@@ -87,7 +152,7 @@ const Paginator: React.FC<IPaginator> = (props) => {
   const makeNextPage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (toNumber(e.target.value) >= 0) {
       // if (!(toNumber(e.target.value) >= props.paginatorNew.page.value && isEmpty(props.mobx.constData)) && toNumber(e.target.value) >= 0)
-        // notificator.push({children: "Это последняя страница"})
+      // notificator.push({children: "Это последняя страница"})
       props.paginatorNew.page.setter(toNumber(e.target.value))
     }
   }
@@ -135,7 +200,7 @@ const Paginator: React.FC<IPaginator> = (props) => {
             aria-label="Таблица"
             id="basic-addon3"
             aria-describedby="basic-addon3"
-            defaultValue={`${props.mobx.constTableAlias.tableTitle}`}
+            defaultValue={`${props.mobx.constTableTitle}`}
             disabled
             aria-disabled
           />
@@ -173,7 +238,10 @@ const Paginator: React.FC<IPaginator> = (props) => {
 };
 
 
-
+/**
+ * Первый аргумент в пагинаторе - Страница
+ * Ворой аргумент в пагинаторе - Размер страницы
+ */
 const MyTable: React.FC<IMyTableProps> = (props) => {
   const [page, setPage] = useState(Object.values(props.paginator)[0])
   const [size, setSize] = useState(Object.values(props.paginator)[1])
@@ -181,6 +249,8 @@ const MyTable: React.FC<IMyTableProps> = (props) => {
   useEffect(() => {
     props.mobx.getAll(props.paginator)
   }, [])
+
+
 
   return (
     <>
@@ -199,7 +269,7 @@ const MyTable: React.FC<IMyTableProps> = (props) => {
                 <tr>
                   {
                     Object.keys(props.mobx.constData[0]).map((value: string, index: number) => {
-                      return <th key={index} className={styles.tableHeader}>{props.mobx.constTableAlias[value]}</th>
+                      return <th key={index} className={styles.tableHeader}>{props.mobx.constTableAlias[value].title}</th>
                     })
                   }
                 </tr>

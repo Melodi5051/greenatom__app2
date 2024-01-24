@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import stylesIndex from "../index.module.scss";
 import styles from "./../styles/employeepage.module.scss";
-import { classnames } from "../helpers/main.helper";
+import { classnames, objFromMobx } from "../helpers/main.helper";
 import { employee, flattenObject } from "../store/employee2.store";
 import { observer } from "mobx-react-lite";
 // import Table from 'react-bootstrap/Table';
@@ -10,12 +10,13 @@ import { Button, ButtonGroup, Table } from "react-bootstrap";
 import { isEmpty, isObject } from "lodash";
 import Loader from "../components/Loader/Loader";
 import Spinner from 'react-bootstrap/Spinner';
-import MyTable from "../components/MyTable/MyTable";
+import MyTable, { IMyTableMOBX } from "../components/MyTable/MyTable";
 
 interface IPropsEmployee { }
 
 
 const Employee: React.FC<IPropsEmployee> = (props) => {
+
   return (
     <>
       <div className={classnames(stylesIndex.taL, styles.m0)}>
@@ -29,7 +30,7 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
       4. √ Наименования кнопок как в 1С - "Записать" и "Записать и закрыть"
     */}
 
-        <MyTable mobx={employee} paginator={{
+        <MyTable mobx={employee as IMyTableMOBX} paginator={{
           pagePosition: 0,
           pageSize: 40,
         }} />

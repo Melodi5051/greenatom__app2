@@ -15,7 +15,7 @@ export interface IModal {
 
 const Modal: React.FC<IModal> = ({ closeAfterClick = false }) => {
   return (
-    <div className={modalmobx.activeStatus ? classnames(styles.modal, styles.active) : styles.modal} onClick={() => modalmobx.modalCloseable ? modalmobx.hide() : notificator.push({children: "Эту операцию нельзя прервать. Следуйте инстукциям внутри окна!", type: "warning"})}>
+    <div className={modalmobx.activeStatus ? classnames(styles.modal, styles.active) : styles.modal} onClick={() => modalmobx.modalCloseable ? modalmobx.disable() : notificator.push({children: "Эту операцию нельзя прервать. Следуйте инстукциям внутри окна!", type: "warning"})}>
       <div className={modalmobx.activeStatus ? classnames(styles.modal__content, styles.active) : styles.modal__content} onClick={(e: any) => closeAfterClick ? '' : e.stopPropagation()}>
         <div className={styles.modalBody}>
           {modalmobx.children}

@@ -1,8 +1,11 @@
 import axios from "axios";
-import { makeAutoObservable, runInAction } from "mobx";
+import { action, makeAutoObservable, observable, runInAction } from "mobx";
 import LocalStorage from "../helpers/localstorage2.helper";
 import { notificator } from "./notify.store";
 import { IEmployee, INewEmployee, IQueryAllEmployees } from "../types/employerTypes";
+import { ROUTES_BY_ROLE } from "../router/router";
+import { IConstTableAlias } from "../components/MyTable/MyTable";
+import { objFromMobx } from "../helpers/main.helper";
 
 /**
  * Заголовки, используемые в запросах к API для текущего стора
@@ -36,28 +39,42 @@ class Employee {
 
   constData: IEmployee[] = [] as IEmployee[];
 
-  constTableAlias = {
-    tableTitle: "Сотрудники",
+  constTableTitle = "Сотрудники"
 
-    id: "ID",
-    firstname: "Имя",
-    surname: "Фамилия",
-    patronymic: "Отчество",
-    jobPosition: "Должность",
-    salary: "З/П",
-    email: "Эл. почта",
-    phoneNumber: "Номер телефона",
-    username: "Логин",
-    role: "Право доступа",
-    address: "Адрес",
+  updateIds = () => {
+    return this.constData.map((empl) => { return { name: `${empl.id}` }; })
+  }
+
+  updateRoles = () => {
+    return Object.keys(ROUTES_BY_ROLE).map((e) => { return { name: e } })
+  }
+
+  constTableAlias: IConstTableAlias = {
+    id: {
+      title: "ID", formTag: ['edit', 'filter', 'remove'], dataType: "number", inputType: "selector", props: { options: this.updateIds }
+    },
+    firstname: { title: "Имя" },
+    surname: { title: "Фамилия" },
+    patronymic: { title: "Отчество" },
+    jobPosition: { title: "Должность" },
+    salary: { title: "З/П", dataType: "number", inputType: "number" },
+    email: { title: "Эл. почта" },
+    phoneNumber: { title: "Номер телефона" },
+    username: { title: "Логин", formTag: ['edit'] },
+    role: { title: "Право доступа", notInForm: true },
+    address: { title: "Адрес" },
 
     // подписи для форм управления таблицей
-    password: "Пароль",
-    repeatPassword: "Повторите пароль",
-    "role.name": "Наименование роли",
+    password: { title: "Пароль", inputType: "password", formTag: ['create'] },
+    repeatPassword: { title: "Повторите пароль", inputType: "password", formTag: ['create'] },
+    "role.name": {
+      title: "Наименование роли", inputType: "selector", formTag: ['create'], props: {
+        options: this.updateRoles
+      }
+    },
 
-    pagePosition: "Страница",
-    pageSize: "Количество на странице",
+    pagePosition: { title: "Страница", notInForm: true },
+    pageSize: { title: "Количество на странице", notInForm: true },
   }
 
   /**
@@ -84,7 +101,7 @@ class Employee {
    * 
    * @param data Данные нового сотрудника
    */
-  async create(data: INewEmployee | {[key: string]: any}) {
+  async create(data: INewEmployee | { [key: string]: any }) {
     const response = await axios.post(
       process.env.REACT_APP_BACKEND_ORIGIN + `/api/auth/signup`,
       data,
@@ -104,7 +121,7 @@ class Employee {
    * 
    * @param data Новые данные для patch запроса
    */
-  async edit(data: IEmployee | {[key: string]: any}) {
+  async edit(data: IEmployee | { [key: string]: any }) {
     const response = await axios.patch(
       process.env.REACT_APP_BACKEND_ORIGIN + `/api/employees/${data.id}`,
       data,
@@ -123,7 +140,7 @@ class Employee {
    * Возвращает информацию обо всех сотрудниках
    * @returns Объект, содержащий всех сотрудников и информацию для пагинации
    */
-  async getAll(queryParameters: IQueryAllEmployees | {[key: string]: any}) {
+  async getAll(queryParameters: IQueryAllEmployees | { [key: string]: any }) {
     try {
       const response = await axios.get(
         process.env.REACT_APP_BACKEND_ORIGIN + `/api/employees`,

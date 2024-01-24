@@ -4,7 +4,7 @@
   width: 100%;
   border-collapse: collapse;
   // margin-bottom: 20px;
-  user-select: none;
+  user-select: none!important;
 
   th,
   td {
@@ -34,6 +34,7 @@
 .tableContainer {
   // height: 80vh;
   min-height: 70vh;
+  height: 100%;
   // max-height: 70vh;
   overflow-y: scroll;
   background-color: #eeeeee;
