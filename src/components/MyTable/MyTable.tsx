@@ -86,12 +86,13 @@ const Paginator: React.FC<IPaginator> = (props) => {
 
   const makeNextPage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (toNumber(e.target.value) >= 0) {
+      if (toNumber(e.target.value) >= props.paginatorNew.page.value && !isEmpty(props.mobx.constData))
       props.paginatorNew.page.setter(toNumber(e.target.value))
     }
   }
 
   const makePageSize = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (toNumber(e.target.value) >= 0) {
+    if (toNumber(e.target.value) >= 0 && toNumber(e.target.value) <= 999) {
       props.paginatorNew.size.setter(toNumber(e.target.value))
     }
   }
@@ -149,10 +150,16 @@ const Paginator: React.FC<IPaginator> = (props) => {
               fetchData(props.paginatorNew.page.value - 1)
             }
           }}>← Назад</Button>
-          <Button variant="light" size="sm" onClick={() => {
-            props.paginatorNew.page.setter(props.paginatorNew.page.value + 1);
-            fetchData(props.paginatorNew.page.value + 1)
-          }}>Вперед →</Button>
+
+          <Button
+            variant="light"
+            size="sm"
+            onClick={() => {
+              props.paginatorNew.page.setter(props.paginatorNew.page.value + 1);
+              fetchData(props.paginatorNew.page.value + 1)
+            }}
+            disabled={isEmpty(props.mobx.constData)}
+          >Вперед →</Button>
         </ButtonGroup>
       </div>
     </div>

@@ -49,6 +49,7 @@
 }
 
 .paginator {
+  user-select: none;
   background-color: #d9d9d9;
   // margin-top: 30px;
   border: 1px solid #ddd;
@@ -61,10 +62,11 @@
   position: relative;
 
   input {
-    // max-width: 100px;
-    max-width: 100px;
     min-width: max-content;
-    // text-align: center;
+  }
+
+  input[type="number"] {
+    max-width: 60px;
   }
 
   .side {
