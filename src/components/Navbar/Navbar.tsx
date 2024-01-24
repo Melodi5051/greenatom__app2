@@ -1,42 +1,36 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import styles from "../Header/Header.module.scss";
 import Button from "../Button/Button";
-import { IEmployee } from "../../types/employerTypes";
-import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
-import { observer } from "mobx-react-lite";
-import { mainStore } from "../../store/main.store";
-import Loader from "../Loader/Loader";
-interface Navbar {
-  userData: IEmployee | null;
+import { authentificator } from "../../store/auth2.store";
+import { ROUTES_BY_ROLE } from "../../router/router";
+import { Link } from "react-router-dom";
+
+interface NavbarProps {
   handleLogout(): void;
-  userRoutes(userRole: string): any;
 }
 
-const Navbar = ({ userData, handleLogout, userRoutes }: Navbar) => {
+const Navbar: React.FC<NavbarProps> = ({ handleLogout }) => {
+  const currentRole = authentificator.constUserData.role;
+  const routes = ROUTES_BY_ROLE[currentRole] || [];
+
   return (
     <>
-      {mainStore.loading ? (
-        <Loader />
-      ) : (
-        <>
-          {userData &&
-            Object.entries(userRoutes(userData.role.name)).map(
-              (el: any, index: number) => (
-                <Link key={index} to={el[1]}>
-                  <Button viewtype="text">{el[0]}</Button>
-                </Link>
-              )
-            )}
-          <Link to={"/profile"}>
-            <Button viewtype="v3">{userData?.username}</Button>
-          </Link>
-          <Button viewtype="text">
-            <img src={SvgLogoutIcon} onClick={handleLogout} />
-          </Button>
-        </>
-      )}
+      <Link to="/profile">
+        <Button viewtype="text">Профиль</Button>
+      </Link>
+      <Link to="/">
+        <Button viewtype="text">Главная</Button>
+      </Link>
+      {routes.map((route: any, index: number) => (
+        <Link key={index} to={route.route}>
+          <Button viewtype="text">{route.name}</Button>
+        </Link>
+      ))}
+      <Button viewtype="text" onClick={handleLogout}>
+        Выйти
+      </Button>
     </>
   );
 };
 
-export default observer(Navbar);
+export default Navbar;

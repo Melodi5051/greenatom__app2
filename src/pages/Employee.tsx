@@ -1,104 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { employeeStore } from "../store/employee.store";
-import { IEmployee } from "../types/employerTypes";
+import stylesIndex from "../index.module.scss";
+import styles from "./../styles/employeepage.module.scss";
+import { classnames } from "../helpers/main.helper";
+import { employee, flattenObject } from "../store/employee2.store";
 import { observer } from "mobx-react-lite";
+// import Table from 'react-bootstrap/Table';
+import { IEmployee, IQueryAllEmployees } from "../types/employerTypes";
+import { Table } from "react-bootstrap";
+import { isEmpty, isObject } from "lodash";
 import Loader from "../components/Loader/Loader";
-import style from "./../styles/department.module.scss";
-import Table from "../components/Table/Table";
-import { getALLEmployee } from "../API/axios.employer";
-import {
-  getALLEmployeeHelper,
-  getEmployeeByIdHelper,
-} from "../helpers/employee.helper";
-import { mainStore } from "../store/main.store";
-import { authStore } from "../store/auth.store";
-import { checkPhoneNumber } from "../helpers/main.helper";
-import Pagination from "../components/Pagination/Pagination";
-import TableHeader from "../components/TableHeader/TableHeader";
+import Spinner from 'react-bootstrap/Spinner';
+import MyTable from "../components/MyTable/MyTable";
 
-export enum EmployeeKeys {
-  "fullname" = "ФИО",
-  "jobPosition" = "Должность",
-  "salary" = "Зарплата",
-  "mail" = "Почта",
-  "phoneNumber" = "Номер телефона",
-}
-export interface IInfoEmployee {
-  fullname: string;
-  jobPosition: string;
-  salary: number;
-  mail: string;
-  phoneNumber: string;
-}
-const extractKeys = (dataTable: IInfoEmployee[] | null) => {
-  if (dataTable && dataTable.length > 0) {
-    return Object.keys(dataTable[0]) as (keyof typeof EmployeeKeys)[];
-  }
-  return [];
-};
+interface IPropsEmployee { }
 
-const transformData = (data: IEmployee[] | null) => {
+
+const Employee: React.FC<IPropsEmployee> = (props) => {
+  const [pageSize, setPageSize] = useState(20);
+  const [pagePosition, setPagePosition] = useState(0);
+  const [data, setData] = useState(employee.constData);
+
+  const refreshTable = () => {
+    employee.getAll({ pagePosition, pageSize } as IQueryAllEmployees);
+  };
+
+  useEffect(() => {
+    refreshTable();
+  }, []);
+
+  useEffect(() => {
+    setData(employee.constData);
+  }, [employee.constData]);
+
   return (
-    data?.map((item) => {
-      const {
-        firstname,
-        surname,
-        patronymic,
-        jobPosition,
-        salary,
-        phoneNumber,
-        email,
-      } = item;
-      return {
-        fullname: `${firstname} ${surname} ${patronymic}`,
-        jobPosition,
-        salary,
-        mail: email,
-        phoneNumber: phoneNumber,
-      };
-    }) || []
+    <>
+      <div className={classnames(stylesIndex.taL, styles.m0)}>
+        <h2>Сотрудники</h2>
+        {/*
+      всю эту таблицу с кнопками засунуть в отдельный компонент
+
+      1. передача функций в компонент через пропсы
+      2. по двойному клику на ячейку открывается модалка, в которой можно изменить ее значение и отправляем новое значение на сервер
+      3. если нет эндпоинта для изменения значения - выскакивает уведомление, что значение изменить нельзя
+      4. √ Наименования кнопок как в 1С - "Записать" и "Записать и закрыть"
+    */}
+        {!isEmpty(employee.constData) ? (
+          <>
+            <MyTable mobx={employee}/>
+          </>
+        ) : (
+          <>
+            <Spinner animation="border" />
+            {/* <p>Возможно больше данных нет. Вы можете вернуться на страницу просмотра</p> */}
+          </>
+        )}
+      </div>
+    </>
   );
 };
 
-const Employer = () => {
-  const [infoEmployee, setinfoEmployee] = useState<any[]>([]);
-  const [arrayKeys, setArrayKeys] = useState<(keyof typeof EmployeeKeys)[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (employeeStore.dataEmployees) {
-      setinfoEmployee(transformData(employeeStore.dataEmployees));
-    }
-  }, [employeeStore.dataEmployees]);
-
-  useEffect(() => {
-    getALLEmployeeHelper();
-  }, [employeeStore.currentPage]);
-
-  useEffect(() => {
-    if (infoEmployee.length > 0) {
-      setLoading(false);
-      setArrayKeys(extractKeys(infoEmployee));
-    }
-  }, [infoEmployee, employeeStore.dataEmployees]);
-
-  // useEffect(() => {
-  //   getEmployeeByIdHelper(3);
-  // }, []);
-
-  return (
-    <div className={style.content}>
-      {!arrayKeys.length || loading ? (
-        <Loader />
-      ) : (
-        <>
-          <TableHeader />
-          <Table dataTable={infoEmployee} keys={arrayKeys} />
-          <Pagination maxPages={employeeStore.maxPage} />
-        </>
-      )}
-    </div>
-  );
-};
-
-export default observer(Employer);
+export default observer(Employee);

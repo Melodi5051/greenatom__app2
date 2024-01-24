@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Input, { EyeInput } from "../Input/Input";
 import Button from "../Button/Button";
 import style from "./ModalAuth.module.scss";
 import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
+import Loader from "../Loader/Loader";
 
 interface IPropsModal {
   handlerAuth: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -16,6 +17,7 @@ interface IPropsModal {
 type Type = "register" | "login";
 
 const ModalAuth = ({ handlerAuth, title, path, link, type }: IPropsModal) => {
+  const [spinner, setSpinner] = useState(false);
   return (
     <div className={style.content}>
       <div className={style.wrapper}>
@@ -29,7 +31,10 @@ const ModalAuth = ({ handlerAuth, title, path, link, type }: IPropsModal) => {
         <form
           className={style.form}
           id="formElement"
-          onSubmit={(e) => handlerAuth(e)}
+          onSubmit={(e) => {
+            handlerAuth(e);
+            setSpinner(true);
+          }}
         >
           {type === "login" ? (
             <>
@@ -52,7 +57,11 @@ const ModalAuth = ({ handlerAuth, title, path, link, type }: IPropsModal) => {
                 />
               </div>
 
-              <Button viewtype="v2">ВОЙТИ</Button>
+              {
+                spinner
+                ? <Loader />
+                : <Button viewtype="v2">ВОЙТИ</Button>
+              } 
             </>
           ) : (
             <>

@@ -43,4 +43,8 @@ const Input: React.FC<IPropsInput> = (props) => {
   return <input className={styles.input} {...props} />;
 };
 
+export const InputSimple: React.FC<IPropsInput> = (props) => {
+  return <input className={styles.inputSimple} {...props}/>
+}
+
 export default Input;

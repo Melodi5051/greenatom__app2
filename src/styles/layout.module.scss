@@ -2,11 +2,12 @@
   flex-direction: column;
 
   .content {
+    min-height: 80vh;
     display: flex;
     flex-direction: column;
     height: 100%;
     justify-content: start;
-    padding: 30px 50px;
     text-align: center;
+    z-index: -1;
   }
 }

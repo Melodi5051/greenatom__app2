@@ -1,37 +1,53 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Header.module.scss";
 import SvgIcon from "../../assets/svg/logo.svg";
 import Button from "../Button/Button";
 import SvgWhiteUserIcon from "../../assets/svg/ui-white-user-profile.svg";
 import SvgUserIcon from "../../assets/svg/ui-user-profile.svg";
 import { observer } from "mobx-react-lite";
-import { userStore } from "../../store/user.store";
-import {
-  removeCurrentPathToLocalStorage,
-  removeTokenToLocalStorage,
-} from "../../helpers/localstorage.helper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
+import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
 import { authentificator } from "../../store/auth2.store";
 
 const Header = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const navigate = useNavigate();
+
+
   const handleLogout = () => {
     // removeTokenToLocalStorage("token");
     // removeTokenToLocalStorage("refreshToken");
     // removeCurrentPathToLocalStorage();
+    authentificator.signout();
+    navigate("/auth", { replace: true })
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current!.contains(event.target as Node)) {
+      setIsDropdownOpen(false);
+    }
   };
 
   useEffect(() => {
-    console.log(authentificator.varAuthStatus);
-  }, [userStore.userRole]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-  console.log("User role: ", userStore.userRole);
   return (
     <>
       <header>
         <div className={styles.divActions}>
           <div className={styles.divLogo}>
-            <Link to={"/"}>
+            <Link to={"/"} className={styles.divLogoLink}>
               <img src={SvgIcon} alt="" />
               <div className={styles.divLogoLabel}>
                 <p>
@@ -42,12 +58,20 @@ const Header = () => {
               </div>
             </Link>
             <div className={styles.divActionsButtons}>
-              {authentificator.varAuthStatus ? (
-                <Navbar
-                  userData={userStore.user}
-                  handleLogout={handleLogout}
-                  userRoutes={userStore.setRoutesByRole}
-                />
+              {/* {!!Object.keys(authentificator.constUserData).length ? ( */}
+              {authentificator.isAuth() ? (
+                <div className={styles.listers}>
+                  <div className={styles.userContainer} ref={dropdownRef}>
+                    <Button viewtype="v3" onClick={toggleDropdown}>
+                      {authentificator.constUserData.sub}
+                    </Button>
+                    {isDropdownOpen && (
+                      <div className={styles.dropdownContent}>
+                        <Navbar handleLogout={handleLogout} />
+                      </div>
+                    )}
+                  </div>
+                </div>
               ) : (
                 <>
                   <Link to={"/auth"}>

@@ -1,23 +1,27 @@
 import { observer } from "mobx-react-lite";
-import { loginHelper } from "../helpers/auth.helper";
 import { IDataLogin } from "../types/userTypes";
-import { authStore } from "../store/auth.store";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import ModalAuth from "../components/ModalAuth/ModalAuth";
-import { notificator } from "../store/notify.store";
 import { authentificator } from "../store/auth2.store";
+import { useState } from "react";
 
 const Login = () => {
-  const handlerLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const [isAuth, setIsAuth] = useState(false);
+  const navigate = useNavigate();
+  const handlerLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const obj = Object.fromEntries(form.entries()) as unknown as IDataLogin;
     // loginHelper(obj);
-    console.log(obj);
-    authentificator.signin(obj);
-    notificator.push({children: "Тут должен быть логин"});
+    
+    
+    const signInStatus = await authentificator.signin(obj);
+    if (!signInStatus) {
+      setIsAuth(true)
+      navigate("/", {replace: true});
+    } else throw Error("Ошибка входа")
   };
-  return authentificator.varAuthStatus ? (
+  return authentificator.isAuth() && authentificator.gotUserData() ? (
     <Navigate replace to={"/"} />
   ) : (
     <ModalAuth

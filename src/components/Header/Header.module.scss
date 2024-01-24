@@ -2,13 +2,13 @@
 
 header {
   user-select: none;
-  border-bottom: 1px solid #000;
-  justify-content: space-between;
+  border-bottom: 1px solid #003274;
   flex: 0 0 auto;
+  justify-content: space-between;
+  width: 100%;
 
   .divActions {
-    width: 100%;
-    padding: 0px 50px;
+    padding: 5px 50px;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
@@ -29,7 +29,7 @@ header {
     .divLogo {
       display: flex;
 
-      a {
+      .divLogoLink {
         display: flex;
         text-decoration: none;
         align-items: center;
@@ -45,11 +45,11 @@ header {
         }
       }
 
-      > a > img {
+      >.divLogoLink>img {
         display: inline;
       }
 
-      > a > * {
+      >.divLogoLink>* {
         padding: 0 17px;
       }
 
@@ -63,6 +63,7 @@ header {
         justify-content: center;
         align-items: center;
         min-width: max-content;
+
         .divLogoLabelSublabel {
           // color: black;
           color: index.$color-blue-2;
@@ -76,11 +77,35 @@ header {
   }
 }
 
-@media (max-width: 1200px) {
-  header .divActions .divLogo > img {
-    display: none;
-  }
+.listers {
+  position: relative;
+  z-index: 100;
+}
 
-  header .divActions .divLogo .divLogoLabel {
+.dropdownContent {
+  position: absolute;
+  top: 115%;
+  right: 50%;
+  transform: translateX(50%);
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 10px;
+  -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  box-shadow: 0px 5px 10px 10px rgba(34, 60, 80, 0.2);
+
+  transition: index.$defaultTransition;
+
+  text-decoration: none;
+  text-transform: none;
+  color: index.$color-black;
+  background-color: index.$color-white;
+
+  border-radius: 5px;
+
+  &:active {
+    -webkit-box-shadow: 0px 5px 25px 2px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 5px 25px 2px rgba(34, 60, 80, 0.2);
+    box-shadow: 0px 5px 25px 2px rgba(34, 60, 80, 0.2);
   }
 }
