@@ -137,22 +137,23 @@ const Paginator: React.FC<IPaginator> = (props) => {
             disabled
             aria-disabled
           />
-          
+
         </InputGroup>
       </div>
 
       <div className={classnames(styles.side, 'my-auto')}>
-        <Button variant="light" onClick={() => {
-          if (props.paginatorNew.page.value - 1 >= 0) {
-            props.paginatorNew.page.setter(props.paginatorNew.page.value - 1);
-            fetchData(props.paginatorNew.page.value - 1)
-          }
-        }}>← Назад</Button>
-
-        <Button variant="light" onClick={() => {
-          props.paginatorNew.page.setter(props.paginatorNew.page.value + 1);
-          fetchData(props.paginatorNew.page.value + 1)
-        }}>Вперед →</Button>
+        <ButtonGroup aria-label="Операции над таблицей">
+          <Button variant="light" size="sm" onClick={() => {
+            if (props.paginatorNew.page.value - 1 >= 0) {
+              props.paginatorNew.page.setter(props.paginatorNew.page.value - 1);
+              fetchData(props.paginatorNew.page.value - 1)
+            }
+          }}>← Назад</Button>
+          <Button variant="light" size="sm" onClick={() => {
+            props.paginatorNew.page.setter(props.paginatorNew.page.value + 1);
+            fetchData(props.paginatorNew.page.value + 1)
+          }}>Вперед →</Button>
+        </ButtonGroup>
       </div>
     </div>
   )
@@ -177,7 +178,7 @@ const MyTable: React.FC<IMyTableProps> = (props) => {
       <div className={styles.tableContainer}>
         {
           isEmpty(props.mobx.constData)
-            ? <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh', color: 'grey', userSelect: 'none'}}>
+            ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh', color: 'grey', userSelect: 'none' }}>
               <h3 className={classnames("mx-auto", "my-auto")}>На этой странице данных нет!</h3>
             </div>
             : <Table striped bordered hover size="sm" className={classnames(styles.table)}>
