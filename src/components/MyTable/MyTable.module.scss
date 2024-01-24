@@ -39,6 +39,7 @@
   background-color: #eeeeee;
   z-index: 20;
   position: relative;
+  user-select: none;
 }
 
 .tableHeader, thead {

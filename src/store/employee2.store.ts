@@ -141,7 +141,7 @@ class Employee {
       })
       return JSON.parse(JSON.stringify(response.data.content));
     } catch (error) {
-      notificator.push({ children: `Не удалось обновить данные. Проверьте вход в аккаунт`, type: "error" });
+      notificator.push({ children: `Не удалось обновить данные, так как страница или рамер страницы указаны неверно`, type: "error" });
       return {};
     }
   }

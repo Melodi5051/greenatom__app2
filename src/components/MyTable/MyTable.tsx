@@ -86,7 +86,8 @@ const Paginator: React.FC<IPaginator> = (props) => {
 
   const makeNextPage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (toNumber(e.target.value) >= 0) {
-      if (toNumber(e.target.value) >= props.paginatorNew.page.value && !isEmpty(props.mobx.constData))
+      // if (!(toNumber(e.target.value) >= props.paginatorNew.page.value && isEmpty(props.mobx.constData)) && toNumber(e.target.value) >= 0)
+        // notificator.push({children: "Это последняя страница"})
       props.paginatorNew.page.setter(toNumber(e.target.value))
     }
   }
@@ -144,12 +145,17 @@ const Paginator: React.FC<IPaginator> = (props) => {
 
       <div className={classnames(styles.side, 'my-auto')}>
         <ButtonGroup aria-label="Операции над таблицей">
-          <Button variant="light" size="sm" onClick={() => {
-            if (props.paginatorNew.page.value - 1 >= 0) {
-              props.paginatorNew.page.setter(props.paginatorNew.page.value - 1);
-              fetchData(props.paginatorNew.page.value - 1)
-            }
-          }}>← Назад</Button>
+          <Button
+            variant="light"
+            size="sm"
+            onClick={() => {
+              if (props.paginatorNew.page.value - 1 >= 0) {
+                props.paginatorNew.page.setter(props.paginatorNew.page.value - 1);
+                fetchData(props.paginatorNew.page.value - 1)
+              }
+            }}
+            disabled={props.paginatorNew.page.value === 0}
+          >← Назад</Button>
 
           <Button
             variant="light"
