@@ -16,22 +16,6 @@ interface IPropsEmployee { }
 
 
 const Employee: React.FC<IPropsEmployee> = (props) => {
-  const [pageSize, setPageSize] = useState(20);
-  const [pagePosition, setPagePosition] = useState(0);
-  const [data, setData] = useState(employee.constData);
-
-  const refreshTable = () => {
-    employee.getAll({ pagePosition, pageSize } as IQueryAllEmployees);
-  };
-
-  useEffect(() => {
-    refreshTable();
-  }, []);
-
-  useEffect(() => {
-    setData(employee.constData);
-  }, [employee.constData]);
-
   return (
     <>
       <div className={classnames(stylesIndex.taL, styles.m0)}>
@@ -44,22 +28,12 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
       3. если нет эндпоинта для изменения значения - выскакивает уведомление, что значение изменить нельзя
       4. √ Наименования кнопок как в 1С - "Записать" и "Записать и закрыть"
     */}
-        {!isEmpty(employee.constData) ? (
-          <>
-            <ButtonGroup aria-label="Basic example">
-              <Button variant="light" size="sm">Создать</Button>
-              <Button variant="light" size="sm">Изменить</Button>
-              <Button variant="light" size="sm">Обновить</Button>
-              <Button variant="light" size="sm">Справка</Button>
-            </ButtonGroup>
-            <MyTable mobx={employee} />
-          </>
-        ) : (
-          <>
-            <Spinner animation="border" />
-            {/* <p>Возможно больше данных нет. Вы можете вернуться на страницу просмотра</p> */}
-          </>
-        )}
+
+        <MyTable mobx={employee} paginator={{
+          pagePosition: 0,
+          pageSize: 40,
+        }} />
+
       </div>
     </>
   );

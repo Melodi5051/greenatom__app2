@@ -32,17 +32,20 @@
 }
 
 .tableContainer {
-  height: 80vh;
-  max-height: 70vh;
+  // height: 80vh;
+  min-height: 70vh;
+  // max-height: 70vh;
   overflow-y: scroll;
   background-color: #eeeeee;
+  z-index: 20;
+  position: relative;
 }
 
 .tableHeader, thead {
   position: sticky;
   top: 0;
   background-color: #fff;
-  z-index: 2;
+  z-index: 20;
 }
 
 .paginator {
@@ -54,9 +57,18 @@
   display: flex;
   justify-content: space-between;
 
-  .element {
-    font-size: .8em;
-    box-sizing: border-box;
+  z-index: 20;
+  position: relative;
+
+  input {
+    // max-width: 100px;
+    max-width: 100px;
+    min-width: max-content;
+    // text-align: center;
+  }
+
+  .side {
+    display: flex;
 
     button {
       display: inline-flex;
@@ -67,12 +79,14 @@
       outline: none;
       cursor: pointer;
       transition: all 0.09s ease-in-out;
+      border: 1px solid #f0f0f0;
+      margin: 2px;
     }
+  }
 
-    input {
-      width: 40px;
-      text-align: center;
-    }
+  .side .element {
+    font-size: .8em;
+    box-sizing: border-box;
 
     * {
       margin-left: 10px;

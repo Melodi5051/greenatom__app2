@@ -36,12 +36,36 @@ class Employee {
 
   constData: IEmployee[] = [] as IEmployee[];
 
+  constTableAlias = {
+    tableTitle: "Сотрудники",
+
+    id: "ID",
+    firstname: "Имя",
+    surname: "Фамилия",
+    patronymic: "Отчество",
+    jobPosition: "Должность",
+    salary: "З/П",
+    email: "Эл. почта",
+    phoneNumber: "Номер телефона",
+    username: "Логин",
+    role: "Право доступа",
+    address: "Адрес",
+
+    // подписи для форм управления таблицей
+    password: "Пароль",
+    repeatPassword: "Повторите пароль",
+    "role.name": "Наименование роли",
+
+    pagePosition: "Страница",
+    pageSize: "Количество на странице",
+  }
+
   /**
    * Удаляет сотрудника о его ID
    * 
    * @param data Данные формы из таблицы
    */
-  async remove(data: {id: string | number}) {
+  async remove(data: { id: string | number }) {
     const response = await axios.delete(
       process.env.REACT_APP_BACKEND_ORIGIN + `/api/employees/${data.id}`,
       {
@@ -60,7 +84,7 @@ class Employee {
    * 
    * @param data Данные нового сотрудника
    */
-  async create(data: INewEmployee) {
+  async create(data: INewEmployee | {[key: string]: any}) {
     const response = await axios.post(
       process.env.REACT_APP_BACKEND_ORIGIN + `/api/auth/signup`,
       data,
@@ -80,7 +104,7 @@ class Employee {
    * 
    * @param data Новые данные для patch запроса
    */
-  async edit(data: IEmployee) {
+  async edit(data: IEmployee | {[key: string]: any}) {
     const response = await axios.patch(
       process.env.REACT_APP_BACKEND_ORIGIN + `/api/employees/${data.id}`,
       data,
@@ -99,7 +123,7 @@ class Employee {
    * Возвращает информацию обо всех сотрудниках
    * @returns Объект, содержащий всех сотрудников и информацию для пагинации
    */
-  async getAll(queryParameters: IQueryAllEmployees) {
+  async getAll(queryParameters: IQueryAllEmployees | {[key: string]: any}) {
     try {
       const response = await axios.get(
         process.env.REACT_APP_BACKEND_ORIGIN + `/api/employees`,
@@ -111,14 +135,14 @@ class Employee {
           params: { ...queryParameters }
         }
       );
-      
+
       runInAction(() => {
         this.constData = response.data.content;
       })
       return JSON.parse(JSON.stringify(response.data.content));
     } catch (error) {
       notificator.push({ children: `Не удалось обновить данные. Проверьте вход в аккаунт`, type: "error" });
-      return [];
+      return {};
     }
   }
 }
