@@ -19,7 +19,7 @@ export interface IConstTableAlias {
     formTag?: ITableFormAction[],
     dataType?: "number" | "string",
     inputType?: React.HTMLInputTypeAttribute | "selector",
-    props?: {[key: string]: () => any},
+    props?: { [key: string]: () => any },
     notInForm?: boolean
   }
 }
@@ -92,31 +92,16 @@ const MyTableButtonGroup: React.FC<IMyTableButtonGroup> = ((props) => {
           modalmobx.show()
         }}
       >Удалить</Button>
+
+      <Button
+        variant="light"
+        size="sm"
+        onClick={() => { props.mobx.getAll(zipObject(Object.keys(props.paginator), [mytablepaginator.page, mytablepaginator.size]));; notificator.push({ children: "Данные обновлены" }) }}>Обновить</Button>
       <Button
         variant="light"
         size="sm"
         onClick={() => {
-          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="filter" buttonsType="okclose"/>)
-          modalmobx.show()
-        }}
-      >Фильтр</Button>
-      <Button
-        variant="light"
-        size="sm"
-        onClick={() => {
-          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="properties" buttonsType="okclose"/>)
-          modalmobx.show()
-        }}
-      >Свойства</Button>
-      <Button
-        variant="light"
-        size="sm"
-        onClick={() => { props.mobx.getAll(zipObject(Object.keys(props.paginator), [mytablepaginator.page, mytablepaginator.size])); ; notificator.push({ children: "Данные обновлены" }) }}>Обновить</Button>
-      <Button
-        variant="light"
-        size="sm"
-        onClick={() => {
-          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="help" buttonsType="okclose"/>)
+          modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="help" buttonsType="okclose" />)
           modalmobx.show()
         }}
       >Справка</Button>
@@ -125,10 +110,17 @@ const MyTableButtonGroup: React.FC<IMyTableButtonGroup> = ((props) => {
 })
 
 
-const MyTableItem: React.FC<{ value: any, [key: string]: any }> = (props) => {
-  return <td key={props.jndex}>{
-    isObject(props.value) ? Object.values(props.value).join(", ") : props.value
-  }</td>;
+const MyTableItem: React.FC<{ value: any, data_uid: number, [key: string]: any }> = (props) => {
+  return <td
+    key={props.jndex}
+    onDoubleClick={() => {
+      console.log(props.data_uid)
+      modalmobx.setChildren(<AutoGenForm mobx={props.mobx} action="edit" openWithDefaultValues={{ id: props.data_uid }} />)
+      modalmobx.show()
+    }}
+  >{
+      isObject(props.value) ? Object.values(props.value).join(", ") : props.value
+    }</td>;
 }
 
 
@@ -265,11 +257,11 @@ const MyTable: React.FC<IMyTableProps> = (props) => {
               </thead>
               <tbody>
                 {
-                  props.mobx.constData.map((empl: {[key: string]: any}, index: number) => {
+                  props.mobx.constData.map((empl: { [key: string]: any }, index: number) => {
                     return <tr key={index}>
                       {
                         Object.keys(empl).map((keyName: string, jndex: number) => {
-                          return <MyTableItem value={empl[keyName]} key={jndex} />;
+                          return <MyTableItem value={empl[keyName]} key={jndex} data_uid={empl.id} mobx={props.mobx} />;
                         })
                       }
                     </tr>

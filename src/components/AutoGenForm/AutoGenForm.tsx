@@ -25,6 +25,7 @@ interface IPropsAutoGenForm {
   mobx: IMyTableMOBX
   action: ITableFormAction
   buttonsType?: IButtonsType
+  openWithDefaultValues? : {[key: string]: any}
 }
 
 interface IPropsFormButtons {
@@ -151,10 +152,10 @@ const AutoGenForm: React.FC<IPropsAutoGenForm> = (props) => {
                         ? <td key={index * 100}>
                           {
                             tableAlias[aliasName].inputType === "selector"
-                              ? <Select name={`${aliasName}`} id={aliasName} {...tableAlias[aliasName].props} options={tableAlias[aliasName].props && tableAlias[aliasName].props?.options()} />
+                              ? <Select name={`${aliasName}`} id={aliasName} {...tableAlias[aliasName].props} options={tableAlias[aliasName].props && tableAlias[aliasName].props?.options()} defaultValue={Number(props?.openWithDefaultValues && props?.openWithDefaultValues[aliasName]) - 1}/>
                               : tableAlias[aliasName].inputType === "password"
-                                ? <EyeInput name={`${aliasName}`} id={aliasName} />
-                                : <Input name={`${aliasName}`} id={aliasName} type={tableAlias[aliasName].inputType} />
+                                ? <EyeInput name={`${aliasName}`} id={aliasName} defaultValue={props?.openWithDefaultValues && props?.openWithDefaultValues[aliasName]} />
+                                : <Input name={`${aliasName}`} id={aliasName} type={tableAlias[aliasName].inputType} defaultValue={props?.openWithDefaultValues && props?.openWithDefaultValues[aliasName]} />
                           }
                         </td>
                         : ''
