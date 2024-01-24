@@ -303,8 +303,6 @@ const ModalTableForm = observer(({ context, pathToFields, writeButtonsType = "wr
 
 
 const Table: React.FC<TableProps> = observer(({ data, context }) => {
-  console.log("ТАБЛИЦА ОТРИСОВАНА")
-
   const CONTEXT_ACTIONS = Object.keys(context.actions);
 
   const TABLE_RAW_HEADER = [...Object.keys(data[0])];

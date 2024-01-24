@@ -23,6 +23,10 @@
   text-overflow: ellipsis;
 }
 
+.mainPage{
+  z-index: 0;
+}
+
 .containerCard {
   display: flex;
   flex-wrap: wrap;
