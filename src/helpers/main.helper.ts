@@ -1,15 +1,5 @@
-import { getMe } from "../API/axios.main";
-import { userStore } from "../store/user.store";
-import { IEmployee } from "../types/employerTypes";
+import { isObject, mapKeys } from "lodash";
 
-export const getMeHelper = (): void => {
-  getMe().then((dataUser: IEmployee) => {
-    userStore.setUser(dataUser);
-    if (dataUser) {
-      userStore.setRole(dataUser.role)
-    }
-  });
-};
 
 export const checkPhoneNumber = (phoneNumber: string): string => {
   const cleaned = phoneNumber.replace(/\D/g, "");
@@ -56,4 +46,18 @@ export function createFieldsByPath(obj: AnyObject, path: string, value: any): An
 
 export function objFromMobx(obj: any) {
   return JSON.parse(JSON.stringify(obj))
+}
+
+interface FlattenedObject {
+  [key: string]: any;
+}
+
+function flattenObject(obj: Record<string, any>, prefix = ''): FlattenedObject {
+  return mapKeys(obj, (value, key) => {
+    const newKey = prefix.length ? `${prefix}.${key}` : key;
+    if (isObject(value)) {
+      return flattenObject(value, newKey);
+    }
+    return newKey;
+  }) as FlattenedObject;
 }

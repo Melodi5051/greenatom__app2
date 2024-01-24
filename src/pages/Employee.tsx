@@ -1,43 +1,24 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import stylesIndex from "../index.module.scss";
 import styles from "./../styles/employeepage.module.scss";
-import Table from "../components/Table/Table";
-import { classnames, objFromMobx } from "../helpers/main.helper";
-import { employee } from "../store/employee2.store";
-import { IEmployee, INewEmployee, IQueryAllEmployees } from "../types/employerTypes";
-import Loader from "../components/Loader/Loader";
+import { classnames } from "../helpers/main.helper";
+import { employee, flattenObject } from "../store/employee2.store";
 import { observer } from "mobx-react-lite";
-import { notificator } from "../store/notify.store";
-import { ROUTES_BY_ROLE } from "../router/router";
-import { find, isEmpty, get, omitBy } from "lodash";
-import { AxiosResponse } from "axios";
+// import Table from 'react-bootstrap/Table';
+import { IEmployee, IQueryAllEmployees } from "../types/employerTypes";
+import { Table } from "react-bootstrap";
+import { isEmpty, isObject } from "lodash";
+import Loader from "../components/Loader/Loader";
+import Spinner from 'react-bootstrap/Spinner';
+import MyTable from "../components/MyTable/MyTable";
 
 interface IPropsEmployee { }
 
-/**
- * При вызове заполняет все найденные селекторы данными. Селекторы берутся из ключей самих данных
- * 
- * @param e Событие клика по селектору
- * @param data Значения, которые надо использовать
- */
-const fillCurrentFormBySelectorValue = (e: ChangeEvent<HTMLInputElement>, data: any) => {
-  // @ts-ignore
-  const optionName: string = e.target?.options[Number(e.target.value)].innerText;
-  const emplObj: IEmployee = find(Object.values(data), { id: Number(optionName.charAt(0)) }) as IEmployee;
-  const emplValues = Object.values(emplObj as Object);
-  const emplKeys = Object.keys(emplObj as Object);
-
-  emplKeys.forEach((selectorPart: string) => {
-    const element = document.querySelector(`#${selectorPart}`) as any
-    if (element && `#${selectorPart}` !== `#${e.currentTarget.id}`)
-      element.value = emplObj[selectorPart];
-  })
-}
 
 const Employee: React.FC<IPropsEmployee> = (props) => {
   const [pageSize, setPageSize] = useState(20);
   const [pagePosition, setPagePosition] = useState(0);
-  const [data, setData] = useState(employee.constEmployeesData);
+  const [data, setData] = useState(employee.constData);
 
   const refreshTable = () => {
     employee.getAll({ pagePosition, pageSize } as IQueryAllEmployees);
@@ -48,123 +29,33 @@ const Employee: React.FC<IPropsEmployee> = (props) => {
   }, []);
 
   useEffect(() => {
-    setData(employee.constEmployeesData);
-  }, [employee.constEmployeesData]);
+    setData(employee.constData);
+  }, [employee.constData]);
 
   return (
-    <div className={classnames(stylesIndex.taL, styles.m0)}>
-      <h2>Сотрудники</h2>
-      {/* 
-        всю эту таблицу с кнопками засунуть в отдельный компонент 
+    <>
+      <div className={classnames(stylesIndex.taL, styles.m0)}>
+        <h2>Сотрудники</h2>
+        {/*
+      всю эту таблицу с кнопками засунуть в отдельный компонент
 
-        1. передача функций в компонент через пропсы
-        2. по двойному клику на ячейку открывается модалка, в которой можно изменить ее значение и отправляем новое значение на сервер
-        3. если нет эндпоинта для изменения значения - выскакивает уведомление, что значение изменить нельзя
-        4. √ Наименования кнопок как в 1С - "Записать" и "Записать и закрыть"
-      */}
-      {!!Object.keys(data).length ? (
-        <>
-          <Table data={data as any} context={{
-            title: "Сотрудники",
-            refreshTable: refreshTable,
-            headerAlias: {
-              id: "ID",
-              firstname: "Имя",
-              surname: "Фамилия",
-              patronymic: "Отчество",
-              jobPosition: "Должность",
-              salary: "З/П",
-              email: "Эл. почта",
-              phoneNumber: "Номер телефона",
-              username: "Логин",
-              role: "Право доступа",
-              address: "Адрес",
-
-              // подписи для форм управления таблицей
-              password: "Пароль",
-              repeatPassword: "Повторите пароль",
-              "role.name": "Наименование роли"
-            },
-            actions: {
-              add: {
-                nessesaryFields: [
-                  "firstname",
-                  "surname",
-                  "patronymic",
-                  "jobPosition",
-                  {title: "salary", inputType: "number", dataType: "number"},
-                  "email",
-                  "phoneNumber",
-                  { title: "password", inputType: "password" },
-                  { title: "repeatPassword", inputType: "password" },
-                  "address",
-                  {
-                    title: "role.name", inputType: "select", props: {
-                      options: Object.keys(ROUTES_BY_ROLE).map(v => { return { name: v } })
-                    }
-                  }
-                ],
-                writeCallback: async (form: INewEmployee) => {
-                  console.log("employees.tsx", form)
-                  // const statusCode = await employee.create(form);
-                  // return statusCode
-                  return 200
-                }
-              },
-              edit: {
-                nessesaryFields: [
-                  {
-                    title: "id", inputType: "select", props: {
-                      // @ts-ignore
-                      options: employee.constEmployeesData.map((empl) => { return { name: `${empl.id}` } }),
-                    }
-                  }
-                ],
-                optionalFields: [
-                  "firstname",
-                  "surname",
-                  "patronymic",
-                  "jobPosition",
-                  {title: "salary", inputType: "number", dataType: "number"},
-                  "email",
-                  "phoneNumber",
-                  // "password",
-                  // "repeatPassword",
-                  "address",
-                  // "role.name"
-                ],
-                writeCallback: async (form: any) => {
-                  console.log("employees.tsx", form)
-                  const reqBody = omitBy(form, isEmpty)
-                  console.log(reqBody);
-                  const statusCode = await employee.edit(reqBody as IEmployee);
-                  return statusCode
-                  // return 200
-                }
-              },
-              remove: {
-                nessesaryFields: [
-                  {
-                    title: "id", inputType: "select", props: {
-                      // @ts-ignore
-                      options: employee.constEmployeesData.map((empl) => { return { name: `${empl.id}` } }),
-                    }
-                  }
-                ],
-                writeCallback: async (form: any) => {
-                  console.log(form)
-                  // const statusCode = await employee.remove(form)
-                  // return statusCode
-                  return 200
-                }
-              }
-            }
-          }} />
-        </>
-      ) : (
-        <Loader sizeDependsOnPage />
-      )}
-    </div>
+      1. передача функций в компонент через пропсы
+      2. по двойному клику на ячейку открывается модалка, в которой можно изменить ее значение и отправляем новое значение на сервер
+      3. если нет эндпоинта для изменения значения - выскакивает уведомление, что значение изменить нельзя
+      4. √ Наименования кнопок как в 1С - "Записать" и "Записать и закрыть"
+    */}
+        {!isEmpty(employee.constData) ? (
+          <>
+            <MyTable mobx={employee}/>
+          </>
+        ) : (
+          <>
+            <Spinner animation="border" />
+            {/* <p>Возможно больше данных нет. Вы можете вернуться на страницу просмотра</p> */}
+          </>
+        )}
+      </div>
+    </>
   );
 };
 
