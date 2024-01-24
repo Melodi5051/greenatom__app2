@@ -4,6 +4,12 @@ import ProtectedRouter from "../components/ProtectedRouter";
 import React from "react";
 import Loader from "../components/Loader/Loader";
 import ErrorPage from "../pages/ErrorPage";
+import Profile from "../pages/Profile";
+import Products from "../pages/Products";
+import Warehouse from "../pages/Warehouse";
+import Order from "../pages/Order";
+import Delivery from "../pages/Delivery";
+import Cart from "../pages/Cart";
 
 const Login = React.lazy(() => import("../pages/Login"));
 const Main = React.lazy(() => import("../components/Main/Main"));
@@ -24,12 +30,12 @@ const Employer = React.lazy(() => import("../pages/Employee"));
 
 // поле description отображается на главной странице как подпись к названию страницы
 export const ROUTES = {
-  employees:  { route: "/employees", name: "Сотрудники", description: "Просмотр сотрудников, изменение учетных данных сотрудников" },
-  products:   { route: "/products", name: "Продукты", description: "Редактирование продуктов и номенклатурных групп" },
-  orders:     { route: "/orders", name: "Заказы", description: "Просмотр и управление заказами" },
-  cart:       { route: "/cart", name: "Корзина", description: "Просмотр собственной корзины" },
-  warehouse:  { route: "/warehouse", name: "Склад", description: "Учет товаров на складе" },
-  delivery:   { route: "/delivery", name: "Доставка", description: "Оперирование статусами доставки" }
+  employees: { route: "/employees", name: "Сотрудники", description: "Просмотр сотрудников, изменение учетных данных сотрудников" },
+  products: { route: "/products", name: "Продукты", description: "Редактирование продуктов и номенклатурных групп" },
+  orders: { route: "/orders", name: "Заказы", description: "Просмотр и управление заказами" },
+  cart: { route: "/cart", name: "Корзина", description: "Просмотр собственной корзины" },
+  warehouse: { route: "/warehouse", name: "Склад", description: "Учет товаров на складе" },
+  delivery: { route: "/delivery", name: "Доставка", description: "Оперирование статусами доставки" }
 }
 // также здесь находится актуальный перечень ролей в качестве
 // ключей этого объекта
@@ -110,11 +116,42 @@ export const router = createBrowserRouter([
         element: (
           <React.Suspense fallback={<Loader />}>
             <ProtectedRouter>
-              <div>профиль</div>
+              <Profile />
             </ProtectedRouter>
           </React.Suspense>
         ),
       },
+      {
+        path: "/warehouse",
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <ProtectedRouter>
+              <Warehouse />
+            </ProtectedRouter>
+          </React.Suspense>
+        ),
+      },
+      {
+        path: "/delivery",
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <ProtectedRouter>
+              <Delivery />
+            </ProtectedRouter>
+          </React.Suspense>
+        ),
+      },
+      {
+        path: "/cart",
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <ProtectedRouter>
+              <Cart />
+            </ProtectedRouter>
+          </React.Suspense>
+        ),
+      },
+
       // {
       //   path: "/департаменты",
       //   element: (
@@ -125,22 +162,23 @@ export const router = createBrowserRouter([
       //     </React.Suspense>
       //   ),
       // },
-      // {
-      //   path: ROUTES.products.route,
-      //   element: (
-      //     <React.Suspense fallback={<Loader />}>
-      //       <ProtectedRouter>
-      //         <Product />
-      //       </ProtectedRouter>
-      //     </React.Suspense>
-      //   ),
-      // },
+
+      {
+        path: ROUTES.products.route,
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <ProtectedRouter>
+              <Products />
+            </ProtectedRouter>
+          </React.Suspense>
+        ),
+      },
       {
         path: ROUTES.orders.route,
         element: (
           <React.Suspense fallback={<div>Loading...</div>}>
             <ProtectedRouter>
-              <div>заказы</div>
+              <Order />
             </ProtectedRouter>
           </React.Suspense>
         ),

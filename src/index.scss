@@ -3,16 +3,11 @@
 @font-face {
   font-family: "RosatomWebRegular";
   src: url("./../public/fonts/Rosatom-Regular_W/Rosatom-Regular_W.eot");
-  src: url("./../public/fonts/Rosatom-Regular_W/Rosatom-Regular_W.eot?#iefix")
-      format("embedded-opentype"),
-    url("./../public/fonts/Rosatom-Regular_W/Rosatom-Regular_W.woff2")
-      format("woff2"),
-    url("./../public/fonts/Rosatom-Regular_W/Rosatom-Regular_W.woff")
-      format("woff"),
-    url("./../public/fonts/Rosatom-Regular_W/Rosatom-Regular_W.ttf")
-      format("truetype"),
-    url("./../public/fonts/Rosatom-Regular_W/Rosatom-Regular_W.svg#RosatomWeb-Regular")
-      format("svg");
+  src: url("./../public/fonts/Rosatom-Regular_W/Rosatom-Regular_W.eot?#iefix") format("embedded-opentype"),
+    url("./../public/fonts/Rosatom-Regular_W/Rosatom-Regular_W.woff2") format("woff2"),
+    url("./../public/fonts/Rosatom-Regular_W/Rosatom-Regular_W.woff") format("woff"),
+    url("./../public/fonts/Rosatom-Regular_W/Rosatom-Regular_W.ttf") format("truetype"),
+    url("./../public/fonts/Rosatom-Regular_W/Rosatom-Regular_W.svg#RosatomWeb-Regular") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -22,14 +17,11 @@
 @font-face {
   font-family: "RosatomWebBold";
   src: url("./../public/fonts/Rosatom-Bold_W/Rosatom-Bold_W.eot");
-  src: url("./../public/fonts/Rosatom-Bold_W/Rosatom-Bold_W.eot?#iefix")
-      format("embedded-opentype"),
+  src: url("./../public/fonts/Rosatom-Bold_W/Rosatom-Bold_W.eot?#iefix") format("embedded-opentype"),
     url("./../public/fonts/Rosatom-Bold_W/Rosatom-Bold_W.woff2") format("woff2"),
     url("./../public/fonts/Rosatom-Bold_W/Rosatom-Bold_W.woff") format("woff"),
-    url("./../public/fonts/Rosatom-Bold_W/Rosatom-Bold_W.ttf")
-      format("truetype"),
-    url("./../public/fonts/Rosatom-Bold_W/Rosatom-Bold_W.svg#RosatomWeb-Bold")
-      format("svg");
+    url("./../public/fonts/Rosatom-Bold_W/Rosatom-Bold_W.ttf") format("truetype"),
+    url("./../public/fonts/Rosatom-Bold_W/Rosatom-Bold_W.svg#RosatomWeb-Bold") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -39,16 +31,11 @@
 @font-face {
   font-family: "RosatomWebItalic";
   src: url("./../public/fonts/Rosatom-Italic_W/Rosatom-Italic_W.eot");
-  src: url("./../public/fonts/Rosatom-Italic_W/Rosatom-Italic_W.eot?#iefix")
-      format("embedded-opentype"),
-    url("./../public/fonts/Rosatom-Italic_W/Rosatom-Italic_W.woff2")
-      format("woff2"),
-    url("./../public/fonts/Rosatom-Italic_W/Rosatom-Italic_W.woff")
-      format("woff"),
-    url("./../public/fonts/Rosatom-Italic_W/Rosatom-Italic_W.ttf")
-      format("truetype"),
-    url("./../public/fonts/Rosatom-Italic_W/Rosatom-Italic_W.svg#RosatomWeb-Italic")
-      format("svg");
+  src: url("./../public/fonts/Rosatom-Italic_W/Rosatom-Italic_W.eot?#iefix") format("embedded-opentype"),
+    url("./../public/fonts/Rosatom-Italic_W/Rosatom-Italic_W.woff2") format("woff2"),
+    url("./../public/fonts/Rosatom-Italic_W/Rosatom-Italic_W.woff") format("woff"),
+    url("./../public/fonts/Rosatom-Italic_W/Rosatom-Italic_W.ttf") format("truetype"),
+    url("./../public/fonts/Rosatom-Italic_W/Rosatom-Italic_W.svg#RosatomWeb-Italic") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -58,15 +45,11 @@
 @font-face {
   font-family: "RosatomWebLight";
   src: url("./../public/fonts/Rosatom-Light_W/Rosatom-Light_W.eot");
-  src: url("./../public/fonts/Rosatom-Light_W/Rosatom-Light_W.eot?#iefix")
-      format("embedded-opentype"),
-    url("./../public/fonts/Rosatom-Light_W/Rosatom-Light_W.woff2")
-      format("woff2"),
+  src: url("./../public/fonts/Rosatom-Light_W/Rosatom-Light_W.eot?#iefix") format("embedded-opentype"),
+    url("./../public/fonts/Rosatom-Light_W/Rosatom-Light_W.woff2") format("woff2"),
     url("./../public/fonts/Rosatom-Light_W/Rosatom-Light_W.woff") format("woff"),
-    url("./../public/fonts/Rosatom-Light_W/Rosatom-Light_W.ttf")
-      format("truetype"),
-    url("./../public/fonts/Rosatom-Light_W/Rosatom-Light_W.svg#RosatomWeb-Light")
-      format("svg");
+    url("./../public/fonts/Rosatom-Light_W/Rosatom-Light_W.ttf") format("truetype"),
+    url("./../public/fonts/Rosatom-Light_W/Rosatom-Light_W.svg#RosatomWeb-Light") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -120,15 +103,21 @@ $color-darkRed: #b84d4d;
   font-family: $fontStack-sanseSerif;
   font-size: $fontSize;
 }
+
 html {
   height: 100%;
+  flex: 1;
 }
+
 body {
   font-size: $fontSize;
   -webkit-font-smoothing: antialiased;
-  height: 100%;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
 }
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -157,4 +146,9 @@ h5 {
 
 h6 {
   font-size: $fontSizeH1 - .5em;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 0;
 }

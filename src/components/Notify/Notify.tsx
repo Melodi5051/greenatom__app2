@@ -21,25 +21,43 @@ export interface IPropsNotify {
  * @param props `children` - дочерний элемент
  * @param props `type` - Тип уведомления с соответствующей иконкой и цветом (по умолчанию `info`)
  */
-const Notify: React.FC<IPropsNotify> = ({children, type, uid = Date.now()}) => {
-  
+const Notify: React.FC<IPropsNotify> = ({ children, type, uid = Date.now() }) => {
+  const timerRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    notificator.remove(uid);
+  };
+
+  React.useEffect(() => {
+    timerRef.current = setTimeout(() => {
+      notificator.remove(uid);
+    }, 3000);
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [uid]);
+
   const iconSelector = {
-    info: {src: PngWhiteInfo, header: "Информация"},
-    warning: {src: PngWhiteWarning, header: "Внимание"},
-    error: {src: PngWhiteError, header: "Ошибка"},
-    positive: {src: PngWhiteInfo, header: "Успешно"},
-    grey: {src: PngWhiteInfo, header: "Информация"}
+    info: { src: PngWhiteInfo, header: "Информация" },
+    warning: { src: PngWhiteWarning, header: "Внимание" },
+    error: { src: PngWhiteError, header: "Ошибка" },
+    positive: { src: PngWhiteInfo, header: "Успешно" },
+    grey: { src: PngWhiteInfo, header: "Информация" }
   }
-  
+
   const notifyType = type || "info";
   const cl = `${styles.notify} ${type ? styles[type] : styles.info} ${styles.active}`;
   return (
     <div
-    className={cl}
-    onClick={(e) => {
-      e.stopPropagation();
-      notificator.remove(uid);
-    }}
+      className={cl}
+      onClick={handleClick}
     >
       <div className={styles.icon}>
         <img src={iconSelector[notifyType].src} alt="" />

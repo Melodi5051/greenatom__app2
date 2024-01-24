@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import styles from "./Header.module.scss";
 import SvgIcon from "../../assets/svg/logo.svg";
 import Button from "../Button/Button";
@@ -6,10 +7,17 @@ import SvgUserIcon from "../../assets/svg/ui-user-profile.svg";
 import { observer } from "mobx-react-lite";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
+import SvgLogoutIcon from "../../assets/svg/ui-logout.svg";
 import { authentificator } from "../../store/auth2.store";
 
 const Header = () => {
-  
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   const navigate = useNavigate();
 
 
@@ -18,16 +26,28 @@ const Header = () => {
     // removeTokenToLocalStorage("refreshToken");
     // removeCurrentPathToLocalStorage();
     authentificator.signout();
-    navigate("/auth", {replace: true})
+    navigate("/auth", { replace: true })
   };
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current!.contains(event.target as Node)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
       <header>
         <div className={styles.divActions}>
           <div className={styles.divLogo}>
-            <Link to={"/"}>
+            <Link to={"/"} className={styles.divLogoLink}>
               <img src={SvgIcon} alt="" />
               <div className={styles.divLogoLabel}>
                 <p>
@@ -40,9 +60,18 @@ const Header = () => {
             <div className={styles.divActionsButtons}>
               {/* {!!Object.keys(authentificator.constUserData).length ? ( */}
               {authentificator.isAuth() ? (
-                <Navbar
-                  handleLogout={handleLogout}
-                />
+                <div className={styles.listers}>
+                  <div className={styles.userContainer} ref={dropdownRef}>
+                    <Button viewtype="v3" onClick={toggleDropdown}>
+                      {authentificator.constUserData.sub}
+                    </Button>
+                    {isDropdownOpen && (
+                      <div className={styles.dropdownContent}>
+                        <Navbar handleLogout={handleLogout} />
+                      </div>
+                    )}
+                  </div>
+                </div>
               ) : (
                 <>
                   <Link to={"/auth"}>
