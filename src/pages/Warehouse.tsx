@@ -1,8 +1,11 @@
 import React from 'react'
+import MyTable from '../components/MyTable/MyTable';
 
 const Warehouse: React.FC = () => {
     return (
-        <div>Склад</div>
+        <div>
+            <h2>Склад</h2>
+        </div>
     )
 }
 

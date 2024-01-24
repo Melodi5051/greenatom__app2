@@ -265,7 +265,7 @@ const MyTable: React.FC<IMyTableProps> = (props) => {
               </thead>
               <tbody>
                 {
-                  props.mobx.constData.map((empl: IEmployee, index: number) => {
+                  props.mobx.constData.map((empl: {[key: string]: any}, index: number) => {
                     return <tr key={index}>
                       {
                         Object.keys(empl).map((keyName: string, jndex: number) => {

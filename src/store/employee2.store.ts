@@ -162,6 +162,10 @@ class Employee {
       return {};
     }
   }
+
+  async filter(queryParameters: IQueryAllEmployees | {[key: string]: any}) {
+    return this.getAll(queryParameters);
+  }
 }
 
 export const employee = new Employee();
